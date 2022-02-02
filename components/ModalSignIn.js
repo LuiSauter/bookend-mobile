@@ -3,13 +3,11 @@ import React from 'react'
 import { View, Modal, StyleSheet } from 'react-native'
 
 export default function ModalSignIn({ children, showModal, handleModal }) {
-  // const [modalVisible, setModalVisible] = useState(false)
-
   return (
     <View style={styles.centeredView}>
       <Modal
-        animationType='slide'
-        transparent='true'
+        animationType='fade'
+        transparent={true}
         visible={showModal}
         onRequestClose={() => {
           console.log('close')
@@ -26,8 +24,10 @@ export const styles = StyleSheet.create({
   buttonOpen: {
     backgroundColor: '#F194FF',
   },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 30,
   },
 })

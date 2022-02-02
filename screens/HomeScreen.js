@@ -1,17 +1,18 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react'
-import { Button, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Button, StyleSheet, Text, View } from 'react-native'
 // import { useQuery } from '@apollo/client'
 // import { ALL_USERS } from '../user/graphql-queries'
 import * as WebBrowser from 'expo-web-browser'
 import * as Google from 'expo-auth-session/providers/google'
 import { signedGoogle } from '../signed'
-import ModalSignIn from '../components/ModalSignIn'
 import Layout from '../components/Layout'
+import ModalSignIn from '../components/ModalSignIn'
+// import { revokeAsync } from 'expo-auth-session'
 
-WebBrowser.maybeCompleteAuthSession()
+WebBrowser.maybeCompleteAuthSession('https://localhost:19006')
 
-const HomeScreen = ({ showModal, handleModal }) => {
+const HomeScreen = ({ showModal, handleModal, navigation }) => {
   // const { data } = useQuery(ALL_USERS)
   const [googleToken, setGoogleToken] = useState(null)
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -22,6 +23,7 @@ const HomeScreen = ({ showModal, handleModal }) => {
   })
 
   useEffect(() => {
+    console.log(response?.type)
     if (response?.type === 'success') {
       const { authentication } = response
       setGoogleToken(authentication?.accessToken)
@@ -30,7 +32,7 @@ const HomeScreen = ({ showModal, handleModal }) => {
 
   const signedGoogleAccessToken = async (token) => {
     const data = await signedGoogle(token)
-    console.log(data)
+    console.log(data.name)
   }
 
   useEffect(() => {
@@ -47,6 +49,7 @@ const HomeScreen = ({ showModal, handleModal }) => {
   return (
     <Layout>
       <Text style={styles.text}>Holis</Text>
+      <Button title='Go to books' onPress={() => navigation.navigate('BookScreen')} />
       <ModalSignIn showModal={showModal} handleModal={handleModal}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
@@ -59,9 +62,12 @@ const HomeScreen = ({ showModal, handleModal }) => {
                 handleModal()
               }}
             />
-            <Pressable style={[styles.button, styles.buttonClose]} onPress={() => handleModal()}>
-              <Text style={styles.textStyle}>Hide Modal</Text>
-            </Pressable>
+            {/* <Button title='Sign out' onPress={() => revokeAsync()} /> */}
+            <Button
+              title='Hide Modal'
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => handleModal()}
+            />
           </View>
         </View>
       </ModalSignIn>
@@ -79,25 +85,30 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   buttonClose: {
-    backgroundColor: '#2196F3',
+    backgroundColor: '#0099ff',
   },
   textStyle: {
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
   centeredView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
+    marginTop: 30,
   },
   modalView: {
     margin: 20,
-    backgroundColor: '#ccc',
+    width: '80%',
+    textAlign: 'center',
+    backgroundColor: '#fff',
     borderRadius: 20,
     padding: 35,
-    alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
