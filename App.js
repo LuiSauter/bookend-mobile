@@ -1,12 +1,17 @@
 import React, { useState } from 'react'
+import { LogBox } from 'react-native'
 import { Image, StyleSheet, TouchableHighlight } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { ApolloClient, ApolloProvider } from '@apollo/client'
 import { InMemoryCache } from '@apollo/client/cache/inmemory/inMemoryCache'
+
 import HomeScreen from './screens/HomeScreen'
 import BookScreen from './screens/BookScreen'
 import bookendLogo from './assets/img/default-user.png'
+
+LogBox.ignoreLogs(['Warning: ...']) // Ignore log notification by message
+LogBox.ignoreAllLogs() //Ignore all log notifications
 
 const Stack = createNativeStackNavigator()
 
@@ -20,7 +25,6 @@ const client = new ApolloClient({
 
 const App = () => {
   const [showModal, setShowModal] = useState(false)
-
   const handleModal = () => setShowModal(!showModal)
 
   return (
@@ -46,7 +50,20 @@ const App = () => {
           >
             {(props) => <HomeScreen {...props} showModal={showModal} handleModal={handleModal} />}
           </Stack.Screen>
-          <Stack.Screen name='BookScreen' component={BookScreen} />
+          <Stack.Screen
+            name='BookScreen'
+            component={BookScreen}
+            options={() => ({
+              title: 'Books',
+              headerStyle: {
+                backgroundColor: '#192734',
+              },
+              headerTitleStyle: {
+                color: '#fff',
+              },
+              headerTintColor: '#fff',
+            })}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </ApolloProvider>
@@ -62,7 +79,7 @@ const style = StyleSheet.create({
   },
   logoContainer: {
     borderRadius: 50,
-    marginRight: 14,
+    marginRight: 20,
   },
 })
 

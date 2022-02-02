@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "636848585982",
+    "project_id": "bookend-c8305",
+    "storage_bucket": "bookend-c8305.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:636848585982:android:e46ce849b1da16ab5179af",
+        "android_client_info": {
+          "package_name": "com.sauter.bookend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "636848585982-hpn7tnf2jl6c9mt9io8pjvi6t3alinde.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbi8Zi-MpDhtVJPoa9mzSLKIKJzDzTRZ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "636848585982-hpn7tnf2jl6c9mt9io8pjvi6t3alinde.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
