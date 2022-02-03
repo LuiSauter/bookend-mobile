@@ -1,17 +1,19 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
 import { View, Modal, StyleSheet } from 'react-native'
+import { useModal } from '../hooks/useModal'
 
-export default function ModalSignIn({ children, showModal, handleModal }) {
+export default function ModalSignIn({ children }) {
+  const { handleModalVisible, modalVisible } = useModal()
   return (
     <View style={styles.centeredView}>
       <Modal
         animationType='fade'
         transparent={true}
-        visible={showModal}
+        visible={modalVisible}
         onRequestClose={() => {
           console.log('close')
-          handleModal()
+          handleModalVisible()
         }}
       >
         {children}
