@@ -1,12 +1,8 @@
-import { useState } from 'react'
+import { useContext } from 'react'
+import { ToggleContext } from '../context/toggleContext'
 
 export const useModal = () => {
-  const [modalVisible, setModalVisible] = useState(false)
+  const { modalVisible, handleModalVisible } = useContext(ToggleContext)
 
-  const handleModal = () => {
-    console.log('press!')
-    setModalVisible(!modalVisible)
-  }
-
-  return { handleModal, modalVisible }
+  return { modalVisible, handleModalVisible }
 }
