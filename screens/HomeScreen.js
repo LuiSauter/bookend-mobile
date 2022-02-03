@@ -1,72 +1,121 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react'
 import { Button, StyleSheet, Text, View } from 'react-native'
-// import { useQuery } from '@apollo/client'
+import { EXPO_CLIENT_ID, ANDROID_CLIENT_ID, IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env'
 // import { ALL_USERS } from '../user/graphql-queries'
 import * as WebBrowser from 'expo-web-browser'
 import * as Google from 'expo-auth-session/providers/google'
-import { signedGoogle } from '../signed'
+// import { signedGoogle } from '../signed'
 import Layout from '../components/Layout'
 import ModalSignIn from '../components/ModalSignIn'
-// import { revokeAsync } from 'expo-auth-session'
+import * as AuthSession from 'expo-auth-session'
+import { useModal } from '../hooks/useModal'
+import { useMutation, useQuery } from '@apollo/client'
+import { LOGINQL } from '../login/graphql-mutations'
 
-WebBrowser.maybeCompleteAuthSession('https://localhost:19006')
+WebBrowser.maybeCompleteAuthSession()
 
-const HomeScreen = ({ showModal, handleModal, navigation }) => {
-  // const { data } = useQuery(ALL_USERS)
-  const [googleToken, setGoogleToken] = useState(null)
+const HomeScreen = ({ navigation }) => {
+  // const { data: dataAllUser } = useQuery(ALL_USERS)
+  const [googleToken, setGoogleToken] = useState({ token: '', signed: false })
+  // const [user, setUser] = useState({
+  //   email: '',
+  //   name: '',
+  //   image: '',
+  // })
+  const { handleModalVisible } = useModal()
+  const [getLogin, { data, error }] = useMutation(LOGINQL)
   const [request, response, promptAsync] = Google.useAuthRequest({
-    expoClientId: '430314882997-l8qvd3eu4cnnos93srci3kg46h8uefj5.apps.googleusercontent.com',
-    androidClientId: '430314882997-eq2h27g5u9mu1qde9ill0n1dmacolq8b.apps.googleusercontent.com',
-    iosClientId: '430314882997-pkd1i5t2ma44db1dpou2qrgfh7pavl0i.apps.googleusercontent.com',
-    webClientId: '430314882997-vfbtg3sgsmsjateom5k010e074je60s5.apps.googleusercontent.com',
+    expoClientId: EXPO_CLIENT_ID,
+    androidClientId: ANDROID_CLIENT_ID,
+    iosClientId: IOS_CLIENT_ID,
+    webClientId: WEB_CLIENT_ID,
   })
 
+  const fetchUserInfo = async () => {
+    const res = await AuthSession.fetchUserInfoAsync(
+      { accessToken: response.authentication?.accessToken },
+      Google.discovery,
+    )
+    if (res.error) {
+      return setGoogleToken({ token: '', signed: false })
+    }
+    if (res) {
+      console.log({ email: res.email, name: res.name, image: res.picture })
+      getLogin({ variables: { email: res.email, name: res.name, image: res.picture } })
+      setGoogleToken({ token: response.authentication?.accessToken, signed: true })
+    }
+  }
+
   useEffect(() => {
-    console.log(response?.type)
+    console.log(response?.type, 'TYPE')
     if (response?.type === 'success') {
-      const { authentication } = response
-      setGoogleToken(authentication?.accessToken)
+      // const { authentication } = response
+      // console.log(authentication)
+      fetchUserInfo()
     }
   }, [response])
-
-  const signedGoogleAccessToken = async (token) => {
-    const data = await signedGoogle(token)
-    console.log(data.name)
-  }
 
   useEffect(() => {
     let cleanup = true
     if (cleanup) {
-      googleToken && signedGoogleAccessToken(googleToken)
+      if (googleToken.signed) {
+        console.log('############')
+        // getLogin({
+        //   variables: {
+        //     email: 'janco7249@gmail.com',
+        //     name: 'Janco Alvarez Luis Gabriel',
+        //     image:
+        //       'https://lh3.googleusercontent.com/a-/AOh14GiprjDlsYm61mv-8-L6xMoXFAw5t38G8B7-wbsvcg=s96-c',
+        //   },
+        // })
+        fetchUserInfo()
+      }
     }
 
     return () => {
       cleanup = false
     }
-  }, [googleToken])
+  }, [googleToken.signed])
+
+  const signOut = async () => {
+    await AuthSession.revokeAsync(
+      {
+        token: response?.authentication?.accessToken,
+        clientId: EXPO_CLIENT_ID,
+      },
+      Google.discovery,
+    )
+    setGoogleToken({ token: '', signed: false })
+  }
+
+  console.log(data, 'Login', error, 'Error', googleToken.signed)
 
   return (
     <Layout>
       <Text style={styles.text}>Holis</Text>
+      <Text style={styles.text}>{data?.signin.profile}</Text>
       <Button title='Go to books' onPress={() => navigation.navigate('BookScreen')} />
-      <ModalSignIn showModal={showModal} handleModal={handleModal}>
+      <ModalSignIn>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>Hello World!</Text>
-            <Button
-              disabled={!request}
-              title='Login'
-              onPress={() => {
-                promptAsync()
-                handleModal()
-              }}
-            />
-            {/* <Button title='Sign out' onPress={() => revokeAsync()} /> */}
+            {googleToken.signed ? (
+              <Button title='Sign out' onPress={signOut} />
+            ) : (
+              <Button
+                disabled={!request}
+                title='Login'
+                onPress={() => {
+                  promptAsync()
+                  handleModalVisible()
+                }}
+              />
+            )}
             <Button
               title='Hide Modal'
               style={[styles.button, styles.buttonClose]}
-              onPress={() => handleModal()}
+              onPress={() => handleModalVisible()}
             />
           </View>
         </View>
