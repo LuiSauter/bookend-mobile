@@ -1,86 +1,32 @@
-import React, { useState } from 'react'
-import { LogBox } from 'react-native'
-import { Image, StyleSheet, TouchableHighlight } from 'react-native'
+import React from 'react'
+// import { LogBox } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { ApolloClient, ApolloProvider } from '@apollo/client'
 import { InMemoryCache } from '@apollo/client/cache/inmemory/inMemoryCache'
+import { ToggleStateProvider } from './context/toggleContext'
+import Navigation from './Navigation'
 
-import HomeScreen from './screens/HomeScreen'
-import BookScreen from './screens/BookScreen'
-import bookendLogo from './assets/img/default-user.png'
-
-LogBox.ignoreLogs(['Warning: ...']) // Ignore log notification by message
-LogBox.ignoreAllLogs() //Ignore all log notifications
-
-const Stack = createNativeStackNavigator()
+// LogBox.ignoreLogs(['Warning: ...']) // Ignore log notification by message
+// LogBox.ignoreAllLogs() //Ignore all log notifications
 
 const cache = new InMemoryCache()
 
 const client = new ApolloClient({
   uri: 'https://bookendd.vercel.app/api/graphql',
   cache,
-  defaultOptions: { watchQuery: { fetchPolicy: 'cache-and-network' } },
+  // defaultOptions: { watchQuery: { fetchPolicy: 'cache-and-network' } },
 })
 
 const App = () => {
-  const [showModal, setShowModal] = useState(false)
-  const handleModal = () => setShowModal(!showModal)
-
   return (
     <ApolloProvider client={client}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name='HomeScreen'
-            options={() => ({
-              title: 'Inicio',
-              headerStyle: {
-                backgroundColor: '#192734',
-              },
-              headerTitleStyle: {
-                color: '#fff',
-              },
-              headerLeft: () => (
-                <TouchableHighlight style={style.logoContainer} onPress={() => handleModal()}>
-                  <Image style={style.bookendLogo} source={bookendLogo} />
-                </TouchableHighlight>
-              ),
-            })}
-          >
-            {(props) => <HomeScreen {...props} showModal={showModal} handleModal={handleModal} />}
-          </Stack.Screen>
-          <Stack.Screen
-            name='BookScreen'
-            component={BookScreen}
-            options={() => ({
-              title: 'Books',
-              headerStyle: {
-                backgroundColor: '#192734',
-              },
-              headerTitleStyle: {
-                color: '#fff',
-              },
-              headerTintColor: '#fff',
-            })}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <ToggleStateProvider>
+        <NavigationContainer>
+          <Navigation />
+        </NavigationContainer>
+      </ToggleStateProvider>
     </ApolloProvider>
   )
 }
-
-const style = StyleSheet.create({
-  bookendLogo: {
-    width: 30,
-    height: 30,
-    borderRadius: 50,
-    backgroundColor: '#ddd',
-  },
-  logoContainer: {
-    borderRadius: 50,
-    marginRight: 20,
-  },
-})
 
 export default App
