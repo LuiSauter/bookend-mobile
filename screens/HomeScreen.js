@@ -18,11 +18,11 @@ WebBrowser.maybeCompleteAuthSession()
 const HomeScreen = ({ navigation }) => {
   // const { data: dataAllUser } = useQuery(ALL_USERS)
   const [googleToken, setGoogleToken] = useState({ token: '', signed: false })
-  // const [user, setUser] = useState({
-  //   email: '',
-  //   name: '',
-  //   image: '',
-  // })
+  const [user, setUser] = useState({
+    email: '',
+    name: '',
+    image: '',
+  })
   const { handleModalVisible } = useModal()
   const [getLogin, { data, error }] = useMutation(LOGINQL)
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -32,35 +32,32 @@ const HomeScreen = ({ navigation }) => {
     webClientId: WEB_CLIENT_ID,
   })
 
-  const fetchUserInfo = async () => {
-    const res = await AuthSession.fetchUserInfoAsync(
-      { accessToken: response.authentication?.accessToken },
-      Google.discovery,
-    )
-    if (res.error) {
-      return setGoogleToken({ token: '', signed: false })
-    }
-    if (res) {
-      console.log({ email: res.email, name: res.name, image: res.picture })
-      getLogin({ variables: { email: res.email, name: res.name, image: res.picture } })
-      setGoogleToken({ token: response.authentication?.accessToken, signed: true })
+  const fetchUserInfo = async (token) => {
+    if (token) {
+      const res = await AuthSession.fetchUserInfoAsync({ accessToken: token }, Google.discovery)
+      if (res) {
+        // console.log(res)
+        setUser({ email: res.email, name: res.name, image: res.picture })
+        // getLogin({ variables: { email: res.email, name: res.name, image: res.picture } })
+        setGoogleToken({ token: token, signed: true })
+      }
     }
   }
 
   useEffect(() => {
     console.log(response?.type, 'TYPE')
     if (response?.type === 'success') {
-      // const { authentication } = response
+      const { authentication } = response
       // console.log(authentication)
-      fetchUserInfo()
+      fetchUserInfo(authentication?.accessToken)
     }
   }, [response])
 
   useEffect(() => {
     let cleanup = true
     if (cleanup) {
-      if (googleToken.signed) {
-        console.log('############')
+      if (googleToken.token) {
+        console.log('hola')
         // getLogin({
         //   variables: {
         //     email: 'janco7249@gmail.com',
@@ -69,27 +66,29 @@ const HomeScreen = ({ navigation }) => {
         //       'https://lh3.googleusercontent.com/a-/AOh14GiprjDlsYm61mv-8-L6xMoXFAw5t38G8B7-wbsvcg=s96-c',
         //   },
         // })
-        fetchUserInfo()
+        // getLogin({ variables: { email: user.email, name: user.name, image: user.image } })
+        // fetchUserInfo(googleToken?.token)
       }
     }
 
     return () => {
       cleanup = false
     }
-  }, [googleToken.signed])
+  }, [googleToken.token])
 
   const signOut = async () => {
-    await AuthSession.revokeAsync(
+    const data = await AuthSession.revokeAsync(
       {
         token: response?.authentication?.accessToken,
         clientId: EXPO_CLIENT_ID,
       },
       Google.discovery,
     )
+    console.log(data)
     setGoogleToken({ token: '', signed: false })
   }
 
-  console.log(data, 'Login', error, 'Error', googleToken.signed)
+  console.log(error, 'err')
 
   return (
     <Layout>

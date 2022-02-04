@@ -1,5 +1,5 @@
 import React from 'react'
-// import { LogBox } from 'react-native'
+import { AppRegistry } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { ApolloClient, ApolloProvider } from '@apollo/client'
 import { InMemoryCache } from '@apollo/client/cache/inmemory/inMemoryCache'
