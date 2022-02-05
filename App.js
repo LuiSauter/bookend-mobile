@@ -1,10 +1,10 @@
 import React from 'react'
-import { AppRegistry } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { ApolloClient, ApolloProvider } from '@apollo/client'
 import { InMemoryCache } from '@apollo/client/cache/inmemory/inMemoryCache'
 import { ToggleStateProvider } from './context/toggleContext'
 import Navigation from './Navigation'
+import { AuthStateProvider } from './context/authContext'
 
 // LogBox.ignoreLogs(['Warning: ...']) // Ignore log notification by message
 // LogBox.ignoreAllLogs() //Ignore all log notifications
@@ -20,11 +20,13 @@ const client = new ApolloClient({
 const App = () => {
   return (
     <ApolloProvider client={client}>
-      <ToggleStateProvider>
-        <NavigationContainer>
-          <Navigation />
-        </NavigationContainer>
-      </ToggleStateProvider>
+      <AuthStateProvider>
+        <ToggleStateProvider>
+          <NavigationContainer>
+            <Navigation />
+          </NavigationContainer>
+        </ToggleStateProvider>
+      </AuthStateProvider>
     </ApolloProvider>
   )
 }

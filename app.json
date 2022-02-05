@@ -29,11 +29,6 @@
       "package": "com.sauter.bookend",
       "versionCode": 1
     },
-    "plugins": [
-      "@react-native-firebase/app",
-      "@react-native-firebase/perf",
-      "@react-native-firebase/crashlytics"
-    ],
     "web": {
       "favicon": "./assets/favicon.png"
     }
