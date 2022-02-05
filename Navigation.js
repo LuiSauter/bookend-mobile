@@ -1,16 +1,35 @@
-import React from 'react'
-import { TouchableHighlight, Image, StyleSheet } from 'react-native'
+import React, { useEffect } from 'react'
+import { TouchableHighlight, Image, StyleSheet, ActivityIndicator } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import { useModal } from './hooks/useModal'
 import HomeScreen from './screens/HomeScreen'
 import BookScreen from './screens/BookScreen'
 import bookendLogo from './assets/img/default-user.png'
+import { useAuth } from './hooks/useAuth'
+import { useLazyQuery } from '@apollo/client'
+import { FIND_USER } from './user/graphql-queries'
 
 const Stack = createNativeStackNavigator()
 
 const Navigation = () => {
   const { handleModalVisible } = useModal()
+  const { googleAuth } = useAuth()
+  const [getFindUserByEmail, { data, loading }] = useLazyQuery(FIND_USER, {
+    variables: { email: googleAuth.email },
+  })
+
+  useEffect(() => {
+    let cleanup = true
+    if (cleanup) {
+      googleAuth.email && getFindUserByEmail({ variables: { email: googleAuth.email } })
+    }
+
+    return () => {
+      cleanup = false
+    }
+  }, [googleAuth.email])
+
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -26,7 +45,13 @@ const Navigation = () => {
           },
           headerLeft: () => (
             <TouchableHighlight style={style.logoContainer} onPress={() => handleModalVisible()}>
-              <Image style={style.bookendLogo} source={bookendLogo} />
+              {googleAuth.status === 'unauthenticated' ? (
+                <Image style={style.bookendLogo} source={bookendLogo} />
+              ) : loading ? (
+                <ActivityIndicator color='#09f' size='large' />
+              ) : (
+                <Image style={style.bookendLogo} source={{ uri: data?.findUser.me.photo }} />
+              )}
             </TouchableHighlight>
           ),
         })}
@@ -51,8 +76,8 @@ const Navigation = () => {
 
 const style = StyleSheet.create({
   bookendLogo: {
-    width: 30,
-    height: 30,
+    width: 33,
+    height: 33,
     borderRadius: 50,
     backgroundColor: '#ddd',
   },

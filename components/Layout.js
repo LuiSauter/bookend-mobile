@@ -1,12 +1,15 @@
 /* eslint-disable react/prop-types */
-import { View, StyleSheet, StatusBar } from 'react-native'
+import { StyleSheet, StatusBar, View, useColorScheme, Text } from 'react-native'
 import React from 'react'
 
 const Layout = ({ children }) => {
+  const colorScheme = useColorScheme()
+  console.log(colorScheme)
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor='#192734' />
       {children}
+      <Text>{colorScheme}</Text>
     </View>
   )
 }
