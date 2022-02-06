@@ -1,5 +1,6 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { ApolloClient, ApolloProvider } from '@apollo/client'
 import { InMemoryCache } from '@apollo/client/cache/inmemory/inMemoryCache'
 import { ToggleStateProvider } from './context/toggleContext'
@@ -20,13 +21,15 @@ const client = new ApolloClient({
 const App = () => {
   return (
     <ApolloProvider client={client}>
-      <AuthStateProvider>
-        <ToggleStateProvider>
-          <NavigationContainer>
-            <Navigation />
-          </NavigationContainer>
-        </ToggleStateProvider>
-      </AuthStateProvider>
+      <SafeAreaProvider>
+        <AuthStateProvider>
+          <ToggleStateProvider>
+            <NavigationContainer>
+              <Navigation />
+            </NavigationContainer>
+          </ToggleStateProvider>
+        </AuthStateProvider>
+      </SafeAreaProvider>
     </ApolloProvider>
   )
 }
