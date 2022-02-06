@@ -9,6 +9,7 @@ import bookendLogo from './assets/img/default-user.png'
 import { useAuth } from './hooks/useAuth'
 import { useLazyQuery } from '@apollo/client'
 import { FIND_USER } from './user/graphql-queries'
+import ModalImageScreen from './screens/ModalImageScreen'
 
 const Stack = createNativeStackNavigator()
 
@@ -32,44 +33,62 @@ const Navigation = () => {
 
   return (
     <Stack.Navigator>
-      <Stack.Screen
-        name='HomeScreen'
-        component={HomeScreen}
-        options={() => ({
-          title: 'Inicio',
-          headerStyle: {
-            backgroundColor: '#192734',
-          },
-          headerTitleStyle: {
-            color: '#fff',
-          },
-          headerLeft: () => (
-            <TouchableHighlight style={style.logoContainer} onPress={() => handleModalVisible()}>
-              {googleAuth.status === 'unauthenticated' ? (
-                <Image style={style.bookendLogo} source={bookendLogo} />
-              ) : loading ? (
-                <ActivityIndicator color='#09f' size='large' />
-              ) : (
-                <Image style={style.bookendLogo} source={{ uri: data?.findUser.me.photo }} />
-              )}
-            </TouchableHighlight>
-          ),
-        })}
-      />
-      <Stack.Screen
-        name='BookScreen'
-        component={BookScreen}
-        options={() => ({
-          title: 'Books',
-          headerStyle: {
-            backgroundColor: '#192734',
-          },
-          headerTitleStyle: {
-            color: '#fff',
-          },
-          headerTintColor: '#fff',
-        })}
-      />
+      <Stack.Group>
+        <Stack.Screen
+          name='HomeScreen'
+          component={HomeScreen}
+          options={() => ({
+            title: 'Inicio',
+            headerStyle: {
+              backgroundColor: '#192734',
+            },
+            headerTitleStyle: {
+              color: '#fff',
+            },
+            headerLeft: () => (
+              <TouchableHighlight style={style.logoContainer} onPress={() => handleModalVisible()}>
+                {googleAuth.status === 'unauthenticated' ? (
+                  <Image style={style.bookendLogo} source={bookendLogo} />
+                ) : loading ? (
+                  <ActivityIndicator color='#09f' size='large' />
+                ) : (
+                  <Image style={style.bookendLogo} source={{ uri: data?.findUser.me.photo }} />
+                )}
+              </TouchableHighlight>
+            ),
+          })}
+        />
+        <Stack.Screen
+          name='BookScreen'
+          component={BookScreen}
+          options={() => ({
+            title: 'Books',
+            headerStyle: {
+              backgroundColor: '#192734',
+            },
+            headerTitleStyle: {
+              color: '#fff',
+            },
+            headerTintColor: '#fff',
+          })}
+        />
+      </Stack.Group>
+      <Stack.Group screenOptions={{ presentation: 'modal' }}>
+        <Stack.Screen
+          name='ModalImageScreen'
+          component={ModalImageScreen}
+          options={() => ({
+            title: '',
+            headerStyle: {
+              backgroundColor: '#192734',
+            },
+            headerTitleStyle: {
+              color: '#fff',
+            },
+            headerTintColor: '#fff',
+          })}
+        />
+      </Stack.Group>
     </Stack.Navigator>
   )
 }

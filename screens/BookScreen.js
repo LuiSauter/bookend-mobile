@@ -6,6 +6,7 @@ const BookScreen = () => {
   return (
     <Layout>
       <Text style={styles.text}>Books Screen</Text>
+      <Text style={styles.text}>Books Screen</Text>
     </Layout>
   )
 }

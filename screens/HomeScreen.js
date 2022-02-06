@@ -14,10 +14,11 @@ import { LOGINQL } from '../login/graphql-mutations'
 import { useAuth } from '../hooks/useAuth'
 import { INITIAL_STATE } from '../context/authContext'
 import AllPost from '../components/Post/AllPost'
+import { Buffer } from 'buffer'
 
 WebBrowser.maybeCompleteAuthSession()
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: EXPO_CLIENT_ID,
     androidClientId: ANDROID_CLIENT_ID,
@@ -45,7 +46,6 @@ const HomeScreen = () => {
   }
 
   useEffect(() => {
-    console.log('TYPE', response?.type, 'TYPE')
     if (response?.type === 'success') {
       const { authentication } = response
       fetchUserInfo(authentication?.accessToken)
@@ -57,11 +57,7 @@ const HomeScreen = () => {
     if (cleanup) {
       if (googleAuth.token !== '') {
         getLogin({
-          variables: {
-            email: googleAuth.email,
-            name: googleAuth.name,
-            image: googleAuth.image,
-          },
+          variables: { email: googleAuth.email, name: googleAuth.name, image: googleAuth.image },
         })
       }
     }
@@ -91,6 +87,7 @@ const HomeScreen = () => {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>Hello World!</Text>
+            <Button title='Books' onPress={() => navigation.push('BookScreen')} />
             {googleAuth.status === 'authenticated' ? (
               <Button title='Sign out' onPress={signOut} />
             ) : (
