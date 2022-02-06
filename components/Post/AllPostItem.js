@@ -1,10 +1,11 @@
 import { View, Text, Image, TouchableOpacity, StyleSheet, TouchableHighlight } from 'react-native'
 import PropTypes from 'prop-types'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLazyQuery } from '@apollo/client'
 import { FIND_USER_BY_USER } from '../../user/graphql-queries'
 import bookendLogo from '../../assets/img/default-user.png'
 import useTimeAgo from '../../hooks/useTimeAgo'
+import { useNavigation } from '@react-navigation/native'
 
 const AllPostItem = ({
   bookUrl,
@@ -22,7 +23,8 @@ const AllPostItem = ({
   const [getUserById, { data }] = useLazyQuery(FIND_USER_BY_USER)
   const date = Number(createdAt)
   const timeago = useTimeAgo(date)
-
+  const [showImage, setShowImage] = useState(false)
+  const navigation = useNavigation()
   useEffect(() => {
     let cleanup = true
     if (cleanup) {
@@ -61,9 +63,15 @@ const AllPostItem = ({
             </Text>
             <Text style={styles.text}>{description}</Text>
           </View>
-          <View style={styles.postImgContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('ModalImageScreen', { image: image })
+            }}
+            activeOpacity={0.6}
+            style={styles.postImgContainer}
+          >
             <Image style={styles.postImg} source={{ uri: image }} />
-          </View>
+          </TouchableOpacity>
           <View></View>
         </View>
       </View>
