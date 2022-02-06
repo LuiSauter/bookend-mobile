@@ -10,6 +10,8 @@ export default function ModalSignIn({ children }) {
       <Modal
         animationType='fade'
         transparent={true}
+        statusBarTranslucent={true}
+        hardwareAccelerated={true}
         visible={modalVisible}
         onRequestClose={() => {
           console.log('close')

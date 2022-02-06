@@ -11,16 +11,6 @@ const AllPost = () => {
       skipValue: 0,
     },
   })
-  useEffect(() => {
-    let cleanup = true
-    if (cleanup) {
-      // getAllPosts({ variables: {} })
-    }
-
-    return () => {
-      cleanup = false
-    }
-  }, [])
 
   const getItemCount = (data) => {
     return data.length
@@ -75,7 +65,6 @@ const AllPost = () => {
 const styles = StyleSheet.create({
   container: {
     height: '100%',
-    marginBottom: 16,
   },
 })
 
