@@ -8,13 +8,12 @@ import * as Google from 'expo-auth-session/providers/google'
 import Layout from '../components/Layout'
 import ModalSignIn from '../components/ModalSignIn'
 import * as AuthSession from 'expo-auth-session'
-import { useModal } from '../hooks/useModal'
+import { useToggle } from '../hooks/useToggle'
 import { useMutation } from '@apollo/client'
 import { LOGINQL } from '../login/graphql-mutations'
 import { useAuth } from '../hooks/useAuth'
 import { INITIAL_STATE } from '../context/authContext'
 import AllPost from '../components/Post/AllPost'
-import { Buffer } from 'buffer'
 
 WebBrowser.maybeCompleteAuthSession()
 
@@ -27,7 +26,7 @@ const HomeScreen = ({ navigation }) => {
   })
   // const { data: dataAllUser } = useQuery(ALL_USERS)
   const { googleAuth, handleGoogleAuthentication } = useAuth()
-  const { handleModalVisible } = useModal()
+  const { handleModalVisible } = useToggle()
   const [getLogin, { reset }] = useMutation(LOGINQL)
 
   const fetchUserInfo = async (token) => {

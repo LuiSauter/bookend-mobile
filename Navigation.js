@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { TouchableHighlight, Image, StyleSheet, ActivityIndicator } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-import { useModal } from './hooks/useModal'
+import { useToggle } from './hooks/useToggle'
 import HomeScreen from './screens/HomeScreen'
 import BookScreen from './screens/BookScreen'
 import bookendLogo from './assets/img/default-user.png'
@@ -10,11 +10,13 @@ import { useAuth } from './hooks/useAuth'
 import { useLazyQuery } from '@apollo/client'
 import { FIND_USER } from './user/graphql-queries'
 import ModalImageScreen from './screens/ModalImageScreen'
+import UserScreen from './screens/UserScreen'
+import NameUser from './components/NameUser'
 
 const Stack = createNativeStackNavigator()
 
 const Navigation = () => {
-  const { handleModalVisible } = useModal()
+  const { handleModalVisible } = useToggle()
   const { googleAuth } = useAuth()
   const [getFindUserByEmail, { data, loading }] = useLazyQuery(FIND_USER, {
     variables: { email: googleAuth.email },
@@ -72,13 +74,36 @@ const Navigation = () => {
             headerTintColor: '#fff',
           })}
         />
+        <Stack.Screen
+          name='UserScreen'
+          component={UserScreen}
+          options={({ route }) => ({
+            title: '',
+            headerTitle: (props) => (
+              <NameUser
+                {...props}
+                name={route.params.name}
+                verified={route.params.verified}
+                fontSize={15}
+              />
+            ),
+            headerStyle: {
+              backgroundColor: '#192734',
+            },
+            headerTitleStyle: {
+              color: '#fff',
+            },
+            headerTintColor: '#fff',
+          })}
+        />
       </Stack.Group>
-      <Stack.Group screenOptions={{ presentation: 'modal' }}>
+      <Stack.Group screenOptions={{ presentation: 'modal', headerShown: false }}>
         <Stack.Screen
           name='ModalImageScreen'
           component={ModalImageScreen}
           options={() => ({
             title: '',
+            statusBarStyle: 'auto',
             headerStyle: {
               backgroundColor: '#192734',
             },
