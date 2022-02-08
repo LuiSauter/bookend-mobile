@@ -1,19 +1,18 @@
 /* eslint-disable react/prop-types */
-import { Image, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { Image, StyleSheet, ImageBackground, View } from 'react-native'
+import React, { useEffect } from 'react'
 import Layout from '../components/Layout'
-import { getColorImage } from '../lib/getColors'
+import { useToggle } from '../hooks/useToggle'
+import Icon from 'react-native-vector-icons/AntDesign'
 
-const ModalImageScreen = ({ route }) => {
+const ModalImageScreen = ({ route, navigation }) => {
   const { image } = route.params
-  const [dominantColor, setDominantColor] = useState('')
+  const { handleAddImage } = useToggle()
+
   useEffect(() => {
     let cleanup = true
-    if (cleanup) {
-      getColorImage(image).then((data) =>
-        setDominantColor(data.result.colors.image_colors[0].html_code),
-      )
-    }
+    if (cleanup) handleAddImage(image)
+
     return () => {
       cleanup = false
     }
@@ -21,20 +20,31 @@ const ModalImageScreen = ({ route }) => {
 
   return (
     <Layout>
-      <View
+      <ImageBackground
         style={{
+          width: '100%',
+          height: '100%',
           flex: 1,
+          alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: dominantColor,
         }}
+        source={{ uri: image }}
+        blurRadius={150}
       >
-        {/* <ImageBackground source={{ uri: image }} resizeMode='cover' style={styles.viewContainer}> */}
-        <Image style={styles.image} source={{ uri: image }} />
-        {/* </ImageBackground> */}
-        <View>
-          <Text>color:</Text>
+        <View style={styles.backIcon}>
+          <Icon.Button
+            backgroundColor='transparent'
+            borderRadius={50}
+            name='arrowleft'
+            onPress={() => navigation.goBack()}
+            size={27}
+            padding={5}
+            iconStyle={{ marginRight: 1 }}
+            underlayColor='#0004'
+          />
         </View>
-      </View>
+        <Image style={styles.image} source={{ uri: image }} />
+      </ImageBackground>
     </Layout>
   )
 }
@@ -42,17 +52,21 @@ const ModalImageScreen = ({ route }) => {
 const styles = StyleSheet.create({
   image: {
     resizeMode: 'cover',
-    height: '50%',
+    height: '80%',
     width: '100%',
   },
-  // example: {
-  //   height: '100%',
-  //   resizeMode: 'cover',
-  //   width: '100%',
-  //   opacity: 0.03,
-  //   overlayColor: 'center',
-  //   ...StyleSheet.absoluteFill,
-  // },
+  backIcon: {
+    ...StyleSheet.absoluteFillObject,
+    color: '#fff',
+    flex: 1,
+    alignItems: 'flex-start',
+    // flexShrink: 1,
+    top: 0,
+    left: 0,
+    // height: 30,
+    // width: 30,
+    margin: 10,
+  },
 })
 
 export default ModalImageScreen
