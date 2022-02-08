@@ -34,7 +34,6 @@ export const FIND_USER = gql`
     }
   }
 `
-
 export const FIND_USER_BY_USER = gql`
   query findUserByUserID($user: String!) {
     findUserById(user: $user) {
@@ -47,6 +46,30 @@ export const FIND_USER_BY_USER = gql`
         username
         verified
       }
+    }
+  }
+`
+export const FIND_PROFILE = gql`
+  query findProfileByUsername($username: String!) {
+    findProfile(username: $username) {
+      description
+      followers
+      following
+      post
+      gender
+      id
+      liked
+      location
+      me {
+        name
+        photo
+        user
+        username
+        email
+        verified
+      }
+      verified
+      website
     }
   }
 `

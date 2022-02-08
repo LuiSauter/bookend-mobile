@@ -1,5 +1,5 @@
 import { StyleSheet, View, VirtualizedList } from 'react-native'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useQuery } from '@apollo/client'
 import { ALL_POSTS } from '../../post/graphql-queries'
 import AllPostItem from './AllPostItem'

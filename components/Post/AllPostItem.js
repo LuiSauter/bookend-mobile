@@ -1,11 +1,13 @@
 import { View, Text, Image, TouchableOpacity, StyleSheet, TouchableHighlight } from 'react-native'
 import PropTypes from 'prop-types'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useLazyQuery } from '@apollo/client'
 import { FIND_USER_BY_USER } from '../../user/graphql-queries'
-import bookendLogo from '../../assets/img/default-user.png'
+import userDefault from '../../assets/img/default-user.png'
 import useTimeAgo from '../../hooks/useTimeAgo'
 import { useNavigation } from '@react-navigation/native'
+import Icon from 'react-native-vector-icons/Ionicons'
+import NameUser from '../NameUser'
 
 const AllPostItem = ({
   bookUrl,
@@ -20,10 +22,9 @@ const AllPostItem = ({
   user,
   author,
 }) => {
-  const [getUserById, { data }] = useLazyQuery(FIND_USER_BY_USER)
+  const [getUserById, { data, loading }] = useLazyQuery(FIND_USER_BY_USER)
   const date = Number(createdAt)
   const timeago = useTimeAgo(date)
-  const [showImage, setShowImage] = useState(false)
   const navigation = useNavigation()
   useEffect(() => {
     let cleanup = true
@@ -35,27 +36,66 @@ const AllPostItem = ({
     }
   }, [user])
 
+  const colors = [
+    '#2666CF',
+    '#8A39E1',
+    '#BB6464',
+    '#219F94',
+    '#F94892',
+    '#035397',
+    '#FFC600',
+    '#502064',
+    '#4A3F35',
+    '#BE3144',
+    '#21325E',
+    '#F76E11',
+  ]
+
   return (
     <TouchableHighlight underlayColor='#0003' onPress={() => console.log('press')}>
       <View style={styles.postContainer}>
         <View style={styles.userImgContainer}>
           {data?.findUserById ? (
-            <Image style={styles.userImg} source={{ uri: data?.findUserById.me.photo }} />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('UserScreen', {
+                  name: data?.findUserById.me.name,
+                  username: data?.findUserById.me.username,
+                  verified: data?.findUserById.me.verified,
+                })
+              }
+              activeOpacity={0.6}
+            >
+              <Image style={styles.userImg} source={{ uri: data?.findUserById.me.photo }} />
+            </TouchableOpacity>
           ) : (
-            <Image style={styles.userImg} source={bookendLogo} />
+            <Image style={styles.userImg} source={userDefault} />
           )}
         </View>
         <View style={styles.postItem}>
           <View style={styles.userTextContainer}>
             <View style={styles.userTextItem}>
-              <Text style={styles.userTextName}>{data?.findUserById.me.name}</Text>
+              <NameUser
+                name={data?.findUserById.me.name}
+                verified={data?.findUserById.me.verified}
+                fontSize={15}
+              />
+              {/* <Text style={styles.userTextName}>{data?.findUserById.me.name}</Text> */}
               <Text style={styles.userTextUsername}>
                 @{data?.findUserById.me.username} · {timeago}
               </Text>
             </View>
-            <TouchableOpacity onPress={() => console.log('options')} style={styles.button}>
-              <Text>x</Text>
-            </TouchableOpacity>
+            {/* <TouchableOpacity onPress={() => console.log('options')} style={styles.button}> */}
+            <Icon.Button
+              backgroundColor='transparent'
+              name='ellipsis-vertical'
+              iconStyle={{ marginRight: 0 }}
+              size={15}
+              borderRadius={50}
+              onPress={() => console.log('ONPRESS')}
+              underlayColor='#0003'
+            />
+            {/* </TouchableOpacity> */}
           </View>
           <View style={styles.postItemDescription}>
             <Text style={styles.postItemTitle}>
@@ -70,7 +110,18 @@ const AllPostItem = ({
             activeOpacity={0.6}
             style={styles.postImgContainer}
           >
-            <Image style={styles.postImg} source={{ uri: image }} />
+            {loading ? (
+              <View
+                style={{
+                  height: 400,
+                  width: '100%',
+                  backgroundColor: colors[Math.floor(Math.random() * colors.length)],
+                  borderRadius: 12,
+                }}
+              />
+            ) : (
+              <Image style={styles.postImg} source={{ uri: image }} />
+            )}
           </TouchableOpacity>
           <View></View>
         </View>
@@ -106,13 +157,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
   },
-  userTextName: {
-    color: 'white',
-    fontSize: 15,
-    fontWeight: 'bold',
-    marginRight: 5,
-  },
   userTextUsername: {
+    // flex: 1,
+    // width: '100%',
     color: '#ccc',
     fontSize: 15,
   },
