@@ -34,3 +34,8 @@ export const ALL_POST_BY_USER = gql`
     }
   }
 `
+export const ALL_POST_BY_USER_COUNT = gql`
+  query allPostUserCount($username: String!) {
+    allPostUserCount(username: $username)
+  }
+`

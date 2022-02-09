@@ -10,15 +10,15 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import NameUser from '../NameUser'
 
 const AllPostItem = ({
-  bookUrl,
+  // bookUrl,
   createdAt,
   image,
   title,
-  comments,
+  // comments,
   description,
-  id,
-  likes,
-  tags,
+  // id,
+  // likes,
+  // tags,
   user,
   author,
 }) => {
