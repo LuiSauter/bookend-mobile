@@ -5,11 +5,14 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 const Layout = ({ children }) => {
   return (
-    <SafeAreaView style={{ flex: 1, justifyContent: 'center' }} edges={['top', 'left', 'right']}>
-      <View style={styles.container}>
-        <StatusBar backgroundColor='#192734' />
-        {children}
-      </View>
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+      <StatusBar
+        barStyle='light-content'
+        animated={true}
+        showHideTransition={'fade'}
+        backgroundColor={'#192734'}
+      />
+      <View style={{ height: '100%', justifyContent: 'center' }}>{children}</View>
     </SafeAreaView>
   )
 }
@@ -17,10 +20,8 @@ const Layout = ({ children }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%',
     backgroundColor: '#192734',
     justifyContent: 'space-between',
-    color: '#fff',
   },
 })
 
