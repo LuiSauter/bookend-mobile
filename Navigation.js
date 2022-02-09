@@ -97,13 +97,21 @@ const Navigation = () => {
           })}
         />
       </Stack.Group>
-      <Stack.Group screenOptions={{ presentation: 'modal', headerShown: false }}>
+      <Stack.Group
+        screenOptions={{
+          presentation: 'modal',
+          headerShown: false,
+          // statusBarHidden: true,
+          statusBarStyle: 'dark',
+          // headerTintColor: '#000',
+        }}
+      >
         <Stack.Screen
           name='ModalImageScreen'
           component={ModalImageScreen}
           options={() => ({
             title: '',
-            statusBarStyle: 'auto',
+            statusBarStyle: 'light',
             headerStyle: {
               backgroundColor: '#192734',
             },

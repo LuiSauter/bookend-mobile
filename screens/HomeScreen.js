@@ -2,7 +2,6 @@
 import React, { useEffect } from 'react'
 import { Button, StyleSheet, Text, View } from 'react-native'
 import { EXPO_CLIENT_ID, ANDROID_CLIENT_ID, IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env'
-// import { ALL_USERS } from '../user/graphql-queries'
 import * as WebBrowser from 'expo-web-browser'
 import * as Google from 'expo-auth-session/providers/google'
 import Layout from '../components/Layout'
@@ -24,7 +23,6 @@ const HomeScreen = ({ navigation }) => {
     iosClientId: IOS_CLIENT_ID,
     webClientId: WEB_CLIENT_ID,
   })
-  // const { data: dataAllUser } = useQuery(ALL_USERS)
   const { googleAuth, handleGoogleAuthentication } = useAuth()
   const { handleModalVisible } = useToggle()
   const [getLogin, { reset }] = useMutation(LOGINQL)
