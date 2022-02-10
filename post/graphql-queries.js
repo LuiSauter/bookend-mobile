@@ -39,3 +39,8 @@ export const ALL_POST_BY_USER_COUNT = gql`
     allPostUserCount(username: $username)
   }
 `
+export const GET_DOMINANT_COLOR = gql`
+  query getDominantColor($image: String!) {
+    getColors(image: $image)
+  }
+`

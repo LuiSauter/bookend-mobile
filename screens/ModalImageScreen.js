@@ -5,7 +5,7 @@ import { useToggle } from '../hooks/useToggle'
 import Icon from 'react-native-vector-icons/AntDesign'
 
 const ModalImageScreen = ({ route, navigation }) => {
-  const { image } = route.params
+  const { image, imageColor } = route.params
   const { handleAddImage } = useToggle()
 
   useEffect(() => {
@@ -18,45 +18,27 @@ const ModalImageScreen = ({ route, navigation }) => {
     }
   }, [image])
 
-  const colors = [
-    '#2666CF',
-    '#8A39E1',
-    '#BB6464',
-    '#219F94',
-    '#F94892',
-    '#035397',
-    '#FFC600',
-    '#502064',
-    '#4A3F35',
-    '#BE3144',
-    '#21325E',
-    '#F76E11',
-  ]
-
-  const colorRandom = colors[Math.floor(Math.random() * colors.length)]
+  console.log(imageColor)
 
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: 'space-between' }}>
       <StatusBar
-        barStyle='default'
-        animated={true}
-        showHideTransition={'none'}
-        backgroundColor={colorRandom}
-        translucent={true}
-        hidden //not found in android
+        // barStyle='default'
+        // animated={true}
+        // showHideTransition={'none'}
+        backgroundColor={imageColor}
+        // translucent={true}
+        //not found in android
       />
       <ImageBackground
-        // onLoad={(e) => {
-        // }}
-        // imageStyle={{ tintColor: colorRandom }}
         style={{
           width: '100%',
           height: '100%',
           flex: 1,
           justifyContent: 'center',
         }}
+        imageStyle={{ tintColor: imageColor }}
         source={{ uri: image }}
-        blurRadius={100}
       >
         <View style={styles.backIcon}>
           <Icon.Button

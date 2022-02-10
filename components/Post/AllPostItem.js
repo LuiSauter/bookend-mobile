@@ -8,6 +8,7 @@ import useTimeAgo from '../../hooks/useTimeAgo'
 import { useNavigation } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import NameUser from '../NameUser'
+import { GET_DOMINANT_COLOR } from '../../post/graphql-queries'
 
 const AllPostItem = ({
   // bookUrl,
@@ -22,10 +23,13 @@ const AllPostItem = ({
   user,
   author,
 }) => {
-  const [getUserById, { data, loading }] = useLazyQuery(FIND_USER_BY_USER)
   const date = Number(createdAt)
   const timeago = useTimeAgo(date)
   const navigation = useNavigation()
+
+  const [getUserById, { data, loading }] = useLazyQuery(FIND_USER_BY_USER)
+  const [getDominantColor, { data: dataDominantColor }] = useLazyQuery(GET_DOMINANT_COLOR)
+
   useEffect(() => {
     let cleanup = true
     if (cleanup) {
@@ -35,6 +39,18 @@ const AllPostItem = ({
       cleanup = false
     }
   }, [user])
+
+  useEffect(() => {
+    let cleanup = true
+    if (cleanup) {
+      if (data?.findUserById.me.photo) {
+        getDominantColor({ variables: { image: data?.findUserById.me.photo } })
+      }
+    }
+    return () => {
+      cleanup = false
+    }
+  }, [data?.findUserById])
 
   const colors = [
     '#2666CF',
@@ -105,7 +121,10 @@ const AllPostItem = ({
           </View>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('ModalImageScreen', { image: image })
+              navigation.navigate('ModalImageScreen', {
+                image: image,
+                imageColor: `rgb(${dataDominantColor?.getColors})`,
+              })
             }}
             activeOpacity={0.6}
             style={styles.postImgContainer}

@@ -102,8 +102,7 @@ const Navigation = () => {
           presentation: 'modal',
           headerShown: false,
           // statusBarHidden: true,
-          statusBarStyle: 'dark',
-          // headerTintColor: '#000',
+          statusBarStyle: 'light',
         }}
       >
         <Stack.Screen
@@ -111,7 +110,6 @@ const Navigation = () => {
           component={ModalImageScreen}
           options={() => ({
             title: '',
-            statusBarStyle: 'light',
             headerStyle: {
               backgroundColor: '#192734',
             },
