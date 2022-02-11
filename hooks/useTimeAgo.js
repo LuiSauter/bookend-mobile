@@ -56,24 +56,31 @@ export default function useTimeAgo(timestamp) {
 
     if (Math.abs(fe) > time) {
       const value = Math.abs(Math.round(fe / myTime))
+      const dayFormat = new Date(timestamp)
+      const minute = dayFormat.getMinutes()
+      const hour = dayFormat.getHours()
+      const day = dayFormat.getDate()
+      const month = months[dayFormat.getMonth()]
+      const year = dayFormat.getFullYear()
+      const dateFormat = `${day} ${month}. ${year}`
+      const hourAndMinute = `${hour}:${minute} ${
+        hour > 0 && hour < 12 ? 'a. m.' : 'p. m.'
+      }  ·  ${dateFormat}`
       if (unit === 'second') {
-        return value + 's'
+        return { hourAndMinute, timeago: value + 's' }
       } else if (unit === 'minute') {
-        return value + 'min'
+        return { hourAndMinute, timeago: value + 'min' }
       } else if (unit === 'hour') {
-        return value + 'hr'
+        return { hourAndMinute, timeago: value + 'hr' }
       } else if (unit === 'day') {
-        return value + 'd'
+        return { hourAndMinute, timeago: value + 'd' }
       } else if (unit === 'week') {
-        const dayFormat = new Date(timestamp)
         const currentYear = new Date()
-        const month = months[dayFormat.getMonth()]
-        const day = dayFormat.getDate()
 
         if (dayFormat.getFullYear() === currentYear.getFullYear()) {
-          return `${day} ${month}.`
+          return { hourAndMinute, timeago: `${day} ${month}.` }
         } else {
-          return `${day} ${month}. ${dayFormat.getFullYear()}`
+          return { hourAndMinute, timeago: dateFormat }
         }
       }
     }
