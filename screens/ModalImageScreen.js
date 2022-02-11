@@ -1,65 +1,65 @@
 /* eslint-disable react/prop-types */
-import { Image, StyleSheet, ImageBackground, View, StatusBar, SafeAreaView } from 'react-native'
-import React, { useEffect } from 'react'
+import { StyleSheet, StatusBar, SafeAreaView } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { useToggle } from '../hooks/useToggle'
-import Icon from 'react-native-vector-icons/AntDesign'
+import { useLazyQuery } from '@apollo/client'
+import { GET_DOMINANT_COLOR } from '../post/graphql-queries'
+import ImageView from 'react-native-image-viewing'
 
 const ModalImageScreen = ({ route, navigation }) => {
-  const { image, imageColor } = route.params
+  const { image } = route.params
   const { handleAddImage } = useToggle()
+  const [getDominantColor, { data: dataDominantColor }] = useLazyQuery(GET_DOMINANT_COLOR)
+  const [isVisible, setIsVisible] = useState(true)
 
   useEffect(() => {
     let cleanup = true
     if (cleanup) {
       handleAddImage(image)
+      getDominantColor({ variables: { image: image } })
     }
     return () => {
       cleanup = false
     }
   }, [image])
 
-  console.log(imageColor)
-
   return (
-    <SafeAreaView style={{ flex: 1, justifyContent: 'space-between' }}>
+    <SafeAreaView style={styles.safeArea}>
       <StatusBar
-        // barStyle='default'
-        // animated={true}
-        // showHideTransition={'none'}
-        backgroundColor={imageColor}
-        // translucent={true}
-        //not found in android
+        barStyle='light-content'
+        animated={true}
+        showHideTransition={'none'}
+        backgroundColor={
+          dataDominantColor?.getColors ? `rgb(${dataDominantColor?.getColors})` : '#192734'
+        }
+        translucent={true}
       />
-      <ImageBackground
-        style={{
-          width: '100%',
-          height: '100%',
-          flex: 1,
-          justifyContent: 'center',
+      <ImageView
+        images={[{ uri: image }]}
+        imageIndex={0}
+        visible={isVisible}
+        onRequestClose={() => {
+          setIsVisible(false)
+          navigation.goBack()
         }}
-        imageStyle={{ tintColor: imageColor }}
-        source={{ uri: image }}
-      >
-        <View style={styles.backIcon}>
-          <Icon.Button
-            backgroundColor='transparent'
-            borderRadius={50}
-            name='arrowleft'
-            color={'#aaa'}
-            onPress={() => navigation.goBack()}
-            size={27}
-            padding={5}
-            iconStyle={{ marginRight: 1 }}
-            underlayColor='#555a'
-          />
-        </View>
-        <Image style={styles.image} source={{ uri: image }} />
-      </ImageBackground>
+        animationType='slide'
+        backgroundColor={
+          dataDominantColor?.getColors ? `rgb(${dataDominantColor?.getColors})` : '#192734'
+        }
+        presentationStyle='overFullScreen'
+        swipeToCloseEnabled={false}
+        doubleTapToZoomEnabled={true}
+      />
     </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    justifyContent: 'space-between',
+    backgroundColor: '#192734',
+  },
   image: {
     resizeMode: 'cover',
     height: '80%',
