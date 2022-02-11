@@ -1,0 +1,79 @@
+/* eslint-disable react/prop-types */
+import { StyleSheet, Text, View } from 'react-native'
+import React from 'react'
+import BtnLike from './Button/BtnLike'
+import Comment from 'react-native-vector-icons/EvilIcons' //comment
+import Download from 'react-native-vector-icons/Feather' //share
+import Share from 'react-native-vector-icons/AntDesign' //sharealt
+
+const MultipleButtons = ({ comments, likes, id, bookDownload }) => {
+  return (
+    <View style={styles.btnContainer}>
+      <View style={styles.btn}>
+        <Share.Button
+          name='sharealt'
+          backgroundColor='transparent'
+          borderRadius={50}
+          color={'#fff'}
+          onPress={() => console.log('xd')}
+          size={21}
+          // padding={4}
+          iconStyle={{ marginRight: 0 }}
+          underlayColor='transparent'
+        />
+      </View>
+      <View style={styles.btn}>
+        <Comment.Button
+          name='comment'
+          backgroundColor='transparent'
+          borderRadius={50}
+          color={'#fff'}
+          onPress={() => console.log('xd')}
+          size={29}
+          // padding={4}
+          iconStyle={{ marginRight: 0 }}
+          underlayColor='transparent'
+        />
+        <Text style={styles.text}>{comments}</Text>
+      </View>
+      {/*  */}
+      <BtnLike id={id} likes={likes} />
+      {/*  */}
+      <View style={styles.btn}>
+        <Download.Button
+          name='download'
+          backgroundColor='transparent'
+          borderRadius={50}
+          color={'#fff'}
+          onPress={() => console.log('xd')}
+          size={22}
+          // padding={0}
+          iconStyle={{ marginRight: 0 }}
+          underlayColor='transparent'
+        />
+      </View>
+    </View>
+  )
+}
+
+export default MultipleButtons
+
+const styles = StyleSheet.create({
+  btnContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingRight: 10,
+    paddingBottom: 10,
+  },
+  btn: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  text: {
+    color: '#fff',
+    fontSize: 15,
+  },
+})
