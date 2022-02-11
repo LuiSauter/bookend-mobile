@@ -1,14 +1,22 @@
 /* eslint-disable react/prop-types */
-import { ActivityIndicator, FlatList, Image, StyleSheet, Text, View } from 'react-native'
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native'
 import React, { useEffect, useState } from 'react'
-import Layout from '../components/Layout'
 import { useLazyQuery } from '@apollo/client'
 import { FIND_PROFILE } from '../user/graphql-queries'
 import NameUser from '../components/NameUser'
 import { ALL_POST_BY_USER, ALL_POST_BY_USER_COUNT } from '../post/graphql-queries'
 import AllPostItem from '../components/Post/AllPostItem'
 
-const INITIAL_PAGE = 2
+const INITIAL_PAGE = 6
 
 const UserScreen = ({ route }) => {
   const { username } = route.params
@@ -83,12 +91,14 @@ const UserScreen = ({ route }) => {
   }
 
   return (
-    <Layout>
-      {loading && (
-        <View>
-          <ActivityIndicator size='large' color='#09f' />
-        </View>
-      )}
+    <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
+      <StatusBar
+        animated={true}
+        showHideTransition={'slide'}
+        barStyle='light-content'
+        backgroundColor='#192734'
+      />
+      {loading && <ActivityIndicator style={{ marginVertical: 16 }} size='large' color='#0099ff' />}
       {dataAllPosts?.allPostsByUsername && (
         <FlatList
           ListHeaderComponent={() => (
@@ -101,21 +111,25 @@ const UserScreen = ({ route }) => {
                 />
                 <Image style={styles.profileImage} source={{ uri: data?.findProfile.me.photo }} />
               </View>
-              <View style={{}}>
+              <View style={{ marginHorizontal: 16 }}>
                 <NameUser
                   name={data?.findProfile.me.name}
                   verified={data?.findProfile.me.verified}
                   fontSize={20}
                 />
-                <Text>@{data?.findProfile.me.username}</Text>
-                <Text>{data?.findProfile.description}</Text>
+                <Text style={styles.textOpacity}>@{data?.findProfile.me.username}</Text>
+                <Text style={styles.text}>{data?.findProfile.description}</Text>
                 <View style={styles.textPresentation}>
-                  <Text>{data?.findProfile.location}</Text>
-                  <Text>{data?.findProfile.website}</Text>
+                  <Text style={styles.textOpacity}>{data?.findProfile.location}</Text>
+                  <Text style={{ fontSize: 15, color: '#0099ff', marginLeft: 16 }}>
+                    {data?.findProfile.website}
+                  </Text>
                 </View>
                 <View style={styles.textPresentation}>
-                  <Text>{data?.findProfile.followers.length} Following</Text>
-                  <Text>{data?.findProfile.following.length} Followers</Text>
+                  <Text style={[styles.text, { marginRight: 16 }]}>
+                    {data?.findProfile.followers.length} Following
+                  </Text>
+                  <Text style={styles.text}>{data?.findProfile.following.length} Followers</Text>
                 </View>
               </View>
             </>
@@ -128,11 +142,24 @@ const UserScreen = ({ route }) => {
           onEndReachedThreshold={0}
         />
       )}
-    </Layout>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    justifyContent: 'space-between',
+    backgroundColor: '#192734',
+  },
+  text: {
+    color: 'white',
+    fontSize: 16,
+  },
+  textOpacity: {
+    color: '#bbb',
+    fontSize: 15,
+  },
   profilePresentation: {
     alignItems: 'center',
   },
