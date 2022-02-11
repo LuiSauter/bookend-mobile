@@ -23,7 +23,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#0099ff"
+        "backgroundColor": "#192734"
       },
       "googleServicesFile": "./google-services.json",
       "package": "com.sauter.bookend",

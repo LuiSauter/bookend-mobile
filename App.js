@@ -6,9 +6,10 @@ import { InMemoryCache } from '@apollo/client/cache/inmemory/inMemoryCache'
 import { ToggleStateProvider } from './context/toggleContext'
 import Navigation from './Navigation'
 import { AuthStateProvider } from './context/authContext'
+import { LogBox } from 'react-native'
 
-// LogBox.ignoreLogs(['Warning: ...']) // Ignore log notification by message
-// LogBox.ignoreAllLogs() //Ignore all log notifications
+LogBox.ignoreLogs(['Warning: ...']) // Ignore log notification by message
+LogBox.ignoreAllLogs() //Ignore all log notifications
 
 const cache = new InMemoryCache()
 
