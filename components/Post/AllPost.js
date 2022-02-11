@@ -1,61 +1,78 @@
-import { StyleSheet, View, VirtualizedList } from 'react-native'
-import React from 'react'
-import { useQuery } from '@apollo/client'
-import { ALL_POSTS } from '../../post/graphql-queries'
+import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { useLazyQuery, useQuery } from '@apollo/client'
+import { ALL_POSTS, ALL_POSTS_COUNT } from '../../post/graphql-queries'
 import AllPostItem from './AllPostItem'
 
-const AllPost = () => {
-  const { data } = useQuery(ALL_POSTS, {
-    variables: {
-      pageSize: 50,
-      skipValue: 0,
-    },
-  })
+const INITIAL_PAGE = 10
 
-  const getItemCount = (data) => {
-    return data.length
+const AllPost = () => {
+  const [isLoading, setIsLoading] = useState(true)
+  const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
+  const [getAllPost, { data, loading, refetch }] = useLazyQuery(ALL_POSTS)
+  const { data: allPostsCount } = useQuery(ALL_POSTS_COUNT)
+
+  useEffect(() => {
+    let cleanup = true
+    if (cleanup) {
+      setCurrentPage(INITIAL_PAGE)
+      getAllPost({ variables: { pageSize: INITIAL_PAGE, skipValue: 0 } })
+    }
+    return () => {
+      cleanup = false
+    }
+  }, [])
+
+  useEffect(() => {
+    let cleanup = true
+    if (cleanup) {
+      refetch({ pageSize: currentPage, skipValue: 0 })
+    }
+    return () => {
+      cleanup = false
+    }
+  }, [currentPage])
+
+  const renderItem = ({ item }) => {
+    return (
+      <AllPostItem
+        bookUrl={item.bookUrl}
+        createdAt={item.createdAt}
+        image={item.image}
+        title={item.title}
+        comments={item.comments}
+        description={item.description}
+        id={item.id}
+        likes={item.likes}
+        tags={item.tags}
+        user={item.user}
+        author={item.author}
+      />
+    )
   }
 
-  const getItem = (data, index) => {
-    return {
-      bookUrl: data[index].bookUrl,
-      createdAt: data[index].createdAt,
-      image: data[index].image,
-      title: data[index].title,
-      comments: data[index].comments,
-      description: data[index].description,
-      id: data[index].id,
-      likes: data[index].likes,
-      tags: data[index].tags,
-      user: data[index].user,
-      author: data[index].author,
+  const renderLoader = () => {
+    return isLoading && <ActivityIndicator style={{ marginBottom: 16 }} color='#09f' size='large' />
+  }
+
+  const loadMoreItem = () => {
+    if (allPostsCount && allPostsCount?.postCount === data?.allPosts.length) {
+      return setIsLoading(false)
     }
+    setCurrentPage(currentPage + INITIAL_PAGE)
   }
 
   return (
     <View style={styles.container}>
+      {loading && <ActivityIndicator style={{ flex: 1 }} color='#09f' size='large' />}
       {data?.allPosts && (
-        <VirtualizedList
+        <FlatList
           data={data?.allPosts}
-          initialNumToRender={6}
-          renderItem={({ item }) => (
-            <AllPostItem
-              bookUrl={item.bookUrl}
-              createdAt={item.createdAt}
-              image={item.image}
-              title={item.title}
-              comments={item.comments}
-              description={item.description}
-              id={item.id}
-              likes={item.likes}
-              tags={item.tags}
-              user={item.user}
-              author={item.author}
-            />
-          )}
+          renderItem={renderItem}
           keyExtractor={(item) => item.id}
-          getItemCount={getItemCount}
-          getItem={getItem}
+          ListFooterComponent={renderLoader}
+          onEndReached={loadMoreItem}
+          onEndReachedThreshold={0}
         />
       )}
     </View>

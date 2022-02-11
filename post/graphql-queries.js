@@ -44,3 +44,24 @@ export const GET_DOMINANT_COLOR = gql`
     getColors(image: $image)
   }
 `
+export const ALL_POSTS_COUNT = gql`
+  query {
+    postCount
+  }
+`
+export const FINDONE_POST = gql`
+  query findPostById($id: String!) {
+    findPost(id: $id) {
+      bookUrl
+      comments
+      description
+      id
+      image
+      tags
+      title
+      user
+      likes
+      author
+    }
+  }
+`

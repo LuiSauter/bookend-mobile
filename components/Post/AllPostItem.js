@@ -8,27 +8,13 @@ import useTimeAgo from '../../hooks/useTimeAgo'
 import { useNavigation } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import NameUser from '../NameUser'
-import { GET_DOMINANT_COLOR } from '../../post/graphql-queries'
 
-const AllPostItem = ({
-  // bookUrl,
-  createdAt,
-  image,
-  title,
-  // comments,
-  description,
-  // id,
-  // likes,
-  // tags,
-  user,
-  author,
-}) => {
+const AllPostItem = ({ createdAt, image, title, description, user, author, id }) => {
   const date = Number(createdAt)
   const timeago = useTimeAgo(date)
   const navigation = useNavigation()
 
   const [getUserById, { data, loading }] = useLazyQuery(FIND_USER_BY_USER)
-  const [getDominantColor, { data: dataDominantColor }] = useLazyQuery(GET_DOMINANT_COLOR)
 
   useEffect(() => {
     let cleanup = true
@@ -39,18 +25,6 @@ const AllPostItem = ({
       cleanup = false
     }
   }, [user])
-
-  useEffect(() => {
-    let cleanup = true
-    if (cleanup) {
-      if (data?.findUserById.me.photo) {
-        getDominantColor({ variables: { image: data?.findUserById.me.photo } })
-      }
-    }
-    return () => {
-      cleanup = false
-    }
-  }, [data?.findUserById])
 
   const colors = [
     '#2666CF',
@@ -67,8 +41,29 @@ const AllPostItem = ({
     '#F76E11',
   ]
 
+  const randomColor = colors[Math.floor(Math.random() * colors.length)]
+
   return (
-    <TouchableHighlight underlayColor='#0003' onPress={() => console.log('press')}>
+    <TouchableHighlight
+      underlayColor='#0003'
+      onPress={() =>
+        navigation.navigate('DetailScreen', {
+          id: id,
+          timeago: timeago,
+          ramdonColor: randomColor,
+          createdAt,
+          image,
+          title,
+          description,
+          user,
+          author,
+          name: data?.findUserById.me.name,
+          username: data?.findUserById.me.username,
+          verified: data?.findUserById.me.verified,
+          photo: data?.findUserById.me.photo,
+        })
+      }
+    >
       <View style={styles.postContainer}>
         <View style={styles.userImgContainer}>
           {data?.findUserById ? (
@@ -94,14 +89,12 @@ const AllPostItem = ({
               <NameUser
                 name={data?.findUserById.me.name}
                 verified={data?.findUserById.me.verified}
-                fontSize={15}
+                fontSize={16}
               />
-              {/* <Text style={styles.userTextName}>{data?.findUserById.me.name}</Text> */}
               <Text style={styles.userTextUsername}>
                 @{data?.findUserById.me.username} · {timeago}
               </Text>
             </View>
-            {/* <TouchableOpacity onPress={() => console.log('options')} style={styles.button}> */}
             <Icon.Button
               backgroundColor='transparent'
               name='ellipsis-vertical'
@@ -111,7 +104,6 @@ const AllPostItem = ({
               onPress={() => console.log('ONPRESS')}
               underlayColor='#0003'
             />
-            {/* </TouchableOpacity> */}
           </View>
           <View style={styles.postItemDescription}>
             <Text style={styles.postItemTitle}>
@@ -123,7 +115,6 @@ const AllPostItem = ({
             onPress={() => {
               navigation.navigate('ModalImageScreen', {
                 image: image,
-                imageColor: `rgb(${dataDominantColor?.getColors})`,
               })
             }}
             activeOpacity={0.6}
@@ -134,7 +125,7 @@ const AllPostItem = ({
                 style={{
                   height: 400,
                   width: '100%',
-                  backgroundColor: colors[Math.floor(Math.random() * colors.length)],
+                  backgroundColor: randomColor,
                   borderRadius: 12,
                 }}
               />
@@ -177,14 +168,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   userTextUsername: {
-    // flex: 1,
-    // width: '100%',
     color: '#ccc',
     fontSize: 15,
   },
   postItem: {
     flex: 1,
-    marginTop: 16,
+    marginTop: 15.5,
   },
   postItemDescription: {
     flex: 1,
@@ -192,12 +181,12 @@ const styles = StyleSheet.create({
   },
   postItemTitle: {
     color: '#0099ff',
-    fontSize: 16,
+    fontSize: 15.5,
     marginBottom: 7,
   },
   text: {
     color: '#fff',
-    fontSize: 15,
+    fontSize: 16,
     lineHeight: 24,
   },
   postImgContainer: {
