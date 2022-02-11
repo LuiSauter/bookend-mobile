@@ -1,10 +1,9 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect } from 'react'
-import { Button, StyleSheet, Text, View } from 'react-native'
+import { Button, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native'
 import { EXPO_CLIENT_ID, ANDROID_CLIENT_ID, IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env'
 import * as WebBrowser from 'expo-web-browser'
 import * as Google from 'expo-auth-session/providers/google'
-import Layout from '../components/Layout'
 import ModalSignIn from '../components/ModalSignIn'
 import * as AuthSession from 'expo-auth-session'
 import { useToggle } from '../hooks/useToggle'
@@ -78,7 +77,13 @@ const HomeScreen = ({ navigation }) => {
   }
 
   return (
-    <Layout>
+    <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
+      <StatusBar
+        animated={true}
+        showHideTransition={'slide'}
+        barStyle='light-content'
+        backgroundColor='#192734'
+      />
       <AllPost />
       <ModalSignIn>
         <View style={styles.centeredView}>
@@ -105,11 +110,16 @@ const HomeScreen = ({ navigation }) => {
           </View>
         </View>
       </ModalSignIn>
-    </Layout>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    justifyContent: 'space-between',
+    backgroundColor: '#192734',
+  },
   text: {
     color: '#fff',
   },

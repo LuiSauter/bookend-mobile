@@ -1,17 +1,27 @@
-import { StyleSheet, Text } from 'react-native'
+import { SafeAreaView, StatusBar, StyleSheet, Text } from 'react-native'
 import React from 'react'
-import Layout from '../components/Layout'
 
 const BookScreen = () => {
   return (
-    <Layout>
+    <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
+      <StatusBar
+        animated={true}
+        showHideTransition={'slide'}
+        barStyle='light-content'
+        backgroundColor='#192734'
+      />
       <Text style={styles.text}>Books Screen</Text>
       <Text style={styles.text}>Books Screen</Text>
-    </Layout>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    justifyContent: 'space-between',
+    backgroundColor: '#192734',
+  },
   text: {
     color: 'white',
   },
