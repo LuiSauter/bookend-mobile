@@ -1,8 +1,9 @@
+import React, { useState, useEffect, useRef } from 'react'
 import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native'
-import React, { useState, useEffect } from 'react'
 import { useLazyQuery, useQuery } from '@apollo/client'
 import { ALL_POSTS, ALL_POSTS_COUNT } from '../../post/graphql-queries'
 import AllPostItem from './AllPostItem'
+import { useToggle } from '../../hooks/useToggle'
 
 const INITIAL_PAGE = 10
 
@@ -11,12 +12,15 @@ const AllPost = () => {
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
   const [getAllPost, { data, loading, refetch }] = useLazyQuery(ALL_POSTS)
   const { data: allPostsCount } = useQuery(ALL_POSTS_COUNT)
+  const ref = useRef(null)
+  const { handleRefToTop } = useToggle()
 
   useEffect(() => {
     let cleanup = true
     if (cleanup) {
       setCurrentPage(INITIAL_PAGE)
       getAllPost({ variables: { pageSize: INITIAL_PAGE, skipValue: 0 } })
+      handleRefToTop(ref)
     }
     return () => {
       cleanup = false
@@ -67,6 +71,7 @@ const AllPost = () => {
       {loading && <ActivityIndicator style={{ flex: 1 }} color='#09f' size='large' />}
       {data?.allPosts && (
         <FlatList
+          ref={ref}
           data={data?.allPosts}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}

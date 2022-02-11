@@ -1,30 +1,46 @@
-import { View, Text, Image, TouchableOpacity, StyleSheet, TouchableHighlight } from 'react-native'
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  TouchableHighlight,
+  StatusBar,
+} from 'react-native'
+import React, { useState } from 'react'
+import { useQuery } from '@apollo/client'
+import { useNavigation } from '@react-navigation/native'
+import Icon from 'react-native-vector-icons/Ionicons'
+import ImageView from 'react-native-image-viewing'
 import PropTypes from 'prop-types'
-import React, { useEffect } from 'react'
-import { useLazyQuery } from '@apollo/client'
+
 import { FIND_USER_BY_USER } from '../../user/graphql-queries'
 import userDefault from '../../assets/img/default-user.png'
 import useTimeAgo from '../../hooks/useTimeAgo'
-import { useNavigation } from '@react-navigation/native'
-import Icon from 'react-native-vector-icons/Ionicons'
 import NameUser from '../NameUser'
+import { GET_DOMINANT_COLOR } from '../../post/graphql-queries'
+import MultipleButtons from '../MultipleButtons'
 
-const AllPostItem = ({ createdAt, image, title, description, user, author, id }) => {
+const AllPostItem = ({
+  bookUrl,
+  comments,
+  likes,
+  tags,
+  createdAt,
+  image,
+  title,
+  description,
+  id,
+  user,
+  author,
+}) => {
   const date = Number(createdAt)
-  const timeago = useTimeAgo(date)
+  const { timeago, hourAndMinute } = useTimeAgo(date)
+  const [isVisible, setIsVisible] = useState(false)
   const navigation = useNavigation()
 
-  const [getUserById, { data, loading }] = useLazyQuery(FIND_USER_BY_USER)
-
-  useEffect(() => {
-    let cleanup = true
-    if (cleanup) {
-      user && getUserById({ variables: { user: user } })
-    }
-    return () => {
-      cleanup = false
-    }
-  }, [user])
+  const { data, loading } = useQuery(FIND_USER_BY_USER, { variables: { user: user } })
+  const { data: dataDominantColor } = useQuery(GET_DOMINANT_COLOR, { variables: { image: image } })
 
   const colors = [
     '#2666CF',
@@ -41,104 +57,136 @@ const AllPostItem = ({ createdAt, image, title, description, user, author, id })
     '#F76E11',
   ]
 
-  const randomColor = colors[Math.floor(Math.random() * colors.length)]
-
   return (
-    <TouchableHighlight
-      underlayColor='#0003'
-      onPress={() =>
-        navigation.navigate('DetailScreen', {
-          id: id,
-          timeago: timeago,
-          ramdonColor: randomColor,
-          createdAt,
-          image,
-          title,
-          description,
-          user,
-          author,
-          name: data?.findUserById.me.name,
-          username: data?.findUserById.me.username,
-          verified: data?.findUserById.me.verified,
-          photo: data?.findUserById.me.photo,
-        })
-      }
-    >
-      <View style={styles.postContainer}>
-        <View style={styles.userImgContainer}>
-          {data?.findUserById ? (
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('UserScreen', {
-                  name: data?.findUserById.me.name,
-                  username: data?.findUserById.me.username,
-                  verified: data?.findUserById.me.verified,
-                })
-              }
-              activeOpacity={0.6}
-            >
-              <Image style={styles.userImg} source={{ uri: data?.findUserById.me.photo }} />
-            </TouchableOpacity>
-          ) : (
-            <Image style={styles.userImg} source={userDefault} />
-          )}
-        </View>
-        <View style={styles.postItem}>
-          <View style={styles.userTextContainer}>
-            <View style={styles.userTextItem}>
-              <NameUser
-                name={data?.findUserById.me.name}
-                verified={data?.findUserById.me.verified}
-                fontSize={16}
+    <>
+      {isVisible && (
+        <StatusBar
+          barStyle='light-content'
+          animated={true}
+          showHideTransition={'none'}
+          backgroundColor={
+            dataDominantColor?.getColors ? `rgb(${dataDominantColor?.getColors})` : '#192734'
+          }
+        />
+      )}
+      <ImageView
+        images={[{ uri: image }]}
+        imageIndex={0}
+        visible={isVisible}
+        onRequestClose={() => {
+          setIsVisible(false)
+        }}
+        animationType='fade'
+        backgroundColor={
+          dataDominantColor?.getColors ? `rgb(${dataDominantColor?.getColors}), 0.9` : '#192734'
+        }
+        swipeToCloseEnabled={false}
+        doubleTapToZoomEnabled={true}
+      />
+      <TouchableHighlight
+        underlayColor='#0003'
+        onPress={() =>
+          navigation.navigate('DetailScreen', {
+            id: id,
+            randomColor: colors[Math.floor(Math.random() * colors.length)],
+            createdAt,
+            image,
+            title,
+            description,
+            user,
+            author,
+            name: data?.findUserById.me.name,
+            username: data?.findUserById.me.username,
+            verified: data?.findUserById.me.verified,
+            photo: data?.findUserById.me.photo,
+            hourAndMinute,
+            bookUrl,
+            comments,
+            likes,
+          })
+        }
+      >
+        <View style={styles.postContainer}>
+          <View style={styles.userImgContainer}>
+            {data?.findUserById ? (
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('UserScreen', {
+                    name: data?.findUserById.me.name,
+                    username: data?.findUserById.me.username,
+                    verified: data?.findUserById.me.verified,
+                  })
+                }
+                activeOpacity={0.6}
+              >
+                <Image style={styles.userImg} source={{ uri: data?.findUserById.me.photo }} />
+              </TouchableOpacity>
+            ) : (
+              <Image style={styles.userImg} source={userDefault} />
+            )}
+          </View>
+          <View style={styles.postItem}>
+            <View style={styles.userTextContainer}>
+              <View style={styles.userTextItem}>
+                <NameUser
+                  name={data?.findUserById.me.name}
+                  verified={data?.findUserById.me.verified}
+                  fontSize={16}
+                />
+                <Text style={styles.userTextUsername}>
+                  @{data?.findUserById.me.username} · {timeago}
+                </Text>
+              </View>
+              <Icon.Button
+                backgroundColor='transparent'
+                name='ellipsis-vertical'
+                iconStyle={{ marginRight: 0 }}
+                size={15}
+                borderRadius={50}
+                onPress={() => console.log('ONPRESS')}
+                underlayColor='#0003'
               />
-              <Text style={styles.userTextUsername}>
-                @{data?.findUserById.me.username} · {timeago}
-              </Text>
             </View>
-            <Icon.Button
-              backgroundColor='transparent'
-              name='ellipsis-vertical'
-              iconStyle={{ marginRight: 0 }}
-              size={15}
-              borderRadius={50}
-              onPress={() => console.log('ONPRESS')}
-              underlayColor='#0003'
+            <View style={styles.postItemDescription}>
+              <Text style={styles.postItemTitle}>
+                {title} - {author}
+              </Text>
+              <Text style={styles.text}>{description}</Text>
+            </View>
+            <TouchableOpacity
+              onPress={() => {
+                setIsVisible(true)
+              }}
+              activeOpacity={0.6}
+              style={styles.postImgContainer}
+            >
+              {loading ? (
+                <View
+                  style={{
+                    height: 400,
+                    width: '100%',
+                    backgroundColor: colors[Math.floor(Math.random() * colors.length)],
+                    borderRadius: 12,
+                  }}
+                />
+              ) : (
+                <Image style={styles.postImg} source={{ uri: image }} />
+              )}
+            </TouchableOpacity>
+            <View></View>
+            <MultipleButtons
+              comments={comments.length}
+              likes={likes.length}
+              id={id}
+              bookDownload={bookUrl}
             />
           </View>
-          <View style={styles.postItemDescription}>
-            <Text style={styles.postItemTitle}>
-              {title} - {author}
-            </Text>
-            <Text style={styles.text}>{description}</Text>
-          </View>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('ModalImageScreen', {
-                image: image,
-              })
-            }}
-            activeOpacity={0.6}
-            style={styles.postImgContainer}
-          >
-            {loading ? (
-              <View
-                style={{
-                  height: 400,
-                  width: '100%',
-                  backgroundColor: randomColor,
-                  borderRadius: 12,
-                }}
-              />
-            ) : (
-              <Image style={styles.postImg} source={{ uri: image }} />
-            )}
-          </TouchableOpacity>
-          <View></View>
         </View>
-      </View>
-    </TouchableHighlight>
+      </TouchableHighlight>
+    </>
   )
 }
+export default AllPostItem
 
 const styles = StyleSheet.create({
   postContainer: {
@@ -204,8 +252,6 @@ const styles = StyleSheet.create({
     height: 30,
   },
 })
-
-export default AllPostItem
 
 AllPostItem.propTypes = {
   bookUrl: PropTypes.string,
