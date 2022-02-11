@@ -1,112 +1,131 @@
 /* eslint-disable react/prop-types */
-import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect } from 'react'
-import { FINDONE_POST } from '../post/graphql-queries'
-import { useLazyQuery } from '@apollo/client'
-import NameUser from '../components/NameUser'
+import {
+  Image,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native'
+import React, { useState } from 'react'
+import { GET_DOMINANT_COLOR } from '../post/graphql-queries'
+import { useQuery } from '@apollo/client'
+import ImageView from 'react-native-image-viewing'
 import Icon from 'react-native-vector-icons/Ionicons'
+
+import NameUser from '../components/NameUser'
 import userDefault from '../assets/img/default-user.png'
 
 const DetailScreen = ({ route, navigation }) => {
   const {
-    id: id,
-    timeago: timeago,
-    ramdonColor: randomColor,
-    createdAt,
+    // id,
+    // randomColor,
+    // createdAt,
+    bookUrl,
+    comments,
+    likes,
     image,
     title,
     description,
-    user,
+    // user,
     author,
     name,
     username,
     verified,
     photo,
+    hourAndMinute,
   } = route.params
-  const [getOnePost, { data, loading }] = useLazyQuery(FINDONE_POST)
-
-  useEffect(() => {
-    let cleanup = true
-    if (cleanup) {
-      id && getOnePost({ variables: { id: id } })
-    }
-    return () => {
-      cleanup = false
-    }
-  }, [id])
-
-  // console.log(data?.findPost)
+  const { data: dataDominantColor } = useQuery(GET_DOMINANT_COLOR, { variables: { image: image } })
+  const [isVisible, setIsVisible] = useState(false)
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
-      <View style={styles.postContainer}>
-        <View style={styles.userImgContainer}>
-          {data?.findUserById ? (
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('UserScreen', {
-                  name: name,
-                  username: username,
-                  verified: verified,
-                })
-              }
-              activeOpacity={0.6}
-            >
-              <Image style={styles.userImg} source={{ uri: photo }} />
-            </TouchableOpacity>
-          ) : (
-            <Image style={styles.userImg} source={userDefault} />
-          )}
-        </View>
-        <View style={styles.postItem}>
-          <View style={styles.userTextContainer}>
-            <View style={styles.userTextItem}>
-              <NameUser name={name} verified={verified} fontSize={16} />
-              <Text style={styles.userTextUsername}>
-                @{username} · {timeago}
-              </Text>
-            </View>
-            <Icon.Button
-              backgroundColor='transparent'
-              name='ellipsis-vertical'
-              iconStyle={{ marginRight: 0 }}
-              size={15}
-              borderRadius={50}
-              onPress={() => console.log('ONPRESS')}
-              underlayColor='#0003'
-            />
-          </View>
-          <View style={styles.postItemDescription}>
-            <Text style={styles.postItemTitle}>
-              {title} - {author}
-            </Text>
-            <Text style={styles.text}>{description}</Text>
-          </View>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('ModalImageScreen', {
-                image: image,
-              })
-            }}
-            activeOpacity={0.6}
-            style={styles.postImgContainer}
-          >
-            {loading ? (
-              <View
-                style={{
-                  height: 400,
-                  width: '100%',
-                  backgroundColor: randomColor,
-                  borderRadius: 12,
-                }}
-              />
+      {isVisible && (
+        <StatusBar
+          barStyle='light-content'
+          animated={true}
+          showHideTransition={'none'}
+          backgroundColor={
+            dataDominantColor?.getColors ? `rgb(${dataDominantColor?.getColors})` : '#192734'
+          }
+        />
+      )}
+      <ImageView
+        images={[{ uri: image }]}
+        imageIndex={0}
+        visible={isVisible}
+        onRequestClose={() => {
+          setIsVisible(false)
+        }}
+        animationType='fade'
+        backgroundColor={
+          dataDominantColor?.getColors ? `rgb(${dataDominantColor?.getColors}), 0.9` : '#192734'
+        }
+        swipeToCloseEnabled={false}
+        doubleTapToZoomEnabled={true}
+      />
+      <ScrollView style={styles.postContainer}>
+        <View style={styles.userTextContainer}>
+          <View style={styles.userImgContainer}>
+            {photo ? (
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('UserScreen', {
+                    name: name,
+                    username: username,
+                    verified: verified,
+                  })
+                }
+                activeOpacity={0.6}
+              >
+                <Image style={styles.userImg} source={{ uri: photo }} />
+              </TouchableOpacity>
             ) : (
-              <Image style={styles.postImg} source={{ uri: image }} />
+              <Image style={styles.userImg} source={userDefault} />
             )}
-          </TouchableOpacity>
-          <View></View>
+          </View>
+          <View style={styles.userTextItem}>
+            <NameUser name={name} verified={verified} fontSize={16} />
+            <Text style={styles.userTextUsername}>@{username}</Text>
+          </View>
+          <Icon.Button
+            backgroundColor='transparent'
+            name='ellipsis-vertical'
+            iconStyle={{ marginRight: 0 }}
+            size={15}
+            borderRadius={50}
+            onPress={() => console.log('ONPRESS')}
+            underlayColor='#0003'
+          />
         </View>
-      </View>
+        <View style={styles.postItemDescription}>
+          <Text style={styles.postItemTitle}>
+            {title} - {author}
+          </Text>
+          <Text style={styles.text}>{description}</Text>
+        </View>
+        <TouchableOpacity
+          onPress={() => setIsVisible(true)}
+          activeOpacity={0.6}
+          style={styles.postImgContainer}
+        >
+          <Image style={styles.postImg} source={{ uri: image }} />
+        </TouchableOpacity>
+        <Text style={[styles.userTextUsername, { marginVertical: 10 }]}>{hourAndMinute}</Text>
+        {(likes.length > 0 || comments.length > 0) && (
+          <View style={styles.likesAndComments}>
+            <Text style={[styles.userTextUsername, { marginRight: 16 }]}>
+              <Text style={{ color: '#fff', fontWeight: '700' }}>{comments.length}</Text>{' '}
+              Comentarios
+            </Text>
+            <Text style={styles.userTextUsername}>
+              <Text style={{ color: '#fff', fontWeight: '700' }}>{likes.length}</Text> Me gusta
+            </Text>
+          </View>
+        )}
+      </ScrollView>
     </SafeAreaView>
   )
 }
@@ -116,13 +135,13 @@ export default DetailScreen
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     backgroundColor: '#192734',
   },
   postContainer: {
     flex: 1,
-    paddingHorizontal: 16,
-    flexDirection: 'row',
+    paddingHorizontal: 14,
+    flexDirection: 'column',
     height: '100%',
   },
   userImgContainer: {
@@ -136,14 +155,13 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   userTextContainer: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   userTextItem: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
   },
   userTextUsername: {
     color: '#ccc',
@@ -154,22 +172,24 @@ const styles = StyleSheet.create({
     marginTop: 15.5,
   },
   postItemDescription: {
-    flex: 1,
+    display: 'flex',
     flexDirection: 'column',
+    marginBottom: 20,
   },
   postItemTitle: {
     color: '#0099ff',
-    fontSize: 15.5,
+    fontSize: 20,
     marginBottom: 7,
   },
   text: {
     color: '#fff',
-    fontSize: 16,
-    lineHeight: 24,
+    fontFamily: 'sans-serif',
+    fontSize: 20,
+    lineHeight: 27,
   },
   postImgContainer: {
-    paddingVertical: 13,
-    maxHeight: 400,
+    maxHeight: 500,
+    borderRadius: 12,
   },
   postImg: {
     height: '100%',
@@ -180,5 +200,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#ccc',
     width: 20,
     height: 30,
+  },
+  likesAndComments: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: '#38444d',
+  },
+  comment: {
+    color: '#fff',
   },
 })

@@ -6,8 +6,8 @@ import IconOcticons from 'react-native-vector-icons/Octicons'
 const NameUser = ({ name, verified, fontSize }) => {
   return (
     <Text style={[styles.userTextName, { fontSize: fontSize }]}>
-      <Text>{name}</Text>
-      {verified && <IconOcticons name='verified' color='white' size={15} />}
+      <Text>{name} </Text>
+      <Text>{verified && <IconOcticons name='verified' color='white' size={fontSize} />}</Text>
     </Text>
   )
 }
