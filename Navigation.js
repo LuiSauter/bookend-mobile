@@ -12,6 +12,7 @@ import { FIND_USER } from './user/graphql-queries'
 import ModalImageScreen from './screens/ModalImageScreen'
 import UserScreen from './screens/UserScreen'
 import NameUser from './components/NameUser'
+import DetailScreen from './screens/DetailScreen'
 
 const Stack = createNativeStackNavigator()
 
@@ -87,6 +88,20 @@ const Navigation = () => {
                 fontSize={15}
               />
             ),
+            headerStyle: {
+              backgroundColor: '#192734',
+            },
+            headerTitleStyle: {
+              color: '#fff',
+            },
+            headerTintColor: '#fff',
+          })}
+        />
+        <Stack.Screen
+          name='DetailScreen'
+          component={DetailScreen}
+          options={() => ({
+            title: 'Book',
             headerStyle: {
               backgroundColor: '#192734',
             },
