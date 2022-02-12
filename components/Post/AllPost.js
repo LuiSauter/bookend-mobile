@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
+import { StyleSheet, View, FlatList, ActivityIndicator, RefreshControl } from 'react-native'
 import { useLazyQuery, useQuery } from '@apollo/client'
 import { ALL_POSTS, ALL_POSTS_COUNT } from '../../post/graphql-queries'
 import AllPostItem from './AllPostItem'
@@ -10,10 +10,11 @@ const INITIAL_PAGE = 10
 const AllPost = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
+  const [refreshing, setRefreshing] = useState(false)
   const [getAllPost, { data, loading, refetch }] = useLazyQuery(ALL_POSTS)
   const { data: allPostsCount } = useQuery(ALL_POSTS_COUNT)
-  const ref = useRef(null)
   const { handleRefToTop } = useToggle()
+  const ref = useRef(null)
 
   useEffect(() => {
     let cleanup = true
@@ -66,9 +67,17 @@ const AllPost = () => {
     setCurrentPage(currentPage + INITIAL_PAGE)
   }
 
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true)
+    await refetch({ pageSize: INITIAL_PAGE, skipValue: 0 })
+    setRefreshing(false)
+  }, [])
+
   return (
     <View style={styles.container}>
-      {loading && <ActivityIndicator style={{ flex: 1 }} color='#09f' size='large' />}
+      {loading && (
+        <ActivityIndicator style={{ flex: 1, marginVertical: 16 }} color='#09f' size='large' />
+      )}
       {data?.allPosts && (
         <FlatList
           ref={ref}
@@ -78,6 +87,14 @@ const AllPost = () => {
           ListFooterComponent={renderLoader}
           onEndReached={loadMoreItem}
           onEndReachedThreshold={0}
+          refreshControl={
+            <RefreshControl
+              progressBackgroundColor={'#192734'}
+              refreshing={refreshing}
+              colors={['#09f']}
+              onRefresh={onRefresh}
+            />
+          }
         />
       )}
     </View>
