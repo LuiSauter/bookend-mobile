@@ -1,6 +1,14 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect } from 'react'
-import { Button, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native'
+import {
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  RefreshControl,
+} from 'react-native'
 import { EXPO_CLIENT_ID, ANDROID_CLIENT_ID, IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env'
 import * as WebBrowser from 'expo-web-browser'
 import * as Google from 'expo-auth-session/providers/google'
@@ -12,10 +20,11 @@ import { LOGINQL } from '../login/graphql-mutations'
 import { useAuth } from '../hooks/useAuth'
 import { INITIAL_STATE } from '../context/authContext'
 import AllPost from '../components/Post/AllPost'
+import GoogleIcon from 'react-native-vector-icons/AntDesign'
 
 WebBrowser.maybeCompleteAuthSession()
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = () => {
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: EXPO_CLIENT_ID,
     androidClientId: ANDROID_CLIENT_ID,
@@ -88,25 +97,59 @@ const HomeScreen = ({ navigation }) => {
       <ModalSignIn>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Hello World!</Text>
-            <Button title='Books' onPress={() => navigation.push('BookScreen')} />
+            <Text style={[styles.text, { marginBottom: 16 }]}>Sign In</Text>
             {googleAuth.status === 'authenticated' ? (
-              <Button title='Sign out' onPress={signOut} />
+              <TouchableOpacity
+                style={[
+                  styles.buttonSignOut,
+                  {
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  },
+                ]}
+                onPress={signOut}
+                activeOpacity={0.7}
+              >
+                <Text style={{ color: '#fff', fontSize: 19, fontWeight: 'bold' }}>Sign Out</Text>
+              </TouchableOpacity>
             ) : (
-              <Button
+              <TouchableOpacity
+                style={[
+                  styles.button,
+                  {
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  },
+                ]}
                 disabled={!request}
-                title='Login'
                 onPress={() => {
                   promptAsync()
                   handleModalVisible()
                 }}
-              />
+                activeOpacity={0.7}
+              >
+                <GoogleIcon
+                  name='google'
+                  color={'#fff'}
+                  onPress={() => console.log('xd')}
+                  size={24}
+                />
+                <Text style={[styles.textButton, { color: '#fff', marginLeft: 16 }]}>
+                  Sign with Google
+                </Text>
+              </TouchableOpacity>
             )}
-            <Button
-              title='Hide Modal'
+            <TouchableOpacity
               style={[styles.button, styles.buttonClose]}
               onPress={() => handleModalVisible()}
-            />
+              activeOpacity={0.7}
+            >
+              <Text style={[styles.textButton, { color: '#fff' }]}>Cancel</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ModalSignIn>
@@ -122,22 +165,34 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#fff',
+    fontSize: 20,
+    textAlign: 'center',
+  },
+  textButton: {
+    fontWeight: 'bold',
+    fontSize: 19,
+    textAlign: 'center',
   },
   button: {
-    borderRadius: 20,
+    borderRadius: 50,
     padding: 10,
     elevation: 2,
+    marginBottom: 16,
+    backgroundColor: '#4281e5',
+  },
+  buttonSignOut: {
+    borderRadius: 50,
+    padding: 10,
+    elevation: 2,
+    marginBottom: 16,
+    backgroundColor: '#4281e5a3',
   },
   buttonClose: {
-    backgroundColor: '#0099ff',
+    backgroundColor: '#ef4444',
   },
   textStyle: {
     color: 'white',
     fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 15,
     textAlign: 'center',
   },
   centeredView: {
@@ -150,17 +205,17 @@ const styles = StyleSheet.create({
     margin: 20,
     width: '80%',
     textAlign: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#192734',
     borderRadius: 20,
     padding: 35,
-    shadowColor: '#000',
+    shadowColor: '#0099ff',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 16,
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 32,
   },
 })
 
