@@ -5,17 +5,20 @@ export const ToggleContext = createContext({})
 
 export const ToggleStateProvider = ({ children }) => {
   const [modalVisible, setModalVisible] = useState(false)
-  const [imageScreen, setImageScreen] = useState('')
-
-  const handleAddImage = (image) => {
-    setImageScreen(image)
-  }
+  const [currentRef, setCurrentRef] = useState()
 
   const handleModalVisible = () => setModalVisible(!modalVisible)
 
+  const handleRefToTop = (ref) => setCurrentRef(ref)
+
   return (
     <ToggleContext.Provider
-      value={{ modalVisible, handleModalVisible, imageScreen, handleAddImage }}
+      value={{
+        modalVisible,
+        handleModalVisible,
+        handleRefToTop,
+        currentRef,
+      }}
     >
       {children}
     </ToggleContext.Provider>

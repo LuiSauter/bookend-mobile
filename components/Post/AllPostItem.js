@@ -25,7 +25,7 @@ const AllPostItem = ({
   bookUrl,
   comments,
   likes,
-  tags,
+  // tags,
   createdAt,
   image,
   title,
@@ -226,6 +226,7 @@ const styles = StyleSheet.create({
   postItemDescription: {
     flex: 1,
     flexDirection: 'column',
+    marginBottom: 12,
   },
   postItemTitle: {
     color: '#0099ff',
@@ -238,7 +239,6 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   postImgContainer: {
-    paddingVertical: 13,
     maxHeight: 400,
   },
   postImg: {
