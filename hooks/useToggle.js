@@ -2,8 +2,14 @@ import { useContext } from 'react'
 import { ToggleContext } from '../context/toggleContext'
 
 export const useToggle = () => {
-  const { modalVisible, handleModalVisible, imageScreen, handleAddImage } =
+  const { modalVisible, handleModalVisible, handleRefToTop, currentRef, loginOpen } =
     useContext(ToggleContext)
 
-  return { modalVisible, handleModalVisible, imageScreen, handleAddImage }
+  return {
+    modalVisible,
+    handleModalVisible,
+    handleRefToTop,
+    currentRef,
+    loginOpen,
+  }
 }

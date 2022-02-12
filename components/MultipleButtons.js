@@ -16,8 +16,7 @@ const MultipleButtons = ({ comments, likes, id, bookDownload }) => {
           borderRadius={50}
           color={'#fff'}
           onPress={() => console.log('xd')}
-          size={21}
-          // padding={4}
+          size={19}
           iconStyle={{ marginRight: 0 }}
           underlayColor='transparent'
         />
@@ -29,16 +28,13 @@ const MultipleButtons = ({ comments, likes, id, bookDownload }) => {
           borderRadius={50}
           color={'#fff'}
           onPress={() => console.log('xd')}
-          size={29}
-          // padding={4}
+          size={26}
           iconStyle={{ marginRight: 0 }}
           underlayColor='transparent'
         />
         <Text style={styles.text}>{comments}</Text>
       </View>
-      {/*  */}
       <BtnLike id={id} likes={likes} />
-      {/*  */}
       <View style={styles.btn}>
         <Download.Button
           name='download'
@@ -46,8 +42,7 @@ const MultipleButtons = ({ comments, likes, id, bookDownload }) => {
           borderRadius={50}
           color={'#fff'}
           onPress={() => console.log('xd')}
-          size={22}
-          // padding={0}
+          size={20}
           iconStyle={{ marginRight: 0 }}
           underlayColor='transparent'
         />
@@ -65,7 +60,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingRight: 10,
-    paddingBottom: 10,
+    paddingVertical: 10,
   },
   btn: {
     display: 'flex',
@@ -74,6 +69,6 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#fff',
-    fontSize: 15,
+    fontSize: 17,
   },
 })

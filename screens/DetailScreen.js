@@ -10,17 +10,18 @@ import {
   View,
 } from 'react-native'
 import React, { useState } from 'react'
-import { GET_DOMINANT_COLOR } from '../post/graphql-queries'
+import { FINDONE_POST, GET_DOMINANT_COLOR } from '../post/graphql-queries'
 import { useQuery } from '@apollo/client'
 import ImageView from 'react-native-image-viewing'
 import Icon from 'react-native-vector-icons/Ionicons'
 
 import NameUser from '../components/NameUser'
 import userDefault from '../assets/img/default-user.png'
+import MultipleButtons from '../components/MultipleButtons'
 
 const DetailScreen = ({ route, navigation }) => {
   const {
-    // id,
+    id,
     // randomColor,
     // createdAt,
     bookUrl,
@@ -37,8 +38,11 @@ const DetailScreen = ({ route, navigation }) => {
     photo,
     hourAndMinute,
   } = route.params
-  const { data: dataDominantColor } = useQuery(GET_DOMINANT_COLOR, { variables: { image: image } })
   const [isVisible, setIsVisible] = useState(false)
+  const { data: dataDominantColor } = useQuery(GET_DOMINANT_COLOR, { variables: { image: image } })
+  const { data } = useQuery(FINDONE_POST, {
+    variables: { id: id },
+  })
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
@@ -117,14 +121,25 @@ const DetailScreen = ({ route, navigation }) => {
         {(likes.length > 0 || comments.length > 0) && (
           <View style={styles.likesAndComments}>
             <Text style={[styles.userTextUsername, { marginRight: 16 }]}>
-              <Text style={{ color: '#fff', fontWeight: '700' }}>{comments.length}</Text>{' '}
+              <Text style={{ color: '#fff', fontWeight: '700' }}>
+                {data?.findPost ? data?.findPost.comments.length : comments.length}
+              </Text>{' '}
               Comentarios
             </Text>
             <Text style={styles.userTextUsername}>
-              <Text style={{ color: '#fff', fontWeight: '700' }}>{likes.length}</Text> Me gusta
+              <Text style={{ color: '#fff', fontWeight: '700' }}>
+                {data?.findPost ? data?.findPost.likes.length : likes.length}
+              </Text>{' '}
+              Me gusta
             </Text>
           </View>
         )}
+        <MultipleButtons
+          comments={comments.length}
+          likes={data?.findPost ? data?.findPost.likes.length : likes.length}
+          id={id}
+          bookDownload={bookUrl}
+        />
       </ScrollView>
     </SafeAreaView>
   )
