@@ -1,26 +1,30 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect } from 'react'
 import {
+  ActivityIndicator,
+  Image,
   SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  RefreshControl,
 } from 'react-native'
 import { EXPO_CLIENT_ID, ANDROID_CLIENT_ID, IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env'
 import * as WebBrowser from 'expo-web-browser'
 import * as Google from 'expo-auth-session/providers/google'
-import ModalSignIn from '../components/ModalSignIn'
 import * as AuthSession from 'expo-auth-session'
+import { useLazyQuery, useMutation } from '@apollo/client'
+import GoogleIcon from 'react-native-vector-icons/AntDesign'
+
+import ModalSignIn from '../components/ModalSignIn'
 import { useToggle } from '../hooks/useToggle'
-import { useMutation } from '@apollo/client'
 import { LOGINQL } from '../login/graphql-mutations'
 import { useAuth } from '../hooks/useAuth'
 import { INITIAL_STATE } from '../context/authContext'
 import AllPost from '../components/Post/AllPost'
-import GoogleIcon from 'react-native-vector-icons/AntDesign'
+import { FIND_USER } from '../user/graphql-queries'
+import NameUser from '../components/NameUser'
 
 WebBrowser.maybeCompleteAuthSession()
 
@@ -32,8 +36,10 @@ const HomeScreen = () => {
     webClientId: WEB_CLIENT_ID,
   })
   const { googleAuth, handleGoogleAuthentication } = useAuth()
+  const { status, email, name, image, token } = googleAuth
   const { handleModalVisible } = useToggle()
   const [getLogin, { reset }] = useMutation(LOGINQL)
+  const [getProfile, { data }] = useLazyQuery(FIND_USER)
 
   const fetchUserInfo = async (token) => {
     if (token) {
@@ -60,17 +66,18 @@ const HomeScreen = () => {
   useEffect(() => {
     let cleanup = true
     if (cleanup) {
-      if (googleAuth.token !== '') {
+      if (token !== '') {
         getLogin({
-          variables: { email: googleAuth.email, name: googleAuth.name, image: googleAuth.image },
+          variables: { email: email, name: name, image: image },
         })
+        getProfile({ variables: { email: email } })
       }
     }
 
     return () => {
       cleanup = false
     }
-  }, [googleAuth.token])
+  }, [token])
 
   const signOut = async () => {
     await AuthSession.revokeAsync(
@@ -97,7 +104,25 @@ const HomeScreen = () => {
       <ModalSignIn>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={[styles.text, { marginBottom: 16 }]}>Sign In</Text>
+            {status === 'authenticated' ? (
+              data?.findUser ? (
+                <View style={styles.modalUser}>
+                  <Image style={styles.modalUserImage} source={{ uri: data?.findUser.me.photo }} />
+                  <View>
+                    <NameUser
+                      fontSize={19}
+                      name={data?.findUser.me.name}
+                      verified={data?.findUser.verified}
+                    />
+                    <Text style={styles.modalUserText}>@{data?.findUser.me.username}</Text>
+                  </View>
+                </View>
+              ) : (
+                <ActivityIndicator color='#09f' size='large' />
+              )
+            ) : (
+              <Text style={[styles.text, { marginBottom: 16 }]}>Sign In</Text>
+            )}
             {googleAuth.status === 'authenticated' ? (
               <TouchableOpacity
                 style={[
@@ -112,7 +137,7 @@ const HomeScreen = () => {
                 onPress={signOut}
                 activeOpacity={0.7}
               >
-                <Text style={{ color: '#fff', fontSize: 19, fontWeight: 'bold' }}>Sign Out</Text>
+                <Text style={{ color: '#fff', fontSize: 18, fontWeight: 'bold' }}>Sign Out</Text>
               </TouchableOpacity>
             ) : (
               <TouchableOpacity
@@ -170,7 +195,7 @@ const styles = StyleSheet.create({
   },
   textButton: {
     fontWeight: 'bold',
-    fontSize: 19,
+    fontSize: 18,
     textAlign: 'center',
   },
   button: {
@@ -217,6 +242,14 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 32,
   },
+  modalUser: {
+    paddingBottom: 16,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  modalUserImage: { height: 65, width: 65, borderRadius: 50, marginRight: 16 },
+  modalUserText: { color: '#ddda', fontSize: 18 },
 })
 
 export default HomeScreen

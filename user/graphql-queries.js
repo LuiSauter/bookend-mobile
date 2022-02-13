@@ -35,7 +35,7 @@ export const FIND_USER = gql`
   }
 `
 export const FIND_USER_BY_USER = gql`
-  query findUserByUserID($user: String!) {
+  query findUserByUserId($user: String!) {
     findUserById(user: $user) {
       following
       me {
