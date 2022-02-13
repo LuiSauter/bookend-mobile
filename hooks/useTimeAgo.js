@@ -80,7 +80,7 @@ export default function useTimeAgo(timestamp) {
         if (dayFormat.getFullYear() === currentYear.getFullYear()) {
           return { hourAndMinute, timeago: `${day} ${month}.` }
         } else {
-          return { hourAndMinute, timeago: dateFormat }
+          return { hourAndMinute, timeago: dateFormat.split('20').join('') }
         }
       }
     }
