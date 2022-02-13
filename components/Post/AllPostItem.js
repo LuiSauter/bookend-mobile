@@ -217,7 +217,8 @@ const styles = StyleSheet.create({
   },
   userTextUsername: {
     color: '#ccc',
-    fontSize: 15,
+    fontSize: 14.5,
+    overflow: 'hidden',
   },
   postItem: {
     flex: 1,

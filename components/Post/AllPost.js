@@ -4,6 +4,7 @@ import { useLazyQuery, useQuery } from '@apollo/client'
 import { ALL_POSTS, ALL_POSTS_COUNT } from '../../post/graphql-queries'
 import AllPostItem from './AllPostItem'
 import { useToggle } from '../../hooks/useToggle'
+import { useAuth } from '../../hooks/useAuth'
 
 const INITIAL_PAGE = 10
 
@@ -14,6 +15,7 @@ const AllPost = () => {
   const [getAllPost, { data, loading, refetch }] = useLazyQuery(ALL_POSTS)
   const { data: allPostsCount } = useQuery(ALL_POSTS_COUNT)
   const { handleRefToTop } = useToggle()
+  const { googleAuth } = useAuth()
   const ref = useRef(null)
 
   useEffect(() => {
@@ -37,6 +39,17 @@ const AllPost = () => {
       cleanup = false
     }
   }, [currentPage])
+
+  useEffect(() => {
+    let cleanup = true
+    if (cleanup) {
+      googleAuth.status === 'unauthenticated' && refetch({ pageSize: INITIAL_PAGE, skipValue: 0 })
+    }
+
+    return () => {
+      cleanup = false
+    }
+  }, [googleAuth.status])
 
   const renderItem = ({ item }) => {
     return (

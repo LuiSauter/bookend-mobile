@@ -40,20 +40,23 @@ const BtnLike = ({ id, likes }) => {
     return () => {
       cleanup = false
     }
-  }, [status === 'authenticated'])
+  }, [status])
 
   const isMatch = dataUser?.findUser.liked.some((postId) => postId === id)
 
   useEffect(() => {
     let cleanup = true
     if (cleanup && isMatch) {
+      if (status === 'unauthenticated') {
+        return setLike(false)
+      }
       isMatch ? setLike(true) : setLike(false)
     }
 
     return () => {
       cleanup = false
     }
-  }, [isMatch])
+  }, [isMatch, status])
 
   const handleLike = (id) => {
     if (status === 'unauthenticated') handleModalVisible()
