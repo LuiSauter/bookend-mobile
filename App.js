@@ -1,10 +1,12 @@
+/* eslint-disable react/prop-types */
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { ApolloClient, ApolloProvider } from '@apollo/client'
 import { InMemoryCache } from '@apollo/client/cache/inmemory/inMemoryCache'
+
 import { ToggleStateProvider } from './context/toggleContext'
-import Navigation from './Navigation'
+import Navigation from './navigation/Navigation'
 import { AuthStateProvider } from './context/authContext'
 import { LogBox } from 'react-native'
 
