@@ -5,8 +5,10 @@ import BtnLike from './Button/BtnLike'
 import Comment from 'react-native-vector-icons/EvilIcons' //comment
 import Download from 'react-native-vector-icons/Feather' //share
 import Share from 'react-native-vector-icons/AntDesign' //sharealt
+import { useNavigation } from '@react-navigation/native'
 
-const MultipleButtons = ({ comments, likes, id, bookDownload }) => {
+const MultipleButtons = ({ comments, likes, id, bookDownload, user, hourAndMinute }) => {
+  const navigation = useNavigation()
   return (
     <View style={styles.btnContainer}>
       <View style={styles.btn}>
@@ -27,14 +29,16 @@ const MultipleButtons = ({ comments, likes, id, bookDownload }) => {
           backgroundColor='transparent'
           borderRadius={50}
           color={'#fff'}
-          onPress={() => console.log('xd')}
+          onPress={() =>
+            navigation.navigate('DetailScreen', { id, user, hourAndMinute, likes, comments })
+          }
           size={26}
           iconStyle={{ marginRight: 0 }}
           underlayColor='transparent'
         />
-        <Text style={styles.text}>{comments}</Text>
+        <Text style={styles.text}>{comments.length}</Text>
       </View>
-      <BtnLike id={id} likes={likes} />
+      <BtnLike id={id} likes={likes.length} />
       <View style={styles.btn}>
         <Download.Button
           name='download'

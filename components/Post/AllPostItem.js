@@ -173,12 +173,13 @@ const AllPostItem = ({
                 <Image style={styles.postImg} source={{ uri: image }} />
               )}
             </TouchableOpacity>
-            <View></View>
             <MultipleButtons
-              comments={comments.length}
-              likes={likes.length}
+              comments={comments}
+              likes={likes}
               id={id}
               bookDownload={bookUrl}
+              user={user}
+              hourAndMinute={hourAndMinute}
             />
           </View>
         </View>
