@@ -10,66 +10,44 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import { EXPO_CLIENT_ID, ANDROID_CLIENT_ID, IOS_CLIENT_ID, WEB_CLIENT_ID } from '@env'
-import * as WebBrowser from 'expo-web-browser'
-import * as Google from 'expo-auth-session/providers/google'
-import * as AuthSession from 'expo-auth-session'
-import { useLazyQuery, useMutation } from '@apollo/client'
+// import * as WebBrowser from 'expo-web-browser'
+import { useLazyQuery } from '@apollo/client'
 import GoogleIcon from 'react-native-vector-icons/AntDesign'
 
 import ModalSignIn from '../components/ModalSignIn'
 import { useToggle } from '../hooks/useToggle'
-import { LOGINQL } from '../login/graphql-mutations'
-import { useAuth } from '../hooks/useAuth'
-import { INITIAL_STATE } from '../context/authContext'
 import AllPost from '../components/Post/AllPost'
 import { FIND_USER } from '../user/graphql-queries'
 import NameUser from '../components/NameUser'
+import { useIsFocused } from '@react-navigation/native'
+import { useAuth } from '../hooks/useAuth'
+import { auth } from '../lib/auth'
 
-WebBrowser.maybeCompleteAuthSession()
+// WebBrowser.maybeCompleteAuthSession()
 
 const HomeScreen = () => {
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    expoClientId: EXPO_CLIENT_ID,
-    androidClientId: ANDROID_CLIENT_ID,
-    iosClientId: IOS_CLIENT_ID,
-    webClientId: WEB_CLIENT_ID,
-  })
-  const { googleAuth, handleGoogleAuthentication } = useAuth()
-  const { status, email, name, image, token } = googleAuth
-  const { handleModalVisible } = useToggle()
-  const [getLogin, { reset }] = useMutation(LOGINQL)
+  const { googleAuth } = useAuth()
+  const { status, email, token } = googleAuth
+  const { handleModalVisible, handleFocused } = useToggle()
   const [getProfile, { data }] = useLazyQuery(FIND_USER)
+  const { promptAsync, request, signOut } = auth()
 
-  const fetchUserInfo = async (token) => {
-    if (token) {
-      const res = await AuthSession.fetchUserInfoAsync({ accessToken: token }, Google.discovery)
-      if (res) {
-        return handleGoogleAuthentication({
-          email: res.email,
-          name: res.name,
-          image: res.picture,
-          token: token,
-          status: 'authenticated',
-        })
-      }
-    }
-  }
+  const isFocused = useIsFocused()
 
   useEffect(() => {
-    if (response?.type === 'success') {
-      const { authentication } = response
-      fetchUserInfo(authentication?.accessToken)
+    let cleanup = true
+    if (cleanup) {
+      isFocused && handleFocused({ isHome: isFocused, isBooks: false, isSearch: false })
     }
-  }, [response])
+    return () => {
+      cleanup = false
+    }
+  }, [isFocused])
 
   useEffect(() => {
     let cleanup = true
     if (cleanup) {
       if (token !== '') {
-        getLogin({
-          variables: { email: email, name: name, image: image },
-        })
         getProfile({ variables: { email: email } })
       }
     }
@@ -78,19 +56,6 @@ const HomeScreen = () => {
       cleanup = false
     }
   }, [token])
-
-  const signOut = async () => {
-    await AuthSession.revokeAsync(
-      {
-        token: response?.authentication?.accessToken,
-        clientId: EXPO_CLIENT_ID,
-      },
-      Google.discovery,
-    )
-    reset()
-    handleGoogleAuthentication(INITIAL_STATE)
-    handleModalVisible()
-  }
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
@@ -134,7 +99,10 @@ const HomeScreen = () => {
                     justifyContent: 'center',
                   },
                 ]}
-                onPress={signOut}
+                onPress={() => {
+                  signOut()
+                  handleModalVisible()
+                }}
                 activeOpacity={0.7}
               >
                 <Text style={{ color: '#fff', fontSize: 18, fontWeight: 'bold' }}>Sign Out</Text>
