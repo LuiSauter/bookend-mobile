@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import {
+  ActivityIndicator,
   Image,
   SafeAreaView,
   ScrollView,
@@ -18,19 +19,18 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import NameUser from '../components/NameUser'
 import userDefault from '../assets/img/default-user.png'
 import MultipleButtons from '../components/MultipleButtons'
+import { FIND_USER_BY_USER } from '../user/graphql-queries'
 
 const DetailScreen = ({ route, navigation }) => {
   const {
     id,
-    // randomColor,
-    // createdAt,
     bookUrl,
     comments,
     likes,
     image,
     title,
     description,
-    // user,
+    user,
     author,
     name,
     username,
@@ -40,9 +40,10 @@ const DetailScreen = ({ route, navigation }) => {
   } = route.params
   const [isVisible, setIsVisible] = useState(false)
   const { data: dataDominantColor } = useQuery(GET_DOMINANT_COLOR, { variables: { image: image } })
-  const { data } = useQuery(FINDONE_POST, {
+  const { data, loading } = useQuery(FINDONE_POST, {
     variables: { id: id },
   })
+  const { data: dataUser } = useQuery(FIND_USER_BY_USER, { variables: { user: user } })
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
@@ -57,7 +58,7 @@ const DetailScreen = ({ route, navigation }) => {
         />
       )}
       <ImageView
-        images={[{ uri: image }]}
+        images={[{ uri: image ? image : data?.findPost.image }]}
         imageIndex={0}
         visible={isVisible}
         onRequestClose={() => {
@@ -73,7 +74,7 @@ const DetailScreen = ({ route, navigation }) => {
       <ScrollView style={styles.postContainer}>
         <View style={styles.userTextContainer}>
           <View style={styles.userImgContainer}>
-            {photo ? (
+            {dataUser?.findUserById ? (
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('UserScreen', {
@@ -84,15 +85,24 @@ const DetailScreen = ({ route, navigation }) => {
                 }
                 activeOpacity={0.6}
               >
-                <Image style={styles.userImg} source={{ uri: photo }} />
+                <Image
+                  style={styles.userImg}
+                  source={{ uri: photo ? photo : dataUser?.findUserById.me.photo }}
+                />
               </TouchableOpacity>
             ) : (
               <Image style={styles.userImg} source={userDefault} />
             )}
           </View>
           <View style={styles.userTextItem}>
-            <NameUser name={name} verified={verified} fontSize={16} />
-            <Text style={styles.userTextUsername}>@{username}</Text>
+            <NameUser
+              name={name ? name : dataUser?.findUserById.me.name}
+              verified={verified ? verified : dataUser?.findUserById.me.verified}
+              fontSize={16}
+            />
+            <Text style={styles.userTextUsername}>
+              @{username ? username : dataUser?.findUserById.me.username}
+            </Text>
           </View>
           <Icon.Button
             backgroundColor='transparent'
@@ -104,42 +114,55 @@ const DetailScreen = ({ route, navigation }) => {
             underlayColor='#0003'
           />
         </View>
-        <View style={styles.postItemDescription}>
-          <Text style={styles.postItemTitle}>
-            {title} - {author}
-          </Text>
-          <Text style={styles.text}>{description}</Text>
-        </View>
-        <TouchableOpacity
-          onPress={() => setIsVisible(true)}
-          activeOpacity={0.6}
-          style={styles.postImgContainer}
-        >
-          <Image style={styles.postImg} source={{ uri: image }} />
-        </TouchableOpacity>
-        <Text style={[styles.userTextUsername, { marginVertical: 10 }]}>{hourAndMinute}</Text>
-        {(likes.length > 0 || comments.length > 0) && (
-          <View style={styles.likesAndComments}>
-            <Text style={[styles.userTextUsername, { marginRight: 16 }]}>
-              <Text style={{ color: '#fff', fontWeight: '700' }}>
-                {data?.findPost ? data?.findPost.comments.length : comments.length}
-              </Text>{' '}
-              Comentarios
-            </Text>
-            <Text style={styles.userTextUsername}>
-              <Text style={{ color: '#fff', fontWeight: '700' }}>
-                {data?.findPost ? data?.findPost.likes.length : likes.length}
-              </Text>{' '}
-              Me gusta
-            </Text>
-          </View>
+        {loading ? (
+          <ActivityIndicator color='#09f' size='large' style={{ display: 'flex', margin: 16 }} />
+        ) : (
+          <>
+            <View style={styles.postItemDescription}>
+              <Text style={styles.postItemTitle}>
+                {title ? title : data?.findPost.title} - {author ? author : data?.findPost.author}
+              </Text>
+              <Text style={styles.text}>
+                {description ? description : data?.findPost.description}
+              </Text>
+            </View>
+            <TouchableOpacity
+              onPress={() => setIsVisible(true)}
+              activeOpacity={0.6}
+              style={styles.postImgContainer}
+            >
+              <Image
+                style={styles.postImg}
+                source={{ uri: image ? image : data?.findPost.image }}
+              />
+            </TouchableOpacity>
+            <Text style={[styles.userTextUsername, { marginVertical: 10 }]}>{hourAndMinute}</Text>
+            {(likes.length > 0 || comments.length > 0) && (
+              <View style={styles.likesAndComments}>
+                <Text style={[styles.userTextUsername, { marginRight: 16 }]}>
+                  <Text style={{ color: '#fff', fontWeight: '700' }}>
+                    {data?.findPost ? data?.findPost.comments.length : comments.length}
+                  </Text>{' '}
+                  Comentarios
+                </Text>
+                <Text style={styles.userTextUsername}>
+                  <Text style={{ color: '#fff', fontWeight: '700' }}>
+                    {data?.findPost ? data?.findPost.likes.length : likes.length}
+                  </Text>{' '}
+                  Me gusta
+                </Text>
+              </View>
+            )}
+            {data?.findPost && (
+              <MultipleButtons
+                comments={comments.length ? comments.length : data?.findPost.comments.length}
+                likes={likes.length ? likes.length : data?.findPost.likes.length}
+                id={id}
+                bookDownload={bookUrl ? bookUrl : data?.findPost.bookUrl}
+              />
+            )}
+          </>
         )}
-        <MultipleButtons
-          comments={comments.length}
-          likes={data?.findPost ? data?.findPost.likes.length : likes.length}
-          id={id}
-          bookDownload={bookUrl}
-        />
       </ScrollView>
     </SafeAreaView>
   )
