@@ -9,7 +9,7 @@ import { FIND_USER } from '../user/graphql-queries'
 import NameUser from './NameUser'
 import bookendLogo from '../assets/img/default-user.png'
 
-import HomeIcon from 'react-native-vector-icons/MaterialCommunityIcons'
+import HomeIcon from 'react-native-vector-icons/Ionicons'
 // home-variant - home-variant-outline
 import Ionicons from 'react-native-vector-icons/Ionicons'
 // ios-person - ios-person-outline
@@ -101,15 +101,15 @@ const CustomDrawerContent = (props) => {
       <DrawerItem
         icon={() => (
           <HomeIcon
-            name={isFocused.home ? 'home-variant' : 'home-variant-outline'}
-            size={26}
+            name={isFocused.home ? 'home' : 'home-outline'}
+            size={22}
             style={{ marginRight: 0, padding: 0 }}
             color='#fff'
           />
         )}
         label='Inicio'
         focused={isFocused.home}
-        labelStyle={{ color: '#fff', fontSize: 20, fontWeight: '500' }}
+        labelStyle={{ color: '#fff', fontSize: 19, fontWeight: '500' }}
         onPress={() => props.navigation.navigate('HomeScreen')}
       />
       <DrawerItem
@@ -123,7 +123,7 @@ const CustomDrawerContent = (props) => {
         )}
         label='Libros'
         focused={isFocused.books}
-        labelStyle={{ color: '#fff', fontSize: 20, fontWeight: '500' }}
+        labelStyle={{ color: '#fff', fontSize: 19, fontWeight: '500' }}
         onPress={() => props.navigation.navigate('BookScreen')}
       />
       {status === 'authenticated' && (
@@ -137,7 +137,7 @@ const CustomDrawerContent = (props) => {
             />
           )}
           label='Perfil'
-          labelStyle={{ color: '#fff', fontSize: 20, fontWeight: '500' }}
+          labelStyle={{ color: '#fff', fontSize: 19, fontWeight: '500' }}
           onPress={() =>
             props.navigation.navigate('UserScreen', {
               name: data?.findUser.me.name,
@@ -149,7 +149,7 @@ const CustomDrawerContent = (props) => {
       )}
       <DrawerItem
         label='Ajustes'
-        labelStyle={{ color: '#fff', fontSize: 20, fontWeight: '500' }}
+        labelStyle={{ color: '#fff', fontSize: 19, fontWeight: '500' }}
         icon={() => (
           <Ionicons
             name='settings-outline'
@@ -167,7 +167,7 @@ const CustomDrawerContent = (props) => {
           ) : (
             <DrawerItem
               label='Cerrar sesión'
-              labelStyle={{ color: '#ef4444a5', fontSize: 20, fontWeight: '500' }}
+              labelStyle={{ color: '#ef4444a5', fontSize: 19, fontWeight: '500' }}
               icon={() => (
                 <SignOutIcon
                   name='log-out-outline'
@@ -182,7 +182,7 @@ const CustomDrawerContent = (props) => {
         ) : (
           <DrawerItem
             label='Iniciar sesión'
-            labelStyle={{ color: '#fff', fontSize: 20, fontWeight: '500' }}
+            labelStyle={{ color: '#fff', fontSize: 19, fontWeight: '500' }}
             icon={() => (
               <GoogleIcon
                 name='google'
