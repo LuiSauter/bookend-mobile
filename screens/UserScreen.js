@@ -15,6 +15,7 @@ import { FIND_PROFILE } from '../user/graphql-queries'
 import NameUser from '../components/NameUser'
 import { ALL_POST_BY_USER, ALL_POST_BY_USER_COUNT } from '../post/graphql-queries'
 import AllPostItem from '../components/Post/AllPostItem'
+import { colors } from '../config/colors'
 
 const INITIAL_PAGE = 6
 
@@ -57,7 +58,7 @@ const UserScreen = ({ route }) => {
   const renderLoader = () => {
     return isLoading ? (
       <View style={{ marginBottom: 10 }}>
-        <ActivityIndicator size='large' color='#09f' />
+        <ActivityIndicator size='large' color={colors.colorThirdBlue} />
       </View>
     ) : null
   }
@@ -96,9 +97,15 @@ const UserScreen = ({ route }) => {
         animated={true}
         showHideTransition={'slide'}
         barStyle='light-content'
-        backgroundColor='#192734'
+        backgroundColor={colors.colorPrimary}
       />
-      {loading && <ActivityIndicator style={{ marginVertical: 16 }} size='large' color='#0099ff' />}
+      {loading && (
+        <ActivityIndicator
+          style={{ marginVertical: 16 }}
+          size='large'
+          color={colors.colorThirdBlue}
+        />
+      )}
       {dataAllPosts?.allPostsByUsername && (
         <FlatList
           ListHeaderComponent={() => (
@@ -121,7 +128,7 @@ const UserScreen = ({ route }) => {
                 <Text style={styles.text}>{data?.findProfile.description}</Text>
                 <View style={styles.textPresentation}>
                   <Text style={styles.textOpacity}>{data?.findProfile.location}</Text>
-                  <Text style={{ fontSize: 15, color: '#0099ff', marginLeft: 16 }}>
+                  <Text style={{ fontSize: 15, color: colors.colorThirdBlue, marginLeft: 16 }}>
                     {data?.findProfile.website}
                   </Text>
                 </View>
@@ -150,14 +157,14 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     justifyContent: 'space-between',
-    backgroundColor: '#192734',
+    backgroundColor: colors.colorThirdBlue,
   },
   text: {
     color: 'white',
     fontSize: 16,
   },
   textOpacity: {
-    color: '#bbb',
+    color: colors.textWhite,
     fontSize: 15,
   },
   profilePresentation: {
@@ -177,7 +184,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    borderColor: '#192734',
+    borderColor: colors.colorPrimary,
     marginTop: 50,
     height: 90,
     width: 90,

@@ -2,6 +2,7 @@ import { useIsFocused } from '@react-navigation/native'
 import { StatusBar } from 'expo-status-bar'
 import React, { useEffect } from 'react'
 import { SafeAreaView, StyleSheet, Text } from 'react-native'
+import { colors } from '../config/colors'
 import { useToggle } from '../hooks/useToggle'
 
 const SearchScreen = () => {
@@ -25,7 +26,7 @@ const SearchScreen = () => {
         showHideTransition={'slide'}
         // barStyle=''
         style='light'
-        backgroundColor='#192734'
+        backgroundColor={colors.colorPrimary}
       />
       <Text style={styles.text}>Search Screen</Text>
     </SafeAreaView>
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     justifyContent: 'space-between',
-    backgroundColor: '#192734',
+    backgroundColor: colors.colorPrimary,
   },
   text: {
     color: 'white',

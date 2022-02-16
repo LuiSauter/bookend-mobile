@@ -19,6 +19,7 @@ import bookendLogo from '../assets/img/default-user.png'
 import BookScreen from '../screens/BookScreen'
 import SearchScreen from '../screens/SearchScreen'
 import MenuIcon from 'react-native-vector-icons/Ionicons'
+import { colors } from '../config/colors'
 
 const Tab = createBottomTabNavigator()
 
@@ -43,12 +44,8 @@ const TabNavigator = ({ navigation }) => {
   return (
     <Tab.Navigator
       screenOptions={{
-        // headerShown: false,
-        tabBarActiveTintColor: '#09f',
-        tabBarStyle: {
-          backgroundColor: '#192734',
-          borderTopColor: '#aaaa',
-        },
+        tabBarActiveTintColor: colors.colorThirdBlue,
+        tabBarStyle: { backgroundColor: colors.colorPrimary, borderTopColor: colors.TextGray },
       }}
     >
       <Tab.Screen
@@ -56,16 +53,12 @@ const TabNavigator = ({ navigation }) => {
         component={HomeScreen}
         options={() => ({
           title: 'Inicio',
-          tabBarLabelStyle: { color: '#fff', fontSize: 18, fontWeight: '500' },
-          headerStyle: {
-            backgroundColor: '#192734',
-          },
-          headerTitleStyle: {
-            color: '#ddd',
-          },
+          tabBarLabelStyle: { color: colors.textWhite, fontSize: 18, fontWeight: '500' },
+          headerStyle: { backgroundColor: colors.colorPrimary },
+          headerTitleStyle: { color: colors.textWhite },
           // drawerActiveBackgroundColor: 'red',
-          tabBarActiveTintColor: '#09f',
-          headerTintColor: '#fff',
+          tabBarActiveTintColor: colors.colorThirdBlue,
+          headerTintColor: colors.textWhite,
           // tabBarIcon: () => (
           //   <Text style={{ color: '#fff', fontSize: 17, fontWeight: 'bold' }}>
           //     Home
@@ -77,13 +70,13 @@ const TabNavigator = ({ navigation }) => {
               <MenuIcon.Button
                 name='options'
                 backgroundColor='transparent'
-                color='#fff'
+                color={colors.textWhite}
                 onPress={() => navigation.openDrawer()}
                 size={24}
                 padding={6}
                 borderRadius={50}
                 iconStyle={{ marginRight: 0, marginLeft: 0 }}
-                underlayColor='#0003'
+                underlayColor={colors.colorUnderlay}
               />
             </View>
           ),
@@ -92,7 +85,7 @@ const TabNavigator = ({ navigation }) => {
               {googleAuth.status === 'unauthenticated' ? (
                 <Image style={style.bookendLogo} source={bookendLogo} />
               ) : loading ? (
-                <ActivityIndicator color='#09f' size='large' />
+                <ActivityIndicator color={colors.colorThirdBlue} size='large' />
               ) : (
                 <Image style={style.bookendLogo} source={{ uri: data?.findUser.me.photo }} />
               )}
@@ -104,7 +97,7 @@ const TabNavigator = ({ navigation }) => {
                 currentRef.current.scrollToOffset({ offset: 0 })
               }}
             >
-              <Text style={{ color: '#fff', fontSize: 20 }}>Inicio</Text>
+              <Text style={{ color: colors.textWhite, fontSize: 20 }}>Inicio</Text>
             </Pressable>
           ),
         })}
@@ -113,16 +106,12 @@ const TabNavigator = ({ navigation }) => {
         name='BookScreen'
         component={BookScreen}
         options={() => ({
-          tabBarLabelStyle: { color: '#fff', fontSize: 18, fontWeight: '500' },
+          tabBarLabelStyle: { color: colors.textWhite, fontSize: 18, fontWeight: '500' },
           title: 'Books',
-          headerStyle: {
-            backgroundColor: '#192734',
-          },
-          tabBarActiveTintColor: '#09f',
-          headerTitleStyle: {
-            color: '#ddd',
-          },
-          headerTintColor: '#fff',
+          headerStyle: { backgroundColor: colors.colorPrimary },
+          tabBarActiveTintColor: colors.colorThirdBlue,
+          headerTitleStyle: { color: colors.textWhite },
+          headerTintColor: colors.textWhite,
           // tabBarIcon: () => (
           //   <Text style={{ color: '#fff', fontSize: 17, fontWeight: 'bold' }}>Book</Text>
           // ),
@@ -131,13 +120,13 @@ const TabNavigator = ({ navigation }) => {
               <MenuIcon.Button
                 name='options'
                 backgroundColor='transparent'
-                color='#fff'
+                color={colors.textWhite}
                 onPress={() => navigation.openDrawer()}
                 size={24}
                 padding={6}
                 borderRadius={50}
                 iconStyle={{ marginRight: 0, marginLeft: 0 }}
-                underlayColor='#0003'
+                underlayColor={colors.colorUnderlay}
               />
             </View>
           ),
@@ -147,16 +136,12 @@ const TabNavigator = ({ navigation }) => {
         name='SearchScreen'
         component={SearchScreen}
         options={() => ({
-          tabBarLabelStyle: { color: '#fff', fontSize: 18, fontWeight: '500' },
+          tabBarLabelStyle: { color: colors.textWhite, fontSize: 18, fontWeight: '500' },
           title: 'Search',
-          headerStyle: {
-            backgroundColor: '#192734',
-          },
-          tabBarActiveTintColor: '#09f',
-          headerTitleStyle: {
-            color: '#ddd',
-          },
-          headerTintColor: '#fff',
+          headerStyle: { backgroundColor: colors.colorPrimary },
+          tabBarActiveTintColor: colors.colorThirdBlue,
+          headerTitleStyle: { color: colors.textWhite },
+          headerTintColor: colors.textWhite,
           // tabBarIcon: () => (
           //   <Text style={{ color: '#fff', fontSize: 17, fontWeight: 'bold' }}>Search</Text>
           // ),
@@ -165,13 +150,13 @@ const TabNavigator = ({ navigation }) => {
               <MenuIcon.Button
                 name='options'
                 backgroundColor='transparent'
-                color='#fff'
+                color={colors.textWhite}
                 onPress={() => navigation.openDrawer()}
                 size={24}
                 padding={6}
                 borderRadius={50}
                 iconStyle={{ marginRight: 0, marginLeft: 0 }}
-                underlayColor='#0003'
+                underlayColor={colors.colorUnderlay}
               />
             </View>
           ),
@@ -187,7 +172,7 @@ const style = StyleSheet.create({
     width: 33,
     height: 33,
     borderRadius: 50,
-    backgroundColor: '#ddd',
+    backgroundColor: colors.textWhite,
   },
   logoContainer: {
     borderRadius: 50,

@@ -8,6 +8,7 @@ import { FINDONE_POST } from '../../post/graphql-queries'
 import { FIND_USER } from '../../user/graphql-queries'
 import { useAuth } from '../../hooks/useAuth'
 import { useToggle } from '../../hooks/useToggle'
+import { colors } from '../../config/colors'
 
 const BtnLike = ({ id, likes }) => {
   const { googleAuth } = useAuth()
@@ -81,7 +82,7 @@ const BtnLike = ({ id, likes }) => {
           name='heart'
           backgroundColor='transparent'
           borderRadius={50}
-          color={'#ff1c85'}
+          color={colors.colorLikeRed}
           onPress={() => handleDisLike(id)}
           size={22}
           iconStyle={{ marginRight: 0 }}
@@ -92,14 +93,16 @@ const BtnLike = ({ id, likes }) => {
           name='heart-outline'
           backgroundColor='transparent'
           borderRadius={50}
-          color={'#fff'}
+          color={colors.textWhite}
           onPress={() => handleLike(id)}
           size={22}
           iconStyle={{ marginRight: 0 }}
           underlayColor='transparent'
         />
       )}
-      <Text style={{ fontSize: 17, color: like ? '#ff1c85' : '#fff' }}>{likes}</Text>
+      <Text style={{ fontSize: 17, color: like ? colors.colorLikeRed : colors.textWhite }}>
+        {likes}
+      </Text>
     </View>
   )
 }

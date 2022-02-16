@@ -22,6 +22,7 @@ import NameUser from '../components/NameUser'
 import { useIsFocused } from '@react-navigation/native'
 import { useAuth } from '../hooks/useAuth'
 import { auth } from '../lib/auth'
+import { colors } from '../config/colors'
 
 // WebBrowser.maybeCompleteAuthSession()
 
@@ -63,7 +64,7 @@ const HomeScreen = () => {
         animated={true}
         showHideTransition={'slide'}
         barStyle='light-content'
-        backgroundColor='#192734'
+        backgroundColor={colors.colorPrimary}
       />
       <AllPost />
       <ModalSignIn>
@@ -83,7 +84,7 @@ const HomeScreen = () => {
                   </View>
                 </View>
               ) : (
-                <ActivityIndicator color='#09f' size='large' />
+                <ActivityIndicator color={colors.colorThirdBlue} size='large' />
               )
             ) : (
               <Text style={[styles.text, { marginBottom: 16 }]}>Sign In</Text>
@@ -105,7 +106,9 @@ const HomeScreen = () => {
                 }}
                 activeOpacity={0.7}
               >
-                <Text style={{ color: '#fff', fontSize: 18, fontWeight: 'bold' }}>Sign Out</Text>
+                <Text style={{ color: colors.textWhite, fontSize: 18, fontWeight: 'bold' }}>
+                  Sign Out
+                </Text>
               </TouchableOpacity>
             ) : (
               <TouchableOpacity
@@ -127,11 +130,11 @@ const HomeScreen = () => {
               >
                 <GoogleIcon
                   name='google'
-                  color={'#fff'}
+                  color={colors.textWhite}
                   onPress={() => console.log('xd')}
                   size={24}
                 />
-                <Text style={[styles.textButton, { color: '#fff', marginLeft: 16 }]}>
+                <Text style={[styles.textButton, { color: colors.textWhite, marginLeft: 16 }]}>
                   Sign with Google
                 </Text>
               </TouchableOpacity>
@@ -141,7 +144,7 @@ const HomeScreen = () => {
               onPress={() => handleModalVisible()}
               activeOpacity={0.7}
             >
-              <Text style={[styles.textButton, { color: '#fff' }]}>Cancel</Text>
+              <Text style={[styles.textButton, { color: colors.textWhite }]}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -154,10 +157,10 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     justifyContent: 'space-between',
-    backgroundColor: '#192734',
+    backgroundColor: colors.colorPrimary,
   },
   text: {
-    color: '#fff',
+    color: colors.textWhite,
     fontSize: 20,
     textAlign: 'center',
   },
@@ -171,20 +174,20 @@ const styles = StyleSheet.create({
     padding: 10,
     elevation: 2,
     marginBottom: 16,
-    backgroundColor: '#4281e5',
+    backgroundColor: colors.colorThirdBlue,
   },
   buttonSignOut: {
     borderRadius: 50,
     padding: 10,
     elevation: 2,
     marginBottom: 16,
-    backgroundColor: '#4281e5a3',
+    backgroundColor: `${colors.colorThirdBlue}a3`,
   },
   buttonClose: {
-    backgroundColor: '#ef4444',
+    backgroundColor: colors.colorFourthRed,
   },
   textStyle: {
-    color: 'white',
+    color: colors.textWhite,
     fontWeight: 'bold',
     textAlign: 'center',
   },
@@ -198,10 +201,10 @@ const styles = StyleSheet.create({
     margin: 20,
     width: '80%',
     textAlign: 'center',
-    backgroundColor: '#192734',
+    backgroundColor: colors.colorPrimary,
     borderRadius: 20,
     padding: 35,
-    shadowColor: '#0099ff',
+    shadowColor: colors.colorThirdBlue,
     shadowOffset: {
       width: 0,
       height: 16,
@@ -217,7 +220,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalUserImage: { height: 65, width: 65, borderRadius: 50, marginRight: 16 },
-  modalUserText: { color: '#ddda', fontSize: 18 },
+  modalUserText: { color: colors.TextGray, fontSize: 18 },
 })
 
 export default HomeScreen

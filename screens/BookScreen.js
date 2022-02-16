@@ -2,6 +2,7 @@ import { SafeAreaView, StatusBar, StyleSheet, Text } from 'react-native'
 import React, { useEffect } from 'react'
 import { useToggle } from '../hooks/useToggle'
 import { useIsFocused } from '@react-navigation/native'
+import { colors } from '../config/colors'
 
 const BookScreen = () => {
   const { handleFocused } = useToggle()
@@ -22,7 +23,7 @@ const BookScreen = () => {
         animated={true}
         showHideTransition={'slide'}
         barStyle='light-content'
-        backgroundColor='#192734'
+        backgroundColor={colors.colorPrimary}
       />
       <Text style={styles.text}>Books Screen</Text>
       <Text style={styles.text}>Books Screen</Text>
@@ -30,15 +31,15 @@ const BookScreen = () => {
   )
 }
 
+export default BookScreen
+
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     justifyContent: 'space-between',
-    backgroundColor: '#192734',
+    backgroundColor: colors.colorPrimary,
   },
   text: {
-    color: 'white',
+    color: colors.textWhite,
   },
 })
-
-export default BookScreen

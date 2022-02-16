@@ -8,6 +8,11 @@ import DetailScreen from '../screens/DetailScreen'
 
 import DrawerHome from './DrawerNavigator'
 import SettingScreen from '../screens/SettingScreen'
+import AccountScreen from '../screens/Setting/AccountScreen'
+import ActivityScreen from '../screens/Setting/ActivityScreen'
+import ContactSceen from '../screens/Setting/ContactSceen'
+import DisplayScreen from '../screens/Setting/DisplayScreen'
+import { colors } from '../config/colors'
 
 const Stack = createNativeStackNavigator()
 
@@ -29,13 +34,9 @@ const Navigation = () => {
                 fontSize={15}
               />
             ),
-            headerStyle: {
-              backgroundColor: '#192734',
-            },
-            headerTitleStyle: {
-              color: '#fff',
-            },
-            headerTintColor: '#fff',
+            headerStyle: { backgroundColor: colors.colorPrimary },
+            headerTitleStyle: { color: colors.textWhite },
+            headerTintColor: colors.textWhite,
           })}
         />
         <Stack.Screen
@@ -43,13 +44,9 @@ const Navigation = () => {
           component={DetailScreen}
           options={() => ({
             title: 'Book',
-            headerStyle: {
-              backgroundColor: '#192734',
-            },
-            headerTitleStyle: {
-              color: '#fff',
-            },
-            headerTintColor: '#fff',
+            headerStyle: { backgroundColor: colors.colorPrimary },
+            headerTitleStyle: { color: colors.textWhite },
+            headerTintColor: colors.textWhite,
           })}
         />
         <Stack.Screen
@@ -57,13 +54,49 @@ const Navigation = () => {
           component={SettingScreen}
           options={() => ({
             title: 'Ajustes',
-            headerStyle: {
-              backgroundColor: '#192734',
-            },
-            headerTitleStyle: {
-              color: '#fff',
-            },
-            headerTintColor: '#fff',
+            headerStyle: { backgroundColor: colors.colorPrimary },
+            headerTitleStyle: { color: colors.textWhite },
+            headerTintColor: colors.textWhite,
+          })}
+        />
+        <Stack.Screen
+          name='AccountScreen'
+          component={AccountScreen}
+          options={() => ({
+            title: 'Tu cuenta',
+            headerStyle: { backgroundColor: colors.colorPrimary },
+            headerTitleStyle: { color: colors.textWhite },
+            headerTintColor: colors.textWhite,
+          })}
+        />
+        <Stack.Screen
+          name='ActivityScreen'
+          component={ActivityScreen}
+          options={() => ({
+            title: 'Tu actividad',
+            headerStyle: { backgroundColor: colors.colorPrimary },
+            headerTitleStyle: { color: colors.textWhite },
+            headerTintColor: colors.textWhite,
+          })}
+        />
+        <Stack.Screen
+          name='ContactSceen'
+          component={ContactSceen}
+          options={() => ({
+            title: 'Contacto del desarrollador',
+            headerStyle: { backgroundColor: colors.colorPrimary },
+            headerTitleStyle: { color: colors.textWhite },
+            headerTintColor: colors.textWhite,
+          })}
+        />
+        <Stack.Screen
+          name='DisplayScreen'
+          component={DisplayScreen}
+          options={() => ({
+            title: 'Pantalla y idiomas',
+            headerStyle: { backgroundColor: colors.colorPrimary },
+            headerTitleStyle: { color: colors.textWhite },
+            headerTintColor: colors.textWhite,
           })}
         />
       </Stack.Group>

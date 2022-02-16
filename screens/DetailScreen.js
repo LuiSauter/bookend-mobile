@@ -12,6 +12,7 @@ import {
 } from 'react-native'
 import React, { useState } from 'react'
 import { FINDONE_POST, GET_DOMINANT_COLOR } from '../post/graphql-queries'
+import { FIND_USER_BY_USER } from '../user/graphql-queries'
 import { useQuery } from '@apollo/client'
 import ImageView from 'react-native-image-viewing'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -19,7 +20,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import NameUser from '../components/NameUser'
 import userDefault from '../assets/img/default-user.png'
 import MultipleButtons from '../components/MultipleButtons'
-import { FIND_USER_BY_USER } from '../user/graphql-queries'
+import { colors } from '../config/colors'
 
 const DetailScreen = ({ route, navigation }) => {
   const {
@@ -53,7 +54,9 @@ const DetailScreen = ({ route, navigation }) => {
           animated={true}
           showHideTransition={'none'}
           backgroundColor={
-            dataDominantColor?.getColors ? `rgb(${dataDominantColor?.getColors})` : '#192734'
+            dataDominantColor?.getColors
+              ? `rgb(${dataDominantColor?.getColors})`
+              : colors.colorPrimary
           }
         />
       )}
@@ -66,7 +69,9 @@ const DetailScreen = ({ route, navigation }) => {
         }}
         animationType='fade'
         backgroundColor={
-          dataDominantColor?.getColors ? `rgb(${dataDominantColor?.getColors}), 0.9` : '#192734'
+          dataDominantColor?.getColors
+            ? `rgb(${dataDominantColor?.getColors}), 0.9`
+            : colors.colorPrimary
         }
         swipeToCloseEnabled={false}
         doubleTapToZoomEnabled={true}
@@ -111,11 +116,15 @@ const DetailScreen = ({ route, navigation }) => {
             size={15}
             borderRadius={50}
             onPress={() => console.log('ONPRESS')}
-            underlayColor='#0003'
+            underlayColor={colors.colorUnderlay}
           />
         </View>
         {loading ? (
-          <ActivityIndicator color='#09f' size='large' style={{ display: 'flex', margin: 16 }} />
+          <ActivityIndicator
+            color={colors.colorThirdBlue}
+            size='large'
+            style={{ display: 'flex', margin: 16 }}
+          />
         ) : (
           <>
             <View style={styles.postItemDescription}>
@@ -140,13 +149,13 @@ const DetailScreen = ({ route, navigation }) => {
             {(likes.length > 0 || comments.length > 0) && (
               <View style={styles.likesAndComments}>
                 <Text style={[styles.userTextUsername, { marginRight: 16 }]}>
-                  <Text style={{ color: '#fff', fontWeight: '700' }}>
+                  <Text style={{ color: colors.textWhite, fontWeight: '700' }}>
                     {data?.findPost ? data?.findPost.comments.length : comments.length}
                   </Text>{' '}
                   Comentarios
                 </Text>
                 <Text style={styles.userTextUsername}>
-                  <Text style={{ color: '#fff', fontWeight: '700' }}>
+                  <Text style={{ color: colors.textWhite, fontWeight: '700' }}>
                     {data?.findPost ? data?.findPost.likes.length : likes.length}
                   </Text>{' '}
                   Me gusta
@@ -174,7 +183,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     justifyContent: 'flex-start',
-    backgroundColor: '#192734',
+    backgroundColor: colors.colorPrimary,
   },
   postContainer: {
     flex: 1,
@@ -202,7 +211,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   userTextUsername: {
-    color: '#ccc',
+    color: colors.textWhite,
     fontSize: 15,
   },
   postItem: {
@@ -215,12 +224,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   postItemTitle: {
-    color: '#0099ff',
+    color: colors.colorThirdBlue,
     fontSize: 20,
     marginBottom: 7,
   },
   text: {
-    color: '#fff',
+    color: colors.textWhite,
     fontFamily: 'sans-serif',
     fontSize: 20,
     lineHeight: 27,
@@ -235,7 +244,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   button: {
-    backgroundColor: '#ccc',
+    backgroundColor: colors.textWhite,
     width: 20,
     height: 30,
   },
@@ -246,9 +255,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: '#38444d',
+    borderColor: colors.TextGray,
   },
   comment: {
-    color: '#fff',
+    color: colors.textWhite,
   },
 })
