@@ -6,6 +6,7 @@ import Comment from 'react-native-vector-icons/EvilIcons' //comment
 import Download from 'react-native-vector-icons/Feather' //share
 import Share from 'react-native-vector-icons/AntDesign' //sharealt
 import { useNavigation } from '@react-navigation/native'
+import { colors } from '../config/colors'
 
 const MultipleButtons = ({ comments, likes, id, bookDownload, user, hourAndMinute }) => {
   const navigation = useNavigation()
@@ -16,7 +17,7 @@ const MultipleButtons = ({ comments, likes, id, bookDownload, user, hourAndMinut
           name='sharealt'
           backgroundColor='transparent'
           borderRadius={50}
-          color={'#fff'}
+          color={colors.textWhite}
           onPress={() => console.log('xd')}
           size={19}
           iconStyle={{ marginRight: 0 }}
@@ -28,7 +29,7 @@ const MultipleButtons = ({ comments, likes, id, bookDownload, user, hourAndMinut
           name='comment'
           backgroundColor='transparent'
           borderRadius={50}
-          color={'#fff'}
+          color={colors.textWhite}
           onPress={() =>
             navigation.navigate('DetailScreen', { id, user, hourAndMinute, likes, comments })
           }
@@ -44,7 +45,7 @@ const MultipleButtons = ({ comments, likes, id, bookDownload, user, hourAndMinut
           name='download'
           backgroundColor='transparent'
           borderRadius={50}
-          color={'#fff'}
+          color={colors.textWhite}
           onPress={() => console.log('xd')}
           size={20}
           iconStyle={{ marginRight: 0 }}
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    color: '#fff',
+    color: colors.textWhite,
     fontSize: 17,
   },
 })

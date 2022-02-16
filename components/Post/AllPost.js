@@ -5,6 +5,7 @@ import { ALL_POSTS, ALL_POSTS_COUNT } from '../../post/graphql-queries'
 import AllPostItem from './AllPostItem'
 import { useToggle } from '../../hooks/useToggle'
 import { useAuth } from '../../hooks/useAuth'
+import { colors } from '../../config/colors'
 
 const INITIAL_PAGE = 10
 
@@ -70,7 +71,15 @@ const AllPost = () => {
   }
 
   const renderLoader = () => {
-    return isLoading && <ActivityIndicator style={{ marginBottom: 16 }} color='#09f' size='large' />
+    return (
+      isLoading && (
+        <ActivityIndicator
+          style={{ marginBottom: 16 }}
+          color={colors.colorThirdBlue}
+          size='large'
+        />
+      )
+    )
   }
 
   const loadMoreItem = () => {
@@ -89,7 +98,11 @@ const AllPost = () => {
   return (
     <View style={styles.container}>
       {loading && (
-        <ActivityIndicator style={{ flex: 1, marginVertical: 16 }} color='#09f' size='large' />
+        <ActivityIndicator
+          style={{ flex: 1, marginVertical: 16 }}
+          color={colors.colorThirdBlue}
+          size='large'
+        />
       )}
       {data?.allPosts && (
         <FlatList
@@ -102,9 +115,9 @@ const AllPost = () => {
           onEndReachedThreshold={0}
           refreshControl={
             <RefreshControl
-              progressBackgroundColor={'#192734'}
+              progressBackgroundColor={colors.colorPrimary}
               refreshing={refreshing}
-              colors={['#09f']}
+              colors={[colors.colorThirdBlue]}
               onRefresh={onRefresh}
             />
           }

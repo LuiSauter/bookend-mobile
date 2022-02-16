@@ -10,7 +10,6 @@ import {
 import React, { useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { useNavigation } from '@react-navigation/native'
-import Icon from 'react-native-vector-icons/Ionicons'
 import ImageView from 'react-native-image-viewing'
 import PropTypes from 'prop-types'
 
@@ -20,12 +19,13 @@ import useTimeAgo from '../../hooks/useTimeAgo'
 import NameUser from '../NameUser'
 import { GET_DOMINANT_COLOR } from '../../post/graphql-queries'
 import MultipleButtons from '../MultipleButtons'
+import BtnOptions from '../Button/BtnOptions'
+import { colors } from '../../config/colors'
 
 const AllPostItem = ({
   bookUrl,
   comments,
   likes,
-  // tags,
   createdAt,
   image,
   title,
@@ -42,7 +42,7 @@ const AllPostItem = ({
   const { data, loading } = useQuery(FIND_USER_BY_USER, { variables: { user: user } })
   const { data: dataDominantColor } = useQuery(GET_DOMINANT_COLOR, { variables: { image: image } })
 
-  const colors = [
+  const colorsRandom = [
     '#2666CF',
     '#8A39E1',
     '#BB6464',
@@ -65,7 +65,9 @@ const AllPostItem = ({
           animated={true}
           showHideTransition={'none'}
           backgroundColor={
-            dataDominantColor?.getColors ? `rgb(${dataDominantColor?.getColors})` : '#192734'
+            dataDominantColor?.getColors
+              ? `rgb(${dataDominantColor?.getColors})`
+              : colors.colorPrimary
           }
         />
       )}
@@ -73,22 +75,22 @@ const AllPostItem = ({
         images={[{ uri: image }]}
         imageIndex={0}
         visible={isVisible}
-        onRequestClose={() => {
-          setIsVisible(false)
-        }}
+        onRequestClose={() => setIsVisible(false)}
         animationType='fade'
         backgroundColor={
-          dataDominantColor?.getColors ? `rgb(${dataDominantColor?.getColors}), 0.9` : '#192734'
+          dataDominantColor?.getColors
+            ? `rgb(${dataDominantColor?.getColors}), 0.9`
+            : colors.colorPrimary
         }
         swipeToCloseEnabled={false}
         doubleTapToZoomEnabled={true}
       />
       <TouchableHighlight
-        underlayColor='#0003'
+        underlayColor={colors.colorUnderlay}
         onPress={() =>
           navigation.navigate('DetailScreen', {
             id: id,
-            randomColor: colors[Math.floor(Math.random() * colors.length)],
+            randomColor: colorsRandom[Math.floor(Math.random() * colorsRandom.length)],
             createdAt,
             image,
             title,
@@ -137,15 +139,7 @@ const AllPostItem = ({
                   @{data?.findUserById.me.username} · {timeago}
                 </Text>
               </View>
-              <Icon.Button
-                backgroundColor='transparent'
-                name='ellipsis-vertical'
-                iconStyle={{ marginRight: 0 }}
-                size={15}
-                borderRadius={50}
-                onPress={() => console.log('ONPRESS')}
-                underlayColor='#0003'
-              />
+              <BtnOptions />
             </View>
             <View style={styles.postItemDescription}>
               <Text style={styles.postItemTitle}>
@@ -165,7 +159,7 @@ const AllPostItem = ({
                   style={{
                     height: 400,
                     width: '100%',
-                    backgroundColor: colors[Math.floor(Math.random() * colors.length)],
+                    backgroundColor: colorsRandom[Math.floor(Math.random() * colorsRandom.length)],
                     borderRadius: 12,
                   }}
                 />
@@ -217,7 +211,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   userTextUsername: {
-    color: '#ccc',
+    color: colors.textWhite,
     fontSize: 14.5,
     overflow: 'hidden',
   },
@@ -231,12 +225,12 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   postItemTitle: {
-    color: '#0099ff',
+    color: colors.colorThirdBlue,
     fontSize: 15.5,
     marginBottom: 7,
   },
   text: {
-    color: '#fff',
+    color: colors.textWhite,
     fontSize: 16,
     lineHeight: 24,
   },
@@ -249,7 +243,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   button: {
-    backgroundColor: '#ccc',
+    backgroundColor: colors.textWhite,
     width: 20,
     height: 30,
   },
