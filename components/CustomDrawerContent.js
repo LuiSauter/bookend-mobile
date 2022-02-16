@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect } from 'react'
-import { ActivityIndicator, Image, Text, View } from 'react-native'
+import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native'
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer'
 import { useLazyQuery } from '@apollo/client'
 
@@ -20,6 +20,7 @@ import SignOutIcon from 'react-native-vector-icons/Ionicons'
 import GoogleIcon from 'react-native-vector-icons/AntDesign'
 import { useToggle } from '../hooks/useToggle'
 import { auth } from '../lib/auth'
+import { colors } from '../config/colors'
 // sign-out-alt
 
 const CustomDrawerContent = (props) => {
@@ -44,25 +45,13 @@ const CustomDrawerContent = (props) => {
   }, [status])
 
   return (
-    <DrawerContentScrollView
-      {...props}
-      contentContainerStyle={{ backgroundColor: '#192734', flex: 1 }}
-    >
+    <DrawerContentScrollView {...props} contentContainerStyle={styles.container}>
       {status === 'authenticated' ? (
         loading ? (
-          <ActivityIndicator color='#09f' size='small' style={{ display: 'flex', margin: 16 }} />
+          <ActivityIndicator color={colors.colorThirdBlue} size='small' style={styles.loading} />
         ) : (
           <>
-            <Image
-              style={{
-                width: 50,
-                height: 50,
-                borderRadius: 50,
-                marginTop: 16,
-                marginLeft: 16,
-              }}
-              source={{ uri: data?.findUser.me.photo }}
-            />
+            <Image style={styles.userImage} source={{ uri: data?.findUser.me.photo }} />
             <DrawerItem
               label={() => (
                 <>
@@ -71,7 +60,9 @@ const CustomDrawerContent = (props) => {
                     fontSize={17}
                     verified={data?.findUser.verified}
                   />
-                  <Text style={{ fontSize: 16, color: '#ccc' }}>@{data?.findUser.me.username}</Text>
+                  <Text style={{ fontSize: 16, color: colors.TextGray }}>
+                    @{data?.findUser.me.username}
+                  </Text>
                 </>
               )}
               onPress={() => props.navigation.navigate('')}
@@ -80,22 +71,8 @@ const CustomDrawerContent = (props) => {
         )
       ) : (
         <>
-          <Image
-            source={bookendLogo}
-            style={{ width: 50, height: 50, borderRadius: 50, margin: 16 }}
-          />
-          <Text
-            style={{
-              fontSize: 24,
-              fontWeight: 'bold',
-              color: '#09f',
-              marginHorizontal: 16,
-              marginBottom: 16,
-              letterSpacing: 0.5,
-            }}
-          >
-            Bookend
-          </Text>
+          <Image source={bookendLogo} style={styles.userImageDefault} />
+          <Text style={styles.textBookend}>Bookend</Text>
         </>
       )}
       <DrawerItem
@@ -103,13 +80,13 @@ const CustomDrawerContent = (props) => {
           <HomeIcon
             name={isFocused.home ? 'home' : 'home-outline'}
             size={22}
-            style={{ marginRight: 0, padding: 0 }}
-            color='#fff'
+            style={styles.icon}
+            color={colors.textWhite}
           />
         )}
         label='Inicio'
         focused={isFocused.home}
-        labelStyle={{ color: '#fff', fontSize: 19, fontWeight: '500' }}
+        labelStyle={styles.label}
         onPress={() => props.navigation.navigate('HomeScreen')}
       />
       <DrawerItem
@@ -117,13 +94,13 @@ const CustomDrawerContent = (props) => {
           <Ionicons
             name={isFocused.books ? 'book' : 'book-outline'}
             size={22}
-            style={{ marginRight: 0, padding: 0 }}
-            color='#fff'
+            style={styles.icon}
+            color={colors.textWhite}
           />
         )}
         label='Libros'
         focused={isFocused.books}
-        labelStyle={{ color: '#fff', fontSize: 19, fontWeight: '500' }}
+        labelStyle={styles.label}
         onPress={() => props.navigation.navigate('BookScreen')}
       />
       {status === 'authenticated' && (
@@ -132,12 +109,12 @@ const CustomDrawerContent = (props) => {
             <Ionicons
               name='ios-person-outline'
               size={24}
-              style={{ marginRight: 0, padding: 0 }}
-              color='#fff'
+              style={styles.icon}
+              color={colors.textWhite}
             />
           )}
           label='Perfil'
-          labelStyle={{ color: '#fff', fontSize: 19, fontWeight: '500' }}
+          labelStyle={styles.label}
           onPress={() =>
             props.navigation.navigate('UserScreen', {
               name: data?.findUser.me.name,
@@ -149,47 +126,38 @@ const CustomDrawerContent = (props) => {
       )}
       <DrawerItem
         label='Ajustes'
-        labelStyle={{ color: '#fff', fontSize: 19, fontWeight: '500' }}
+        labelStyle={styles.label}
         icon={() => (
           <Ionicons
             name='settings-outline'
             size={24}
-            style={{ marginRight: 0, padding: 0 }}
-            color='#fff'
+            style={styles.icon}
+            color={colors.textWhite}
           />
         )}
         onPress={() => props.navigation.navigate('SettingScreen')}
       />
-      <View style={{ borderTopWidth: 1, borderTopColor: '#aaa', marginTop: 8, paddingTop: 8 }}>
+      <View style={styles.login}>
         {status === 'authenticated' ? (
-          loading ? (
-            <ActivityIndicator color='#09f' size='large' style={{ display: 'flex', margin: 16 }} />
-          ) : (
-            <DrawerItem
-              label='Cerrar sesión'
-              labelStyle={{ color: '#ef4444a5', fontSize: 19, fontWeight: '500' }}
-              icon={() => (
-                <SignOutIcon
-                  name='log-out-outline'
-                  size={24}
-                  style={{ marginRight: 0, padding: 0 }}
-                  color='#ef4444a5'
-                />
-              )}
-              onPress={() => signOut()}
-            />
-          )
+          <DrawerItem
+            label='Cerrar sesión'
+            labelStyle={{ color: `${colors.colorFourthRed}a5`, fontSize: 19, fontWeight: '500' }}
+            icon={() => (
+              <SignOutIcon
+                name='log-out-outline'
+                size={24}
+                style={styles.icon}
+                color={`${colors.colorFourthRed}a5`}
+              />
+            )}
+            onPress={() => signOut()}
+          />
         ) : (
           <DrawerItem
             label='Iniciar sesión'
-            labelStyle={{ color: '#fff', fontSize: 19, fontWeight: '500' }}
+            labelStyle={styles.label}
             icon={() => (
-              <GoogleIcon
-                name='google'
-                size={24}
-                style={{ marginRight: 0, padding: 0, marginLeft: 0 }}
-                color='#fff'
-              />
+              <GoogleIcon name='google' size={24} style={styles.icon} color={colors.textWhite} />
             )}
             onPress={() => promptAsync()}
           />
@@ -198,4 +166,46 @@ const CustomDrawerContent = (props) => {
     </DrawerContentScrollView>
   )
 }
+
 export default CustomDrawerContent
+
+const styles = StyleSheet.create({
+  container: { backgroundColor: colors.colorPrimary, flex: 1 },
+  loading: { display: 'flex', margin: 16 },
+  userImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    marginTop: 16,
+    marginLeft: 16,
+  },
+  userImageDefault: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    margin: 16,
+  },
+  textBookend: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: colors.colorThirdBlue,
+    marginHorizontal: 16,
+    marginBottom: 16,
+    letterSpacing: 0.5,
+  },
+  label: {
+    color: colors.textWhite,
+    fontSize: 19,
+    fontWeight: '500',
+  },
+  icon: {
+    marginRight: 0,
+    padding: 0,
+  },
+  login: {
+    borderTopWidth: 1,
+    borderTopColor: colors.TextGray,
+    marginTop: 8,
+    paddingTop: 8,
+  },
+})
