@@ -134,9 +134,13 @@ const UserScreen = ({ route }) => {
                 </View>
                 <View style={styles.textPresentation}>
                   <Text style={[styles.text, { marginRight: 16 }]}>
-                    {data?.findProfile.followers.length} Following
+                    {data?.findProfile.followers.length}
+                    <Text style={{ color: colors.TextGray }}> Following</Text>
                   </Text>
-                  <Text style={styles.text}>{data?.findProfile.following.length} Followers</Text>
+                  <Text style={styles.text}>
+                    {data?.findProfile.following.length}
+                    <Text style={{ color: colors.TextGray }}> Followers</Text>
+                  </Text>
                 </View>
               </View>
             </>
@@ -157,14 +161,15 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     justifyContent: 'space-between',
-    backgroundColor: colors.colorThirdBlue,
+    backgroundColor: colors.colorPrimary,
   },
   text: {
-    color: 'white',
+    color: colors.textWhite,
     fontSize: 16,
+    marginTop: 12,
   },
   textOpacity: {
-    color: colors.textWhite,
+    color: colors.TextGray,
     fontSize: 15,
   },
   profilePresentation: {
