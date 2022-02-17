@@ -19,7 +19,7 @@ const Stack = createNativeStackNavigator()
 const Navigation = () => {
   return (
     <Stack.Navigator>
-      <Stack.Group screenOptions={() => ({ headerShown: true })}>
+      <Stack.Group>
         <Stack.Screen name='DrawerHome' component={DrawerHome} options={{ headerShown: false }} />
         <Stack.Screen
           name='UserScreen'
