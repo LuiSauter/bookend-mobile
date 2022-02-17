@@ -15,12 +15,12 @@ import { FINDONE_POST, GET_DOMINANT_COLOR } from '../post/graphql-queries'
 import { FIND_USER_BY_USER } from '../user/graphql-queries'
 import { useQuery } from '@apollo/client'
 import ImageView from 'react-native-image-viewing'
-import Icon from 'react-native-vector-icons/Ionicons'
 
 import NameUser from '../components/NameUser'
 import userDefault from '../assets/img/default-user.png'
 import MultipleButtons from '../components/MultipleButtons'
 import { colors } from '../config/colors'
+import BtnOptions from '../components/Button/BtnOptions'
 
 const DetailScreen = ({ route, navigation }) => {
   const {
@@ -109,15 +109,7 @@ const DetailScreen = ({ route, navigation }) => {
               @{username ? username : dataUser?.findUserById.me.username}
             </Text>
           </View>
-          <Icon.Button
-            backgroundColor='transparent'
-            name='ellipsis-vertical'
-            iconStyle={{ marginRight: 0 }}
-            size={15}
-            borderRadius={50}
-            onPress={() => console.log('ONPRESS')}
-            underlayColor={colors.colorUnderlay}
-          />
+          <BtnOptions id={id} />
         </View>
         {loading ? (
           <ActivityIndicator
@@ -165,7 +157,7 @@ const DetailScreen = ({ route, navigation }) => {
             {data?.findPost && (
               <MultipleButtons
                 comments={comments.length ? comments.length : data?.findPost.comments.length}
-                likes={likes.length ? likes.length : data?.findPost.likes.length}
+                likes={likes ? likes : data?.findPost.likes}
                 id={id}
                 bookDownload={bookUrl ? bookUrl : data?.findPost.bookUrl}
               />

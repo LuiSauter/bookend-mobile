@@ -1,15 +1,35 @@
-import React, { useState } from 'react'
+/* eslint-disable react/prop-types */
+import { useLazyQuery } from '@apollo/client'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { colors } from '../../config/colors'
+import { useAuth } from '../../hooks/useAuth'
+import { FIND_USER } from '../../user/graphql-queries'
 
-const BtnOptions = () => {
+const BtnOptions = ({ id }) => {
   const [visible, setVisible] = useState(false)
+  const [getUserByEmail, { data: dataUser }] = useLazyQuery(FIND_USER)
+  const { googleAuth } = useAuth()
+  const { status, email } = googleAuth
+
+  useEffect(() => {
+    let cleanup = true
+    if (cleanup) {
+      status === 'authenticated' && getUserByEmail({ variables: { email: email } })
+    }
+    return () => {
+      cleanup = false
+    }
+  }, [status])
 
   const hideMenu = () => setVisible(false)
 
   const showMenu = () => setVisible(true)
+
+  const isMatch = dataUser?.findUser.liked.some((postId) => postId === id)
+
   return (
     <View style={styles.container}>
       <Menu
@@ -63,7 +83,6 @@ export default BtnOptions
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
   },

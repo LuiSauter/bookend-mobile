@@ -139,7 +139,7 @@ const AllPostItem = ({
                   @{data?.findUserById.me.username} · {timeago}
                 </Text>
               </View>
-              <BtnOptions />
+              <BtnOptions id={id} />
             </View>
             <View style={styles.postItemDescription}>
               <Text style={styles.postItemTitle}>
