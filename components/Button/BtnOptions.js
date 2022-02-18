@@ -1,14 +1,15 @@
 /* eslint-disable react/prop-types */
 import { useLazyQuery } from '@apollo/client'
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { colors } from '../../config/colors'
 import { useAuth } from '../../hooks/useAuth'
 import { FIND_USER } from '../../user/graphql-queries'
+import BtnFollow from './BtnFollow'
 
-const BtnOptions = ({ id }) => {
+const BtnOptions = ({ id, username, user }) => {
   const [visible, setVisible] = useState(false)
   const [getUserByEmail, { data: dataUser }] = useLazyQuery(FIND_USER)
   const { googleAuth } = useAuth()
@@ -57,14 +58,30 @@ const BtnOptions = ({ id }) => {
           >
             Reportar un problema
           </MenuItem>
-          <MenuItem
-            pressColor={colors.colorUnderlay}
-            textStyle={{ color: colors.textWhite, fontSize: 18 }}
-            onPress={hideMenu}
-            style={{ borderRadius: 12 }}
-          >
-            Dejar de seguir
-          </MenuItem>
+          {dataUser?.findUser.me.email !== email && (
+            <MenuItem
+              pressColor='transparent'
+              textStyle={{
+                color: colors.textWhite,
+                fontSize: 18,
+              }}
+              style={{
+                borderRadius: 12,
+              }}
+            >
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Text style={{ color: colors.textWhite, fontSize: 18 }}>@{username}</Text>
+                <BtnFollow username={username} user={user} />
+              </View>
+            </MenuItem>
+          )}
           <MenuDivider color={colors.TextGray} />
           <MenuItem
             textStyle={{ color: colors.colorFourthRed, fontSize: 18 }}
