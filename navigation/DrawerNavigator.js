@@ -23,7 +23,7 @@ import bookendLogo from '../assets/img/default-user.png'
 const Drawer = createDrawerNavigator()
 
 const DrawerHome = () => {
-  const { handleModalVisible, currentRef, isFocused } = useToggle()
+  const { handleModalVisible, currentRef } = useToggle()
   const { googleAuth } = useAuth()
   const [getFindUserByEmail, { data, loading }] = useLazyQuery(FIND_USER, {
     variables: { email: googleAuth.email },
@@ -86,10 +86,14 @@ const DrawerHome = () => {
                 currentRef.current.scrollToOffset({ offset: 0 })
               }}
             >
-              <Text style={{ color: colors.textWhite, fontSize: 20 }}>
-                {(isFocused.home && 'Inicio') ||
-                  (isFocused.books && 'Books') ||
-                  (isFocused.search && 'Search')}
+              <Text
+                style={{
+                  color: colors.textWhite,
+                  fontSize: 20,
+                  fontFamily: 'sans-serif',
+                }}
+              >
+                Bookend
               </Text>
             </Pressable>
           ),

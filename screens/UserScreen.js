@@ -16,14 +16,18 @@ import NameUser from '../components/NameUser'
 import { ALL_POST_BY_USER, ALL_POST_BY_USER_COUNT } from '../post/graphql-queries'
 import AllPostItem from '../components/Post/AllPostItem'
 import { colors } from '../config/colors'
+import BtnFollow from '../components/Button/BtnFollow'
+import { useAuth } from '../hooks/useAuth'
 
 const INITIAL_PAGE = 6
 
 const UserScreen = ({ route }) => {
   const { username } = route.params
+  const { googleAuth } = useAuth()
+  const { status, email } = googleAuth
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
-  const [getProfile, { data }] = useLazyQuery(FIND_PROFILE)
   const [isLoading, setIsLoading] = useState(true)
+  const [getProfile, { data }] = useLazyQuery(FIND_PROFILE)
   const [getAllPost, { data: dataAllPosts, refetch, loading }] = useLazyQuery(ALL_POST_BY_USER)
   const [getCountAllPost, { data: CountAllPosts }] = useLazyQuery(ALL_POST_BY_USER_COUNT)
 
@@ -118,12 +122,17 @@ const UserScreen = ({ route }) => {
                 />
                 <Image style={styles.profileImage} source={{ uri: data?.findProfile.me.photo }} />
               </View>
-              <View style={{ marginHorizontal: 16 }}>
-                <NameUser
-                  name={data?.findProfile.me.name}
-                  verified={data?.findProfile.me.verified}
-                  fontSize={20}
-                />
+              <View style={{ marginHorizontal: 16, marginTop: 10 }}>
+                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                  <NameUser
+                    name={data?.findProfile.me.name}
+                    verified={data?.findProfile.me.verified}
+                    fontSize={20}
+                  />
+                  {data?.findProfile.me.email !== email && (
+                    <BtnFollow username={username} user={data?.findProfile.me.user} />
+                  )}
+                </View>
                 <Text style={styles.textOpacity}>@{data?.findProfile.me.username}</Text>
                 <Text style={styles.text}>{data?.findProfile.description}</Text>
                 <View style={styles.textPresentation}>
