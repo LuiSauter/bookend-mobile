@@ -151,11 +151,11 @@ const AllPostRanking = () => {
 
 export default AllPostRanking
 
-const styles = StyleSheet.create({
-  column: {
-    flexShrink: 1,
-    justifyContent: 'space-around',
-    marginHorizontal: 5,
-    // padding: 10,
-  },
-})
+// const styles = StyleSheet.create({
+//   column: {
+//     flexShrink: 1,
+//     justifyContent: 'space-around',
+//     marginHorizontal: 5,
+//     // padding: 10,
+//   },
+// })
