@@ -65,3 +65,20 @@ export const FINDONE_POST = gql`
     }
   }
 `
+export const ALL_POST_RANKING = gql`
+  query ($pageSize: Int!, $skipValue: Int!) {
+    allPostRanking(pageSize: $pageSize, skipValue: $skipValue) {
+      bookUrl
+      comments
+      description
+      id
+      image
+      likes
+      likesCount
+      tags
+      title
+      user
+      author
+    }
+  }
+`
