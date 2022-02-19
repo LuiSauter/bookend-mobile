@@ -21,8 +21,6 @@ import userDefault from '../assets/img/default-user.png'
 import MultipleButtons from '../components/MultipleButtons'
 import { colors } from '../config/colors'
 import BtnOptions from '../components/Button/BtnOptions'
-import BtnFollow from '../components/Button/BtnFollow'
-import { useAuth } from '../hooks/useAuth'
 
 const DetailScreen = ({ route, navigation }) => {
   const {
@@ -43,8 +41,6 @@ const DetailScreen = ({ route, navigation }) => {
   } = route.params
   const [isVisible, setIsVisible] = useState(false)
   const { data: dataDominantColor } = useQuery(GET_DOMINANT_COLOR, { variables: { image: image } })
-  const { googleAuth } = useAuth()
-  const { email } = googleAuth
   const { data, loading } = useQuery(FINDONE_POST, {
     variables: { id: id },
   })
@@ -113,12 +109,12 @@ const DetailScreen = ({ route, navigation }) => {
               @{username ? username : dataUser?.findUserById.me.username}
             </Text>
           </View>
-          <BtnOptions username={username} user={user} id={id} />
+          <BtnOptions username={username} user={user} />
         </View>
         {loading ? (
           <ActivityIndicator
             color={colors.colorThirdBlue}
-            size='large'
+            size='small'
             style={{ display: 'flex', margin: 16 }}
           />
         ) : (

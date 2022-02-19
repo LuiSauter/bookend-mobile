@@ -1,8 +1,9 @@
-import { SafeAreaView, StatusBar, StyleSheet, Text } from 'react-native'
+import { SafeAreaView, StatusBar, StyleSheet } from 'react-native'
 import React, { useEffect } from 'react'
 import { useToggle } from '../hooks/useToggle'
 import { useIsFocused } from '@react-navigation/native'
 import { colors } from '../config/colors'
+import AllPostRanking from '../components/Post/AllPostRanking'
 
 const BookScreen = () => {
   const { handleFocused } = useToggle()
@@ -25,8 +26,7 @@ const BookScreen = () => {
         barStyle='light-content'
         backgroundColor={colors.colorPrimary}
       />
-      <Text style={styles.text}>Books Screen</Text>
-      <Text style={styles.text}>Books Screen</Text>
+      <AllPostRanking />
     </SafeAreaView>
   )
 }
