@@ -26,19 +26,13 @@ const AllPost = () => {
       getAllPost({ variables: { pageSize: INITIAL_PAGE, skipValue: 0 } })
       handleRefToTop(ref)
     }
-    return () => {
-      cleanup = false
-    }
+    return () => (cleanup = false)
   }, [])
 
   useEffect(() => {
     let cleanup = true
-    if (cleanup) {
-      refetch({ pageSize: currentPage, skipValue: 0 })
-    }
-    return () => {
-      cleanup = false
-    }
+    if (cleanup) refetch({ pageSize: currentPage, skipValue: 0 })
+    return () => (cleanup = false)
   }, [currentPage])
 
   useEffect(() => {
@@ -47,9 +41,7 @@ const AllPost = () => {
       googleAuth.status === 'unauthenticated' && refetch({ pageSize: INITIAL_PAGE, skipValue: 0 })
     }
 
-    return () => {
-      cleanup = false
-    }
+    return () => (cleanup = false)
   }, [googleAuth.status])
 
   const renderItem = ({ item }) => {
@@ -76,7 +68,7 @@ const AllPost = () => {
         <ActivityIndicator
           style={{ marginBottom: 16 }}
           color={colors.colorThirdBlue}
-          size='large'
+          size='small'
         />
       )
     )
