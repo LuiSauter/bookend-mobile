@@ -9,7 +9,7 @@ import { useAuth } from '../../hooks/useAuth'
 import { FIND_USER } from '../../user/graphql-queries'
 import BtnFollow from './BtnFollow'
 
-const BtnOptions = ({ id, username, user }) => {
+const BtnOptions = ({ username, user }) => {
   const [visible, setVisible] = useState(false)
   const [getUserByEmail, { data: dataUser }] = useLazyQuery(FIND_USER)
   const { googleAuth } = useAuth()
@@ -28,8 +28,6 @@ const BtnOptions = ({ id, username, user }) => {
   const hideMenu = () => setVisible(false)
 
   const showMenu = () => setVisible(true)
-
-  const isMatch = dataUser?.findUser.liked.some((postId) => postId === id)
 
   return (
     <View style={styles.container}>
@@ -52,21 +50,22 @@ const BtnOptions = ({ id, username, user }) => {
         <View style={{ margin: 16 }}>
           <MenuItem
             pressColor={colors.colorUnderlay}
-            textStyle={{ color: colors.textWhite, fontSize: 18 }}
+            textStyle={{
+              color: colors.textWhite,
+              fontSize: 18,
+            }}
             onPress={hideMenu}
             style={{ borderRadius: 12 }}
           >
             Reportar un problema
           </MenuItem>
-          {dataUser?.findUser.me.email !== email && (
+          {dataUser?.findUser.me.user !== user && (
             <MenuItem
               pressColor='transparent'
               textStyle={{
                 color: colors.textWhite,
                 fontSize: 18,
-              }}
-              style={{
-                borderRadius: 12,
+                width: '130%',
               }}
             >
               <View
@@ -77,7 +76,15 @@ const BtnOptions = ({ id, username, user }) => {
                   alignItems: 'center',
                 }}
               >
-                <Text style={{ color: colors.textWhite, fontSize: 18 }}>@{username}</Text>
+                <Text
+                  style={{
+                    color: colors.textWhite,
+                    fontSize: 18,
+                    textAlign: 'center',
+                  }}
+                >
+                  @{username}
+                </Text>
                 <BtnFollow username={username} user={user} />
               </View>
             </MenuItem>
@@ -106,8 +113,6 @@ const styles = StyleSheet.create({
   menu: {
     width: '90%',
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
     borderRadius: 16,
     backgroundColor: colors.colorSecondary,
   },
