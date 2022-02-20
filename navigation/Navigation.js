@@ -6,13 +6,14 @@ import UserScreen from '../screens/UserScreen'
 import NameUser from '../components/NameUser'
 import DetailScreen from '../screens/DetailScreen'
 
-import DrawerHome from './DrawerNavigator'
+// import DrawerHome from './DrawerNavigator'
 import SettingScreen from '../screens/SettingScreen'
 import AccountScreen from '../screens/Setting/AccountScreen'
 import ActivityScreen from '../screens/Setting/ActivityScreen'
 import ContactSceen from '../screens/Setting/ContactSceen'
 import DisplayScreen from '../screens/Setting/DisplayScreen'
 import { colors } from '../config/colors'
+import TabNavigator from './TabNavigator'
 
 const Stack = createNativeStackNavigator()
 
@@ -20,7 +21,11 @@ const Navigation = () => {
   return (
     <Stack.Navigator>
       <Stack.Group>
-        <Stack.Screen name='DrawerHome' component={DrawerHome} options={{ headerShown: false }} />
+        <Stack.Screen
+          name='TabNavigation'
+          component={TabNavigator}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name='UserScreen'
           component={UserScreen}
