@@ -2,6 +2,7 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { colors } from '../../config/colors'
+import BtnLike from '../Button/BtnLike'
 
 const AllPostRankItem = ({
   bookUrl,
@@ -18,10 +19,14 @@ const AllPostRankItem = ({
 }) => {
   return (
     <View style={styles.container}>
-      <Image style={styles.image} source={{ uri: image }} />
+      <View>
+        <Image style={styles.image} source={{ uri: image }} />
+        <View style={styles.titleAndBtn}>
+          <BtnLike id={id} likes={likes.length} />
+        </View>
+      </View>
       <View style={styles.TextAndLikes}>
         <Text style={styles.text}>{title}</Text>
-        <Text style={[styles.text, { marginLeft: 10 }]}>{likes.length}</Text>
       </View>
     </View>
   )
@@ -47,12 +52,26 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   text: {
-    fontSize: 16,
-    paddingTop: 6,
+    fontSize: 17,
     color: colors.textWhite,
   },
   TextAndLikes: {
     display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  titleAndBtn: {
+    position: 'absolute',
+    bottom: 4,
+    right: 4,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#0003',
+    borderRadius: 16,
+    paddingRight: 10,
   },
 })

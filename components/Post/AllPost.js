@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
-import { StyleSheet, View, FlatList, ActivityIndicator, RefreshControl } from 'react-native'
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  ActivityIndicator,
+  RefreshControl,
+  VirtualizedList,
+} from 'react-native'
 import { useLazyQuery, useQuery } from '@apollo/client'
 import { ALL_POSTS, ALL_POSTS_COUNT } from '../../post/graphql-queries'
 import AllPostItem from './AllPostItem'
@@ -62,6 +69,22 @@ const AllPost = () => {
     )
   }
 
+  const getItemCount = (data) => data.length
+
+  const getItem = (data, index) => ({
+    bookUrl: data[index].bookUrl,
+    comments: data[index].comments,
+    description: data[index].description,
+    id: data[index].id,
+    image: data[index].image,
+    tags: data[index].tags,
+    title: data[index].title,
+    user: data[index].user,
+    likes: data[index].likes,
+    createdAt: data[index].createdAt,
+    author: data[index].author,
+  })
+
   const renderLoader = () => {
     return (
       isLoading && (
@@ -96,7 +119,7 @@ const AllPost = () => {
           size='large'
         />
       )}
-      {data?.allPosts && (
+      {/* {data?.allPosts && (
         <FlatList
           ref={ref}
           data={data?.allPosts}
@@ -110,6 +133,28 @@ const AllPost = () => {
               progressBackgroundColor={colors.colorPrimary}
               refreshing={refreshing}
               colors={[colors.colorThirdBlue]}
+              onRefresh={onRefresh}
+            />
+          }
+        />
+      )} */}
+      {data?.allPosts && (
+        <VirtualizedList
+          ref={ref}
+          data={data?.allPosts}
+          initialNumToRender={INITIAL_PAGE}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.key}
+          getItemCount={getItemCount}
+          getItem={getItem}
+          ListFooterComponent={renderLoader}
+          onEndReached={loadMoreItem}
+          onEndReachedThreshold={0}
+          refreshControl={
+            <RefreshControl
+              progressBackgroundColor='#09f'
+              refreshing={refreshing}
+              colors={['#000']}
               onRefresh={onRefresh}
             />
           }

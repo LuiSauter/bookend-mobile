@@ -1,107 +1,76 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
-import { View } from 'react-native'
+import { TouchableHighlight } from 'react-native'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import HomeScreen from '../screens/HomeScreen'
 import BookScreen from '../screens/BookScreen'
 import SearchScreen from '../screens/SearchScreen'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { colors } from '../config/colors'
 
-const Tab = createMaterialBottomTabNavigator()
+const Tab = createBottomTabNavigator()
 
-const TabNavigator = ({ navigation }) => {
+const TabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={{
         tabBarActiveTintColor: colors.colorThirdBlue,
-        tabBarStyle: { backgroundColor: colors.colorPrimary, borderTopColor: colors.TextGray },
+        tabBarStyle: {
+          backgroundColor: colors.colorPrimary,
+          borderTopColor: colors.TextGray,
+        },
+        headerShown: true,
+        tabBarButton: (props) => <TouchableHighlight underlayColor='#0002' {...props} />,
       }}
-      activeColor={colors.textWhite}
-      inactiveColor={colors.TextGray}
+      activeColor={colors.colorThirdBlue}
+      tabBarActiveTintColor={colors.colorThirdBlue}
+      tabBarInactiveTintColor={colors.TextGray}
       barStyle={{ backgroundColor: colors.colorPrimary }}
     >
       <Tab.Screen
         name='HomeScreen'
         component={HomeScreen}
-        options={() => ({
+        options={{
           title: 'Inicio',
+          tabBarLabelStyle: { fontSize: 15, fontWeight: '500' },
           tabBarIcon: ({ color }) => (
             <Icon
-              name={color === colors.textWhite ? 'home' : 'home-outline'}
+              name={color === colors.colorThirdBlue ? 'home' : 'home-outline'}
               size={22}
               color={color}
             />
           ),
-        })}
+        }}
       />
       <Tab.Screen
         name='BookScreen'
         component={BookScreen}
-        options={() => ({
-          tabBarLabelStyle: { color: colors.textWhite, fontSize: 18, fontWeight: '500' },
+        options={{
           title: 'Books',
-          headerStyle: { backgroundColor: colors.colorPrimary },
-          tabBarActiveTintColor: colors.colorThirdBlue,
-          headerTitleStyle: { color: colors.textWhite },
-          headerTintColor: colors.textWhite,
+          tabBarLabelStyle: { fontSize: 15, fontWeight: '500' },
           tabBarIcon: ({ color }) => (
             <Icon
-              name={color === colors.textWhite ? 'book' : 'book-outline'}
+              name={color === colors.colorThirdBlue ? 'book' : 'book-outline'}
               size={22}
               color={color}
             />
           ),
-          headerLeft: () => (
-            <View style={{ marginLeft: 12 }}>
-              <Icon.Button
-                name='options'
-                backgroundColor='transparent'
-                color={colors.textWhite}
-                onPress={() => navigation.openDrawer()}
-                size={24}
-                padding={6}
-                borderRadius={50}
-                iconStyle={{ marginRight: 0, marginLeft: 0 }}
-                underlayColor={colors.colorUnderlay}
-              />
-            </View>
-          ),
-        })}
+        }}
       />
       <Tab.Screen
         name='SearchScreen'
         component={SearchScreen}
-        options={() => ({
-          tabBarLabelStyle: { color: colors.textWhite, fontSize: 18, fontWeight: '500' },
+        options={{
           title: 'Search',
-          headerStyle: { backgroundColor: colors.colorPrimary },
-          tabBarActiveTintColor: colors.colorThirdBlue,
-          headerTitleStyle: { color: colors.textWhite },
-          headerTintColor: colors.textWhite,
+          tabBarLabelStyle: { fontSize: 15, fontWeight: '500' },
           tabBarIcon: ({ color }) => (
             <Icon
-              name={color === colors.textWhite ? 'search' : 'search-outline'}
+              name={color === colors.colorThirdBlue ? 'search' : 'search-outline'}
               size={22}
               color={color}
             />
           ),
-          headerLeft: () => (
-            <View style={{ marginLeft: 12 }}>
-              <Icon.Button
-                name='options'
-                backgroundColor='transparent'
-                color={colors.textWhite}
-                onPress={() => navigation.openDrawer()}
-                size={24}
-                padding={6}
-                borderRadius={50}
-                iconStyle={{ marginRight: 0, marginLeft: 0 }}
-                underlayColor={colors.colorUnderlay}
-              />
-            </View>
-          ),
-        })}
+        }}
       />
     </Tab.Navigator>
   )

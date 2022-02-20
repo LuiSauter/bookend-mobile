@@ -40,22 +40,16 @@ const HomeScreen = () => {
     if (cleanup) {
       isFocused && handleFocused({ isHome: isFocused, isBooks: false, isSearch: false })
     }
-    return () => {
-      cleanup = false
-    }
+    return () => (cleanup = false)
   }, [isFocused])
 
   useEffect(() => {
     let cleanup = true
     if (cleanup) {
-      if (token !== '') {
-        getProfile({ variables: { email: email } })
-      }
+      if (token !== '') getProfile({ variables: { email: email } })
     }
 
-    return () => {
-      cleanup = false
-    }
+    return () => (cleanup = false)
   }, [token])
 
   return (
