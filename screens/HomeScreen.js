@@ -19,7 +19,6 @@ import { useToggle } from '../hooks/useToggle'
 import AllPost from '../components/Post/AllPost'
 import { FIND_USER } from '../user/graphql-queries'
 import NameUser from '../components/NameUser'
-import { useIsFocused } from '@react-navigation/native'
 import { useAuth } from '../hooks/useAuth'
 import { auth } from '../lib/auth'
 import { colors } from '../config/colors'
@@ -29,19 +28,10 @@ import { colors } from '../config/colors'
 const HomeScreen = () => {
   const { googleAuth } = useAuth()
   const { status, email, token } = googleAuth
-  const { handleModalVisible, handleFocused } = useToggle()
   const [getProfile, { data }] = useLazyQuery(FIND_USER)
   const { promptAsync, request, signOut } = auth()
 
-  const isFocused = useIsFocused()
-
-  useEffect(() => {
-    let cleanup = true
-    if (cleanup) {
-      isFocused && handleFocused({ isHome: isFocused, isBooks: false, isSearch: false })
-    }
-    return () => (cleanup = false)
-  }, [isFocused])
+  const { handleModalVisible } = useToggle()
 
   useEffect(() => {
     let cleanup = true

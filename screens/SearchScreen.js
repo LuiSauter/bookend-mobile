@@ -6,19 +6,6 @@ import { colors } from '../config/colors'
 import { useToggle } from '../hooks/useToggle'
 
 const SearchScreen = () => {
-  const { handleFocused } = useToggle()
-  const isFocused = useIsFocused()
-
-  useEffect(() => {
-    let cleanup = true
-    if (cleanup) {
-      isFocused && handleFocused({ isHome: false, isBooks: false, isSearch: isFocused })
-    }
-    return () => {
-      cleanup = false
-    }
-  }, [isFocused])
-
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
       <StatusBar
