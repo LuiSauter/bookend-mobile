@@ -18,7 +18,7 @@ const cache = new InMemoryCache()
 const client = new ApolloClient({
   uri: 'https://bookendd.vercel.app/api/graphql',
   cache,
-  // defaultOptions: { watchQuery: { fetchPolicy: 'cache-and-network' } },
+  defaultOptions: { watchQuery: { fetchPolicy: 'cache-and-network' } },
 })
 
 const App = () => {
