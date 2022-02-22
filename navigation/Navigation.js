@@ -13,7 +13,7 @@ import ActivityScreen from '../screens/Setting/ActivityScreen'
 import ContactSceen from '../screens/Setting/ContactSceen'
 import DisplayScreen from '../screens/Setting/DisplayScreen'
 import { colors } from '../config/colors'
-import TabNavigator from './TabNavigator'
+import DrawerNavigator from './DrawerNavigator'
 
 const Stack = createNativeStackNavigator()
 
@@ -23,8 +23,11 @@ const Navigation = () => {
       <Stack.Group>
         <Stack.Screen
           name='TabNavigation'
-          component={TabNavigator}
-          options={{ headerShown: false }}
+          component={DrawerNavigator}
+          options={{
+            headerShown: false,
+            title: 'Inicio',
+          }}
         />
         <Stack.Screen
           name='UserScreen'
