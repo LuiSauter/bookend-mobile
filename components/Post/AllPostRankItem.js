@@ -1,8 +1,12 @@
 /* eslint-disable react/prop-types */
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, TouchableHighlight, View } from 'react-native'
 import React from 'react'
-import { colors } from '../../config/colors'
+import { colors, colorsRandom } from '../../config/colors'
 import BtnLike from '../Button/BtnLike'
+import { useNavigation } from '@react-navigation/native'
+import useTimeAgo from '../../hooks/useTimeAgo'
+import { FIND_USER_BY_USER } from '../../user/graphql-queries'
+import { useQuery } from '@apollo/client'
 
 const AllPostRankItem = ({
   bookUrl,
@@ -17,18 +21,48 @@ const AllPostRankItem = ({
   user,
   author,
 }) => {
+  const navigation = useNavigation()
+  const date = Number(createdAt)
+  const { hourAndMinute } = useTimeAgo(date)
+  const { data } = useQuery(FIND_USER_BY_USER, { variables: { user: user } })
+
   return (
-    <View style={styles.container}>
-      <View>
-        <Image style={styles.image} source={{ uri: image }} />
-        <View style={styles.titleAndBtn}>
-          <BtnLike id={id} likes={likes.length} />
+    <TouchableHighlight
+      onPress={() =>
+        data?.findUserById &&
+        navigation.navigate('DetailScreen', {
+          id: id,
+          randomColor: colorsRandom[Math.floor(Math.random() * colorsRandom.length)],
+          createdAt,
+          image,
+          title,
+          description,
+          user,
+          author,
+          name: data?.findUserById.me.name,
+          username: data?.findUserById.me.username,
+          verified: data?.findUserById.me.verified,
+          photo: data?.findUserById.me.photo,
+          hourAndMinute,
+          bookUrl,
+          comments,
+          likes,
+        })
+      }
+      underlayColor={colors.colorUnderlay}
+    >
+      <View style={styles.container}>
+        <View>
+          <Image style={styles.image} source={{ uri: image }} />
+          <View style={styles.titleAndBtn}>
+            <BtnLike id={id} likes={likes.length} />
+          </View>
+        </View>
+        <View style={styles.TextAndLikes}>
+          <Text style={styles.text}>{title}</Text>
         </View>
       </View>
-      <View style={styles.TextAndLikes}>
-        <Text style={styles.text}>{title}</Text>
-      </View>
-    </View>
+    </TouchableHighlight>
   )
 }
 
@@ -43,6 +77,8 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
+    maxWidth: 200,
+    maxHeight: 340,
   },
   image: {
     borderRadius: 16,
@@ -52,8 +88,10 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   text: {
-    fontSize: 17,
+    fontSize: 16,
     color: colors.textWhite,
+    width: '100%',
+    textAlign: 'center',
   },
   TextAndLikes: {
     display: 'flex',
