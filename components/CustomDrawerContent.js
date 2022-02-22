@@ -18,13 +18,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 // ios-search
 import SignOutIcon from 'react-native-vector-icons/Ionicons'
 import GoogleIcon from 'react-native-vector-icons/AntDesign'
-import { useToggle } from '../hooks/useToggle'
 import { auth } from '../lib/auth'
 import { colors } from '../config/colors'
 // sign-out-alt
 
 const CustomDrawerContent = (props) => {
-  const { isFocused } = useToggle()
   const { signOut, promptAsync } = auth()
   const { googleAuth } = useAuth()
   const { email, status } = googleAuth
@@ -77,29 +75,17 @@ const CustomDrawerContent = (props) => {
       )}
       <DrawerItem
         icon={() => (
-          <HomeIcon
-            name={isFocused.home ? 'home' : 'home-outline'}
-            size={22}
-            style={styles.icon}
-            color={colors.textWhite}
-          />
+          <HomeIcon name={'home'} size={22} style={styles.icon} color={colors.textWhite} />
         )}
         label='Inicio'
-        focused={isFocused.home}
         labelStyle={styles.label}
         onPress={() => props.navigation.navigate('HomeScreen')}
       />
       <DrawerItem
         icon={() => (
-          <Ionicons
-            name={isFocused.books ? 'book' : 'book-outline'}
-            size={22}
-            style={styles.icon}
-            color={colors.textWhite}
-          />
+          <Ionicons name={'book'} size={22} style={styles.icon} color={colors.textWhite} />
         )}
         label='Libros'
-        focused={isFocused.books}
         labelStyle={styles.label}
         onPress={() => props.navigation.navigate('BookScreen')}
       />
