@@ -20,7 +20,7 @@ import NameUser from '../NameUser'
 import { GET_DOMINANT_COLOR } from '../../post/graphql-queries'
 import MultipleButtons from '../MultipleButtons'
 import BtnOptions from '../Button/BtnOptions'
-import { colors } from '../../config/colors'
+import { colors, colorsRandom } from '../../config/colors'
 
 const AllPostItem = ({
   bookUrl,
@@ -41,21 +41,6 @@ const AllPostItem = ({
 
   const { data, loading } = useQuery(FIND_USER_BY_USER, { variables: { user: user } })
   const { data: dataDominantColor } = useQuery(GET_DOMINANT_COLOR, { variables: { image: image } })
-
-  const colorsRandom = [
-    '#2666CF',
-    '#8A39E1',
-    '#BB6464',
-    '#219F94',
-    '#F94892',
-    '#035397',
-    '#FFC600',
-    '#502064',
-    '#4A3F35',
-    '#BE3144',
-    '#21325E',
-    '#F76E11',
-  ]
 
   return (
     <>
@@ -157,7 +142,7 @@ const AllPostItem = ({
               {loading ? (
                 <View
                   style={{
-                    height: 400,
+                    height: 350,
                     width: '100%',
                     backgroundColor: colorsRandom[Math.floor(Math.random() * colorsRandom.length)],
                     borderRadius: 12,
@@ -235,7 +220,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   postImgContainer: {
-    maxHeight: 400,
+    maxHeight: 350,
   },
   postImg: {
     height: '100%',
