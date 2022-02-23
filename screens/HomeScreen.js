@@ -71,7 +71,7 @@ const HomeScreen = () => {
                 <ActivityIndicator color={colors.colorThirdBlue} size='large' />
               )
             ) : (
-              <Text style={[styles.text, { marginBottom: 16 }]}>Sign In</Text>
+              <Text style={styles.text}>Sign In</Text>
             )}
             {googleAuth.status === 'authenticated' ? (
               <TouchableOpacity
@@ -157,14 +157,14 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     padding: 10,
     elevation: 2,
-    marginBottom: 16,
+    marginTop: 16,
     backgroundColor: colors.colorThirdBlue,
   },
   buttonSignOut: {
     borderRadius: 50,
     padding: 10,
     elevation: 2,
-    marginBottom: 16,
+    // marginBottom: 16,
     backgroundColor: `${colors.colorThirdBlue}a3`,
   },
   buttonClose: {
