@@ -8,7 +8,7 @@ import AllPostRankItem from './AllPostRankItem'
 import { colors } from '../../config/colors'
 
 const INITIAL_PAGE = 10
-const ITEM_HEIGHT = 340
+const ITEM_HEIGHT = 270
 
 const renderItem = ({ item }) => (
   <AllPostRankItem
@@ -62,9 +62,9 @@ const AllPostRanking = () => {
     return (
       isLoading && (
         <ActivityIndicator
-          style={{ marginBottom: 16 }}
+          style={{ flex: 1, marginVertical: 16, width: '100%' }}
           color={colors.colorThirdBlue}
-          size='small'
+          size='large'
         />
       )
     )
@@ -88,7 +88,7 @@ const AllPostRanking = () => {
     <View style={{ height: '100%' }}>
       {loading && (
         <ActivityIndicator
-          style={{ flex: 1, marginVertical: 16 }}
+          style={{ flex: 1, width: '100%', height: '100%' }}
           color={colors.colorThirdBlue}
           size='large'
         />
@@ -104,6 +104,8 @@ const AllPostRanking = () => {
           initialNumToRender={INITIAL_PAGE}
           onEndReachedThreshold={0}
           removeClippedSubviews={true}
+          numColumns={2}
+          columnWrapperStyle={styles.column}
           refreshControl={
             <RefreshControl
               progressBackgroundColor={colors.colorPrimary}
@@ -122,8 +124,8 @@ export default AllPostRanking
 
 const styles = StyleSheet.create({
   column: {
-    flexShrink: 1,
-    justifyContent: 'space-around',
-    marginHorizontal: 5,
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    paddingHorizontal: 6,
   },
 })
