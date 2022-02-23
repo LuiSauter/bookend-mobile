@@ -72,7 +72,7 @@ const AllPost = () => {
         <ActivityIndicator
           style={{ marginBottom: 16 }}
           color={colors.colorThirdBlue}
-          size='small'
+          size='large'
         />
       )
     )
@@ -97,7 +97,7 @@ const AllPost = () => {
     <View style={styles.container}>
       {loading && (
         <ActivityIndicator
-          style={{ flex: 1, marginVertical: 16 }}
+          style={{ flex: 1, paddingTop: 24, paddingBottom: 16 }}
           color={colors.colorThirdBlue}
           size='large'
         />
