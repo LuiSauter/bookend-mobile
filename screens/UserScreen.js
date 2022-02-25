@@ -15,16 +15,19 @@ import { FIND_PROFILE } from '../user/graphql-queries'
 import NameUser from '../components/NameUser'
 import { ALL_POST_BY_USER, ALL_POST_BY_USER_COUNT } from '../post/graphql-queries'
 import AllPostItem from '../components/Post/AllPostItem'
-import { colors } from '../config/colors'
 import BtnFollow from '../components/Button/BtnFollow'
 import { useAuth } from '../hooks/useAuth'
+import { useTheme } from '@react-navigation/native'
+import { useToggle } from '../hooks/useToggle'
 
 const INITIAL_PAGE = 6
 
 const UserScreen = ({ route }) => {
   const { username } = route.params
   const { googleAuth } = useAuth()
-  const { status, email } = googleAuth
+  const { colors } = useTheme()
+  const { darkTheme } = useToggle()
+  const { email } = googleAuth
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
   const [isLoading, setIsLoading] = useState(true)
   const [getProfile, { data }] = useLazyQuery(FIND_PROFILE)
@@ -96,12 +99,15 @@ const UserScreen = ({ route }) => {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
+    <SafeAreaView
+      style={[styles.safeArea, { backgroundColor: colors.primary }]}
+      edges={['top', 'left', 'right']}
+    >
       <StatusBar
         animated={true}
         showHideTransition={'slide'}
-        barStyle='light-content'
-        backgroundColor={colors.colorPrimary}
+        barStyle={darkTheme ? 'light-content' : 'dark-content'}
+        backgroundColor={colors.primary}
       />
       {loading && (
         <ActivityIndicator
@@ -120,7 +126,10 @@ const UserScreen = ({ route }) => {
                   style={styles.imageBackground}
                   source={{ uri: data?.findProfile.me.photo }}
                 />
-                <Image style={styles.profileImage} source={{ uri: data?.findProfile.me.photo }} />
+                <Image
+                  style={[styles.profileImage, { borderColor: colors.primary }]}
+                  source={{ uri: data?.findProfile.me.photo }}
+                />
               </View>
               <View style={{ marginHorizontal: 16, marginTop: 10 }}>
                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
@@ -133,22 +142,28 @@ const UserScreen = ({ route }) => {
                     <BtnFollow username={username} user={data?.findProfile.me.user} />
                   )}
                 </View>
-                <Text style={styles.textOpacity}>@{data?.findProfile.me.username}</Text>
-                <Text style={styles.text}>{data?.findProfile.description}</Text>
+                <Text style={[styles.textOpacity, { color: colors.textGray }]}>
+                  @{data?.findProfile.me.username}
+                </Text>
+                <Text style={[styles.text, { color: colors.text }]}>
+                  {data?.findProfile.description}
+                </Text>
                 <View style={styles.textPresentation}>
-                  <Text style={styles.textOpacity}>{data?.findProfile.location}</Text>
+                  <Text style={[styles.textOpacity, { color: colors.textGray }]}>
+                    {data?.findProfile.location}
+                  </Text>
                   <Text style={{ fontSize: 15, color: colors.colorThirdBlue, marginLeft: 16 }}>
                     {data?.findProfile.website}
                   </Text>
                 </View>
                 <View style={styles.textPresentation}>
-                  <Text style={[styles.text, { marginRight: 16 }]}>
+                  <Text style={[styles.text, { marginRight: 16, color: colors.text }]}>
                     {data?.findProfile.followers.length}
-                    <Text style={{ color: colors.TextGray }}> Following</Text>
+                    <Text style={{ color: colors.textGray }}> Following</Text>
                   </Text>
-                  <Text style={styles.text}>
+                  <Text style={[styles.text, { color: colors.text }]}>
                     {data?.findProfile.following.length}
-                    <Text style={{ color: colors.TextGray }}> Followers</Text>
+                    <Text style={{ color: colors.textGray }}> Followers</Text>
                   </Text>
                 </View>
               </View>
@@ -170,15 +185,12 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     justifyContent: 'space-between',
-    backgroundColor: colors.colorPrimary,
   },
   text: {
-    color: colors.textWhite,
     fontSize: 16,
     marginTop: 12,
   },
   textOpacity: {
-    color: colors.TextGray,
     fontSize: 15,
   },
   profilePresentation: {
@@ -198,7 +210,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    borderColor: colors.colorPrimary,
     marginTop: 50,
     height: 90,
     width: 90,

@@ -10,19 +10,14 @@ import NameUser from './NameUser'
 import bookendLogo from '../assets/img/default-user.png'
 
 import HomeIcon from 'react-native-vector-icons/Ionicons'
-// home-variant - home-variant-outline
 import Ionicons from 'react-native-vector-icons/Ionicons'
-// ios-person - ios-person-outline
-// settings - settings-outline
-// book - book-outline
-// ios-search
 import SignOutIcon from 'react-native-vector-icons/Ionicons'
 import GoogleIcon from 'react-native-vector-icons/AntDesign'
 import { auth } from '../lib/auth'
-import { colors } from '../config/colors'
-// sign-out-alt
+import { useTheme } from '@react-navigation/native'
 
 const CustomDrawerContent = (props) => {
+  const { colors } = useTheme()
   const { signOut, promptAsync } = auth()
   const { googleAuth } = useAuth()
   const { email, status } = googleAuth
@@ -43,7 +38,10 @@ const CustomDrawerContent = (props) => {
   }, [status])
 
   return (
-    <DrawerContentScrollView {...props} contentContainerStyle={styles.container}>
+    <DrawerContentScrollView
+      {...props}
+      contentContainerStyle={[styles.container, { backgroundColor: colors.primary }]}
+    >
       {status === 'authenticated' ? (
         loading ? (
           <ActivityIndicator color={colors.colorThirdBlue} size='small' style={styles.loading} />
@@ -58,33 +56,35 @@ const CustomDrawerContent = (props) => {
                     fontSize={17}
                     verified={data?.findUser.verified}
                   />
-                  <Text style={{ fontSize: 16, color: colors.TextGray }}>
+                  <Text style={{ fontSize: 16, color: colors.textGray }}>
                     @{data?.findUser.me.username}
                   </Text>
                 </>
               )}
-              onPress={() => props.navigation.navigate('')}
+              onPress={() =>
+                props.navigation.navigate('UserScreen', {
+                  name: data?.findUser.me.name,
+                  username: data?.findUser.me.username,
+                  verified: data?.findUser.verified,
+                })
+              }
             />
           </>
         )
       ) : (
         <>
           <Image source={bookendLogo} style={styles.userImageDefault} />
-          <Text style={styles.textBookend}>Bookend</Text>
+          <Text style={[styles.textBookend, { color: colors.colorThirdBlue }]}>Bookend</Text>
         </>
       )}
       <DrawerItem
-        icon={() => (
-          <HomeIcon name={'home'} size={22} style={styles.icon} color={colors.textWhite} />
-        )}
+        icon={() => <HomeIcon name={'home'} size={22} style={styles.icon} color={colors.text} />}
         label='Inicio'
         labelStyle={styles.label}
         onPress={() => props.navigation.navigate('HomeScreen')}
       />
       <DrawerItem
-        icon={() => (
-          <Ionicons name={'book'} size={22} style={styles.icon} color={colors.textWhite} />
-        )}
+        icon={() => <Ionicons name={'book'} size={22} style={styles.icon} color={colors.text} />}
         label='Libros'
         labelStyle={styles.label}
         onPress={() => props.navigation.navigate('BookScreen')}
@@ -92,12 +92,7 @@ const CustomDrawerContent = (props) => {
       {status === 'authenticated' && (
         <DrawerItem
           icon={() => (
-            <Ionicons
-              name='ios-person-outline'
-              size={24}
-              style={styles.icon}
-              color={colors.textWhite}
-            />
+            <Ionicons name='ios-person-outline' size={24} style={styles.icon} color={colors.text} />
           )}
           label='Perfil'
           labelStyle={styles.label}
@@ -114,16 +109,11 @@ const CustomDrawerContent = (props) => {
         label='Ajustes'
         labelStyle={styles.label}
         icon={() => (
-          <Ionicons
-            name='settings-outline'
-            size={24}
-            style={styles.icon}
-            color={colors.textWhite}
-          />
+          <Ionicons name='settings-outline' size={24} style={styles.icon} color={colors.text} />
         )}
         onPress={() => props.navigation.navigate('SettingScreen')}
       />
-      <View style={styles.login}>
+      <View style={[styles.login, { borderTopColor: colors.textGray }]}>
         {status === 'authenticated' ? (
           <DrawerItem
             label='Cerrar sesión'
@@ -141,9 +131,9 @@ const CustomDrawerContent = (props) => {
         ) : (
           <DrawerItem
             label='Iniciar sesión'
-            labelStyle={styles.label}
+            labelStyle={[styles.label, { color: colors.text }]}
             icon={() => (
-              <GoogleIcon name='google' size={24} style={styles.icon} color={colors.textWhite} />
+              <GoogleIcon name='google' size={24} style={styles.icon} color={colors.text} />
             )}
             onPress={() => promptAsync()}
           />
@@ -156,7 +146,7 @@ const CustomDrawerContent = (props) => {
 export default CustomDrawerContent
 
 const styles = StyleSheet.create({
-  container: { backgroundColor: colors.colorPrimary, flex: 1 },
+  container: { flex: 1 },
   loading: { display: 'flex', margin: 16 },
   userImage: {
     width: 50,
@@ -174,13 +164,11 @@ const styles = StyleSheet.create({
   textBookend: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: colors.colorThirdBlue,
     marginHorizontal: 16,
     marginBottom: 16,
     letterSpacing: 0.5,
   },
   label: {
-    color: colors.textWhite,
     fontSize: 19,
     fontWeight: '500',
   },
@@ -190,7 +178,6 @@ const styles = StyleSheet.create({
   },
   login: {
     borderTopWidth: 1,
-    borderTopColor: colors.TextGray,
     marginTop: 8,
     paddingTop: 8,
   },

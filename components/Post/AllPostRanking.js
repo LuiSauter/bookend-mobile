@@ -5,7 +5,7 @@ import { ALL_POSTS_COUNT, ALL_POST_RANKING } from '../../post/graphql-queries'
 import { useLazyQuery, useQuery } from '@apollo/client'
 import { FlatList } from 'react-native-gesture-handler'
 import AllPostRankItem from './AllPostRankItem'
-import { colors } from '../../config/colors'
+import { useTheme } from '@react-navigation/native'
 
 const INITIAL_PAGE = 10
 const ITEM_HEIGHT = 270
@@ -35,6 +35,7 @@ const getItemLayout = (data, index) => ({
 })
 
 const AllPostRanking = () => {
+  const { colors } = useTheme()
   const [isLoading, setIsLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
   const [refreshing, setRefreshing] = useState(false)
@@ -108,7 +109,7 @@ const AllPostRanking = () => {
           columnWrapperStyle={styles.column}
           refreshControl={
             <RefreshControl
-              progressBackgroundColor={colors.colorPrimary}
+              progressBackgroundColor={colors.primary}
               refreshing={refreshing}
               colors={[colors.colorThirdBlue]}
               onRefresh={onRefresh}

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useTheme } from '@react-navigation/native'
 import React from 'react'
 import {
   SafeAreaView,
@@ -11,7 +11,7 @@ import {
   View,
 } from 'react-native'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
-import { colors } from '../config/colors'
+import { useToggle } from '../hooks/useToggle'
 
 const data = [
   {
@@ -49,6 +49,7 @@ const data = [
 
 const Item = ({ title, description, screen }) => {
   const navigation = useNavigation()
+  const { colors } = useTheme()
   return (
     <TouchableHighlight
       onPress={() => navigation.navigate(screen)}
@@ -56,14 +57,14 @@ const Item = ({ title, description, screen }) => {
     >
       <View style={styles.item}>
         <View style={styles.text}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.description}>{description}</Text>
+          <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
+          <Text style={[styles.description, { color: colors.textGray }]}>{description}</Text>
         </View>
         <AntDesignIcon
           name='right'
           size={20}
           style={{ marginRight: 0, padding: 0 }}
-          color={colors.TextGray}
+          color={colors.textGray}
         />
       </View>
     </TouchableHighlight>
@@ -71,17 +72,23 @@ const Item = ({ title, description, screen }) => {
 }
 
 const SettingScreen = () => {
+  const { darkTheme } = useToggle()
+  const { colors } = useTheme()
+
   const renderItem = ({ item }) => (
     <Item title={item.title} screen={item.screen} description={item.description} />
   )
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
+    <SafeAreaView
+      style={[styles.safeArea, { backgroundColor: colors.primary }]}
+      edges={['top', 'left', 'right']}
+    >
       <StatusBar
         animated={true}
         showHideTransition={'slide'}
-        barStyle='light-content'
-        backgroundColor={colors.colorPrimary}
+        barStyle={darkTheme ? 'light-content' : 'dark-content'}
+        backgroundColor={colors.primary}
       />
       <FlatList data={data} renderItem={renderItem} keyExtractor={(item) => item.id} />
     </SafeAreaView>
@@ -93,7 +100,6 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     justifyContent: 'space-between',
-    backgroundColor: colors.colorPrimary,
   },
   item: {
     flex: 1,
@@ -108,12 +114,10 @@ const styles = StyleSheet.create({
     width: '90%',
   },
   title: {
-    color: colors.textWhite,
     fontSize: 18,
     fontWeight: 'bold',
   },
   description: {
-    color: colors.textWhite,
     fontSize: 15,
   },
 })

@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import React, { useState } from 'react'
 import {
   ActivityIndicator,
   Image,
@@ -10,7 +11,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import React, { useState } from 'react'
 import { FINDONE_POST, GET_DOMINANT_COLOR } from '../post/graphql-queries'
 import { FIND_USER_BY_USER } from '../user/graphql-queries'
 import { useQuery } from '@apollo/client'
@@ -19,8 +19,9 @@ import ImageView from 'react-native-image-viewing'
 import NameUser from '../components/NameUser'
 import userDefault from '../assets/img/default-user.png'
 import MultipleButtons from '../components/MultipleButtons'
-import { colors } from '../config/colors'
 import BtnOptions from '../components/Button/BtnOptions'
+import { useToggle } from '../hooks/useToggle'
+import { useTheme } from '@react-navigation/native'
 
 const DetailScreen = ({ route, navigation }) => {
   const {
@@ -39,6 +40,8 @@ const DetailScreen = ({ route, navigation }) => {
     photo,
     hourAndMinute,
   } = route.params
+  const { darkTheme } = useToggle()
+  const { colors } = useTheme()
   const [isVisible, setIsVisible] = useState(false)
   const { data: dataDominantColor } = useQuery(GET_DOMINANT_COLOR, { variables: { image: image } })
   const { data, loading } = useQuery(FINDONE_POST, {
@@ -47,16 +50,17 @@ const DetailScreen = ({ route, navigation }) => {
   const { data: dataUser } = useQuery(FIND_USER_BY_USER, { variables: { user: user } })
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
+    <SafeAreaView
+      style={[styles.safeArea, { backgroundColor: colors.primary }]}
+      edges={['top', 'left', 'right']}
+    >
       {isVisible && (
         <StatusBar
-          barStyle='light-content'
+          barStyle={darkTheme ? 'light-content' : 'dark-content'}
           animated={true}
           showHideTransition={'none'}
           backgroundColor={
-            dataDominantColor?.getColors
-              ? `rgb(${dataDominantColor?.getColors})`
-              : colors.colorPrimary
+            dataDominantColor?.getColors ? `rgb(${dataDominantColor?.getColors})` : colors.primary
           }
         />
       )}
@@ -71,7 +75,7 @@ const DetailScreen = ({ route, navigation }) => {
         backgroundColor={
           dataDominantColor?.getColors
             ? `rgb(${dataDominantColor?.getColors}), 0.9`
-            : colors.colorPrimary
+            : colors.primary
         }
         swipeToCloseEnabled={false}
         doubleTapToZoomEnabled={true}
@@ -105,7 +109,7 @@ const DetailScreen = ({ route, navigation }) => {
               verified={verified ? verified : dataUser?.findUserById.me.verified}
               fontSize={16}
             />
-            <Text style={styles.userTextUsername}>
+            <Text style={[styles.userTextUsername, { color: colors.text }]}>
               @{username ? username : dataUser?.findUserById.me.username}
             </Text>
           </View>
@@ -120,10 +124,10 @@ const DetailScreen = ({ route, navigation }) => {
         ) : (
           <>
             <View style={styles.postItemDescription}>
-              <Text style={styles.postItemTitle}>
+              <Text style={[styles.postItemTitle, { color: colors.colorThirdBlue }]}>
                 {title ? title : data?.findPost.title} - {author ? author : data?.findPost.author}
               </Text>
-              <Text style={styles.text}>
+              <Text style={[styles.text, { color: colors.text }]}>
                 {description ? description : data?.findPost.description}
               </Text>
             </View>
@@ -137,17 +141,29 @@ const DetailScreen = ({ route, navigation }) => {
                 source={{ uri: image ? image : data?.findPost.image }}
               />
             </TouchableOpacity>
-            <Text style={[styles.userTextUsername, { marginVertical: 10 }]}>{hourAndMinute}</Text>
+            <Text
+              style={[
+                [styles.userTextUsername, { color: colors.textGray }],
+                { marginVertical: 10 },
+              ]}
+            >
+              {hourAndMinute}
+            </Text>
             {(likes.length > 0 || comments.length > 0) && (
-              <View style={styles.likesAndComments}>
-                <Text style={[styles.userTextUsername, { marginRight: 16 }]}>
-                  <Text style={{ color: colors.textWhite, fontWeight: '700' }}>
+              <View style={[styles.likesAndComments, { borderColor: colors.border }]}>
+                <Text
+                  style={[
+                    [styles.userTextUsername, { color: colors.textGray }],
+                    { marginRight: 16 },
+                  ]}
+                >
+                  <Text style={{ color: colors.text, fontWeight: '700' }}>
                     {data?.findPost ? data?.findPost.comments.length : comments.length}
                   </Text>{' '}
                   Comentarios
                 </Text>
-                <Text style={styles.userTextUsername}>
-                  <Text style={{ color: colors.textWhite, fontWeight: '700' }}>
+                <Text style={[styles.userTextUsername, { color: colors.textGray }]}>
+                  <Text style={{ color: colors.text, fontWeight: '700' }}>
                     {data?.findPost ? data?.findPost.likes.length : likes.length}
                   </Text>{' '}
                   Me gusta
@@ -175,7 +191,6 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     justifyContent: 'flex-start',
-    backgroundColor: colors.colorPrimary,
   },
   postContainer: {
     flex: 1,
@@ -203,7 +218,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   userTextUsername: {
-    color: colors.TextGray,
     fontSize: 15,
   },
   postItem: {
@@ -216,12 +230,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   postItemTitle: {
-    color: colors.colorThirdBlue,
     fontSize: 20,
     marginBottom: 7,
   },
   text: {
-    color: colors.textWhite,
     fontFamily: 'sans-serif',
     fontSize: 20,
     lineHeight: 27,
@@ -235,11 +247,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     resizeMode: 'cover',
   },
-  button: {
-    backgroundColor: colors.textWhite,
-    width: 20,
-    height: 30,
-  },
   likesAndComments: {
     display: 'flex',
     flexDirection: 'row',
@@ -247,9 +254,5 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: colors.TextGray,
-  },
-  comment: {
-    color: colors.textWhite,
   },
 })

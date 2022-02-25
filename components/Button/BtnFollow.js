@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useLazyQuery, useMutation } from '@apollo/client'
+import { useTheme } from '@react-navigation/native'
 import React, { useEffect } from 'react'
-import { StyleSheet, Text, TouchableHighlight, View } from 'react-native'
-import { colors } from '../../config/colors'
+import { Text, TouchableHighlight } from 'react-native'
 import { useAuth } from '../../hooks/useAuth'
 import { useToggle } from '../../hooks/useToggle'
 import { FOLLOW_USER, UNFOLLOW_USER } from '../../user/graphql-mutation'
@@ -11,6 +11,7 @@ import { FIND_PROFILE, FIND_USER } from '../../user/graphql-queries'
 const BtnFollow = ({ username, user }) => {
   const { handleModalVisible } = useToggle()
   const { googleAuth } = useAuth()
+  const { colors } = useTheme()
   const { status, email } = googleAuth
   const [getUserByEmail, { data: dataUser }] = useLazyQuery(FIND_USER)
   const [getFollow] = useMutation(FOLLOW_USER, {
@@ -63,10 +64,10 @@ const BtnFollow = ({ username, user }) => {
     >
       <Text
         style={{
-          color: colors.textWhite,
+          color: colors.text,
           borderWidth: 1,
           borderRadius: 16,
-          borderColor: colors.textWhite,
+          borderColor: colors.text,
           paddingVertical: 4,
           paddingHorizontal: 10,
           fontSize: 16,
@@ -83,7 +84,7 @@ const BtnFollow = ({ username, user }) => {
     >
       <Text
         style={{
-          color: colors.textWhite,
+          color: colors.white,
           backgroundColor: colors.colorThirdBlue,
           borderRadius: 16,
           paddingVertical: 4,
@@ -97,4 +98,3 @@ const BtnFollow = ({ username, user }) => {
   )
 }
 export default BtnFollow
-const styles = StyleSheet.create({})

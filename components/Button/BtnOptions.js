@@ -1,15 +1,16 @@
 /* eslint-disable react/prop-types */
 import { useLazyQuery } from '@apollo/client'
+import { useTheme } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu'
 import Icon from 'react-native-vector-icons/Ionicons'
-import { colors } from '../../config/colors'
 import { useAuth } from '../../hooks/useAuth'
 import { FIND_USER } from '../../user/graphql-queries'
 import BtnFollow from './BtnFollow'
 
 const BtnOptions = ({ username, user }) => {
+  const { colors } = useTheme()
   const [visible, setVisible] = useState(false)
   const [getUserByEmail, { data: dataUser }] = useLazyQuery(FIND_USER)
   const { googleAuth } = useAuth()
@@ -33,7 +34,7 @@ const BtnOptions = ({ username, user }) => {
     <View style={styles.container}>
       <Menu
         visible={visible}
-        style={styles.menu}
+        style={[styles.menu, { backgroundColor: colors.secondary }]}
         anchor={
           <Icon.Button
             backgroundColor='transparent'
@@ -51,7 +52,7 @@ const BtnOptions = ({ username, user }) => {
           <MenuItem
             pressColor={colors.colorUnderlay}
             textStyle={{
-              color: colors.textWhite,
+              color: colors.text,
               fontSize: 18,
             }}
             onPress={hideMenu}
@@ -63,7 +64,7 @@ const BtnOptions = ({ username, user }) => {
             <MenuItem
               pressColor='transparent'
               textStyle={{
-                color: colors.textWhite,
+                color: colors.text,
                 fontSize: 18,
                 width: '130%',
               }}
@@ -78,7 +79,7 @@ const BtnOptions = ({ username, user }) => {
               >
                 <Text
                   style={{
-                    color: colors.textWhite,
+                    color: colors.text,
                     fontSize: 18,
                     textAlign: 'center',
                   }}
@@ -89,7 +90,7 @@ const BtnOptions = ({ username, user }) => {
               </View>
             </MenuItem>
           )}
-          <MenuDivider color={colors.TextGray} />
+          <MenuDivider color={colors.textGray} />
           <MenuItem
             textStyle={{ color: colors.colorFourthRed, fontSize: 18 }}
             pressColor={colors.colorUnderlay}
@@ -114,6 +115,5 @@ const styles = StyleSheet.create({
     width: '90%',
     flex: 1,
     borderRadius: 16,
-    backgroundColor: colors.colorSecondary,
   },
 })

@@ -6,16 +6,17 @@ import HomeScreen from '../screens/HomeScreen'
 import BookScreen from '../screens/BookScreen'
 import SearchScreen from '../screens/SearchScreen'
 import Icon from 'react-native-vector-icons/Ionicons'
-import { colors } from '../config/colors'
 import { useToggle } from '../hooks/useToggle'
 import { useLazyQuery } from '@apollo/client'
 import { FIND_USER } from '../user/graphql-queries'
 import { useAuth } from '../hooks/useAuth'
 import bookendLogo from '../assets/img/default-user.png'
+import { useTheme } from '@react-navigation/native'
 
 const Tab = createBottomTabNavigator()
 
 const TabNavigator = () => {
+  const { colors } = useTheme()
   const { handleModalVisible } = useToggle()
   const { googleAuth } = useAuth()
   const [getFindUserByEmail, { data, loading }] = useLazyQuery(FIND_USER, {
@@ -38,20 +39,20 @@ const TabNavigator = () => {
       screenOptions={({ navigation }) => ({
         tabBarActiveTintColor: colors.colorThirdBlue,
         tabBarStyle: {
-          backgroundColor: colors.colorPrimary,
-          borderTopColor: colors.TextGray,
+          backgroundColor: colors.primary,
+          borderTopColor: colors.textGray,
         },
         tabBarShowLabel: false,
-        headerStyle: { backgroundColor: colors.colorPrimary },
-        headerTitleStyle: { color: colors.textWhite },
-        headerTintColor: colors.textWhite,
+        headerStyle: { backgroundColor: colors.primary },
+        headerTitleStyle: { color: colors.text },
+        headerTintColor: colors.text,
         tabBarButton: (props) => <TouchableHighlight underlayColor='#0002' {...props} />,
         headerLeft: () => (
           <View style={{ marginLeft: 12 }}>
             <Icon.Button
               name='options'
               backgroundColor='transparent'
-              color={colors.textWhite}
+              color={colors.text}
               onPress={() => navigation.openDrawer()}
               size={24}
               padding={6}
@@ -64,7 +65,10 @@ const TabNavigator = () => {
         headerRight: () => (
           <TouchableHighlight style={styles.logoContainer} onPress={() => handleModalVisible()}>
             {googleAuth.status === 'unauthenticated' ? (
-              <Image style={styles.bookendLogo} source={bookendLogo} />
+              <Image
+                style={[styles.bookendLogo, { backgroundColor: colors.textWhite }]}
+                source={bookendLogo}
+              />
             ) : loading ? (
               <ActivityIndicator color={colors.colorThirdBlue} size='large' />
             ) : (
@@ -75,8 +79,8 @@ const TabNavigator = () => {
       })}
       activeColor={colors.colorThirdBlue}
       tabBarActiveTintColor={colors.colorThirdBlue}
-      tabBarInactiveTintColor={colors.TextGray}
-      barStyle={{ backgroundColor: colors.colorPrimary }}
+      tabBarInactiveTintColor={colors.textGray}
+      barStyle={{ backgroundColor: colors.primary }}
     >
       <Tab.Screen
         name='HomeScreen'
@@ -136,7 +140,6 @@ const styles = StyleSheet.create({
     width: 33,
     height: 33,
     borderRadius: 50,
-    backgroundColor: colors.textWhite,
   },
   logoContainer: {
     borderRadius: 50,

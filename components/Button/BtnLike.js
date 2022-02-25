@@ -8,11 +8,12 @@ import { FINDONE_POST } from '../../post/graphql-queries'
 import { FIND_USER } from '../../user/graphql-queries'
 import { useAuth } from '../../hooks/useAuth'
 import { useToggle } from '../../hooks/useToggle'
-import { colors } from '../../config/colors'
+import { useTheme } from '@react-navigation/native'
 
 const BtnLike = ({ id, likes }) => {
   const { googleAuth } = useAuth()
   const { email, status } = googleAuth
+  const { colors } = useTheme()
   const [like, setLike] = useState(false)
   const { handleModalVisible } = useToggle()
   const [getLike] = useMutation(LIKE_POST, {
@@ -93,16 +94,14 @@ const BtnLike = ({ id, likes }) => {
           name='heart-outline'
           backgroundColor='transparent'
           borderRadius={50}
-          color={colors.textWhite}
+          color={colors.text}
           onPress={() => handleLike(id)}
           size={22}
           iconStyle={{ marginRight: 0 }}
           underlayColor='transparent'
         />
       )}
-      <Text style={{ fontSize: 17, color: like ? colors.colorLikeRed : colors.textWhite }}>
-        {likes}
-      </Text>
+      <Text style={{ fontSize: 17, color: like ? colors.colorLikeRed : colors.text }}>{likes}</Text>
     </View>
   )
 }

@@ -4,8 +4,7 @@ import { StyleSheet, View, FlatList, ActivityIndicator, RefreshControl } from 'r
 import { useLazyQuery, useQuery } from '@apollo/client'
 import { ALL_POSTS, ALL_POSTS_COUNT } from '../../post/graphql-queries'
 import AllPostItem from './AllPostItem'
-// import { useAuth } from '../../hooks/useAuth'
-import { colors } from '../../config/colors'
+import { useTheme } from '@react-navigation/native'
 
 const INITIAL_PAGE = 10
 const ITEM_HEIGHT = 700
@@ -35,6 +34,7 @@ const getItemLayout = (data, index) => ({
 const keyExtractor = (item) => item.id.toString()
 
 const AllPost = () => {
+  const { colors } = useTheme()
   const [isLoading, setIsLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
   const [refreshing, setRefreshing] = useState(false)
@@ -59,12 +59,6 @@ const AllPost = () => {
     }
     return () => (cleanup = false)
   }, [currentPage])
-
-  // useEffect(() => {
-  //   let cleanup = true
-  //   if (cleanup) googleAuth.status === 'unauthenticated' && refetch({ pageSize: INITIAL_PAGE, skipValue: 0 })
-  //   return () => (cleanup = false)
-  // }, [googleAuth.status])
 
   const renderLoader = () => {
     return (
@@ -115,7 +109,7 @@ const AllPost = () => {
           removeClippedSubviews={true}
           refreshControl={
             <RefreshControl
-              progressBackgroundColor={colors.colorPrimary}
+              progressBackgroundColor={colors.primary}
               refreshing={refreshing}
               colors={[colors.colorThirdBlue]}
               onRefresh={onRefresh}

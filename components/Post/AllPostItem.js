@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import React, { useState } from 'react'
 import { useQuery } from '@apollo/client'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useTheme } from '@react-navigation/native'
 import ImageView from 'react-native-image-viewing'
 import PropTypes from 'prop-types'
 
@@ -20,7 +20,7 @@ import NameUser from '../NameUser'
 import { GET_DOMINANT_COLOR } from '../../post/graphql-queries'
 import MultipleButtons from '../MultipleButtons'
 import BtnOptions from '../Button/BtnOptions'
-import { colors, colorsRandom } from '../../config/colors'
+import { colorsRandom } from '../../config/colors'
 
 const AllPostItem = ({
   bookUrl,
@@ -34,6 +34,7 @@ const AllPostItem = ({
   user,
   author,
 }) => {
+  const { colors } = useTheme()
   const date = Number(createdAt)
   const { timeago, hourAndMinute } = useTimeAgo(date)
   const [isVisible, setIsVisible] = useState(false)
@@ -50,9 +51,7 @@ const AllPostItem = ({
           animated={true}
           showHideTransition={'none'}
           backgroundColor={
-            dataDominantColor?.getColors
-              ? `rgb(${dataDominantColor?.getColors})`
-              : colors.colorPrimary
+            dataDominantColor?.getColors ? `rgb(${dataDominantColor?.getColors})` : colors.primary
           }
         />
       )}
@@ -65,7 +64,7 @@ const AllPostItem = ({
         backgroundColor={
           dataDominantColor?.getColors
             ? `rgb(${dataDominantColor?.getColors}), 0.9`
-            : colors.colorPrimary
+            : colors.primary
         }
         swipeToCloseEnabled={false}
         doubleTapToZoomEnabled={true}
@@ -120,17 +119,17 @@ const AllPostItem = ({
                   verified={data?.findUserById.me.verified}
                   fontSize={16}
                 />
-                <Text style={styles.userTextUsername}>
+                <Text style={[styles.userTextUsername, { color: colors.text }]}>
                   @{data?.findUserById.me.username} · {timeago}
                 </Text>
               </View>
               <BtnOptions username={data?.findUserById.me.username} user={user} />
             </View>
             <View style={styles.postItemDescription}>
-              <Text style={styles.postItemTitle}>
+              <Text style={[styles.postItemTitle, { color: colors.colorThirdBlue }]}>
                 {title} - {author}
               </Text>
-              <Text style={styles.text}>{description}</Text>
+              <Text style={[styles.text, { color: colors.text }]}>{description}</Text>
             </View>
             <TouchableOpacity
               onPress={() => {
@@ -196,7 +195,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   userTextUsername: {
-    color: colors.textWhite,
     fontSize: 14.5,
     overflow: 'hidden',
   },
@@ -210,12 +208,10 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   postItemTitle: {
-    color: colors.colorThirdBlue,
     fontSize: 15.5,
     marginBottom: 7,
   },
   text: {
-    color: colors.textWhite,
     fontSize: 16,
     lineHeight: 24,
   },
@@ -226,11 +222,6 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 12,
     resizeMode: 'cover',
-  },
-  button: {
-    backgroundColor: colors.textWhite,
-    width: 20,
-    height: 30,
   },
 })
 

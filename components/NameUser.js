@@ -2,19 +2,22 @@
 import { Text, StyleSheet } from 'react-native'
 import React from 'react'
 import IconOcticons from 'react-native-vector-icons/Octicons'
+import { useTheme } from '@react-navigation/native'
 
 const NameUser = ({ name, verified, fontSize }) => {
+  const { colors } = useTheme()
   return (
-    <Text style={[styles.userTextName, { fontSize: fontSize }]}>
+    <Text style={[styles.userTextName, { fontSize: fontSize, color: colors.text }]}>
       <Text>{name} </Text>
-      <Text>{verified && <IconOcticons name='verified' color='white' size={fontSize} />}</Text>
+      <Text>
+        {verified && <IconOcticons name='verified' color={colors.colorThirdBlue} size={fontSize} />}
+      </Text>
     </Text>
   )
 }
 
 const styles = StyleSheet.create({
   userTextName: {
-    color: 'white',
     fontWeight: 'bold',
     marginRight: 5,
   },

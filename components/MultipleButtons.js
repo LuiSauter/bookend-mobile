@@ -5,10 +5,10 @@ import BtnLike from './Button/BtnLike'
 import Comment from 'react-native-vector-icons/EvilIcons' //comment
 import Download from 'react-native-vector-icons/Feather' //share
 import Share from 'react-native-vector-icons/AntDesign' //sharealt
-import { useNavigation } from '@react-navigation/native'
-import { colors } from '../config/colors'
+import { useNavigation, useTheme } from '@react-navigation/native'
 
-const MultipleButtons = ({ comments, likes, id, bookDownload, user, hourAndMinute }) => {
+const MultipleButtons = ({ comments, likes, id, user, hourAndMinute }) => {
+  const { colors } = useTheme()
   const navigation = useNavigation()
   return (
     <View style={styles.btnContainer}>
@@ -17,7 +17,7 @@ const MultipleButtons = ({ comments, likes, id, bookDownload, user, hourAndMinut
           name='sharealt'
           backgroundColor='transparent'
           borderRadius={50}
-          color={colors.textWhite}
+          color={colors.text}
           onPress={() => console.log('xd')}
           size={19}
           iconStyle={{ marginRight: 0 }}
@@ -29,7 +29,7 @@ const MultipleButtons = ({ comments, likes, id, bookDownload, user, hourAndMinut
           name='comment'
           backgroundColor='transparent'
           borderRadius={50}
-          color={colors.textWhite}
+          color={colors.text}
           onPress={() =>
             navigation.navigate('DetailScreen', { id, user, hourAndMinute, likes, comments })
           }
@@ -37,7 +37,7 @@ const MultipleButtons = ({ comments, likes, id, bookDownload, user, hourAndMinut
           iconStyle={{ marginRight: 0 }}
           underlayColor='transparent'
         />
-        <Text style={styles.text}>{comments.length}</Text>
+        <Text style={[styles.text, { color: colors.text }]}>{comments.length}</Text>
       </View>
       <BtnLike id={id} likes={likes.length} />
       <View style={styles.btn}>
@@ -45,7 +45,7 @@ const MultipleButtons = ({ comments, likes, id, bookDownload, user, hourAndMinut
           name='download'
           backgroundColor='transparent'
           borderRadius={50}
-          color={colors.textWhite}
+          color={colors.text}
           onPress={() => console.log('xd')}
           size={20}
           iconStyle={{ marginRight: 0 }}
@@ -73,7 +73,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    color: colors.textWhite,
     fontSize: 17,
   },
 })

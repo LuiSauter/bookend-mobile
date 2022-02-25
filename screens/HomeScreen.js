@@ -10,28 +10,26 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-// import * as WebBrowser from 'expo-web-browser'
 import { useLazyQuery } from '@apollo/client'
+import { useTheme } from '@react-navigation/native'
 import GoogleIcon from 'react-native-vector-icons/AntDesign'
 
+import AllPost from '../components/Post/AllPost'
+import NameUser from '../components/NameUser'
 import ModalSignIn from '../components/ModalSignIn'
 import { useToggle } from '../hooks/useToggle'
-import AllPost from '../components/Post/AllPost'
 import { FIND_USER } from '../user/graphql-queries'
-import NameUser from '../components/NameUser'
 import { useAuth } from '../hooks/useAuth'
 import { auth } from '../lib/auth'
-import { colors } from '../config/colors'
-
-// WebBrowser.maybeCompleteAuthSession()
 
 const HomeScreen = () => {
   const { googleAuth } = useAuth()
+  const { colors } = useTheme()
+  const { handleModalVisible, darkTheme } = useToggle()
+
   const { status, email, token } = googleAuth
   const [getProfile, { data }] = useLazyQuery(FIND_USER)
   const { promptAsync, request, signOut } = auth()
-
-  const { handleModalVisible } = useToggle()
 
   useEffect(() => {
     let cleanup = true
@@ -43,17 +41,25 @@ const HomeScreen = () => {
   }, [token])
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
+    <SafeAreaView
+      style={[styles.safeArea, { backgroundColor: colors.primary }]}
+      edges={['top', 'left', 'right']}
+    >
       <StatusBar
         animated={true}
         showHideTransition={'slide'}
-        barStyle='light-content'
-        backgroundColor={colors.colorPrimary}
+        barStyle={darkTheme ? 'light-content' : 'dark-content'}
+        backgroundColor={colors.primary}
       />
       <AllPost />
       <ModalSignIn>
         <View style={styles.centeredView}>
-          <View style={styles.modalView}>
+          <View
+            style={[
+              styles.modalView,
+              { backgroundColor: colors.primary, shadowColor: colors.colorThirdBlue },
+            ]}
+          >
             {status === 'authenticated' ? (
               data?.findUser ? (
                 <View style={styles.modalUser}>
@@ -64,14 +70,16 @@ const HomeScreen = () => {
                       name={data?.findUser.me.name}
                       verified={data?.findUser.verified}
                     />
-                    <Text style={styles.modalUserText}>@{data?.findUser.me.username}</Text>
+                    <Text style={[styles.modalUserText, { color: colors.textGray }]}>
+                      @{data?.findUser.me.username}
+                    </Text>
                   </View>
                 </View>
               ) : (
                 <ActivityIndicator color={colors.colorThirdBlue} size='large' />
               )
             ) : (
-              <Text style={styles.text}>Sign In</Text>
+              <Text style={[styles.text, { color: colors.text }]}>Sign In</Text>
             )}
             {googleAuth.status === 'authenticated' ? (
               <TouchableOpacity
@@ -82,6 +90,7 @@ const HomeScreen = () => {
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'center',
+                    backgroundColor: `${colors.colorThirdBlue}a3`,
                   },
                 ]}
                 onPress={() => {
@@ -90,7 +99,7 @@ const HomeScreen = () => {
                 }}
                 activeOpacity={0.7}
               >
-                <Text style={{ color: colors.textWhite, fontSize: 18, fontWeight: 'bold' }}>
+                <Text style={{ color: colors.text, fontSize: 18, fontWeight: 'bold' }}>
                   Sign Out
                 </Text>
               </TouchableOpacity>
@@ -103,6 +112,7 @@ const HomeScreen = () => {
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'center',
+                    backgroundColor: colors.colorThirdBlue,
                   },
                 ]}
                 disabled={!request}
@@ -114,21 +124,25 @@ const HomeScreen = () => {
               >
                 <GoogleIcon
                   name='google'
-                  color={colors.textWhite}
+                  color={colors.white}
                   onPress={() => console.log('xd')}
                   size={24}
                 />
-                <Text style={[styles.textButton, { color: colors.textWhite, marginLeft: 16 }]}>
+                <Text style={[styles.textButton, { color: colors.white, marginLeft: 16 }]}>
                   Sign with Google
                 </Text>
               </TouchableOpacity>
             )}
             <TouchableOpacity
-              style={[styles.button, styles.buttonClose]}
+              style={[
+                styles.button,
+                { backgroundColor: colors.colorFourthRed },
+                // { backgroundColor: colors.colorThirdBlue },
+              ]}
               onPress={() => handleModalVisible()}
               activeOpacity={0.7}
             >
-              <Text style={[styles.textButton, { color: colors.textWhite }]}>Cancel</Text>
+              <Text style={[styles.textButton, { color: colors.white }]}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -141,10 +155,8 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     justifyContent: 'space-between',
-    backgroundColor: colors.colorPrimary,
   },
   text: {
-    color: colors.textWhite,
     fontSize: 20,
     textAlign: 'center',
   },
@@ -158,22 +170,11 @@ const styles = StyleSheet.create({
     padding: 10,
     elevation: 2,
     marginTop: 16,
-    backgroundColor: colors.colorThirdBlue,
   },
   buttonSignOut: {
     borderRadius: 50,
     padding: 10,
     elevation: 2,
-    // marginBottom: 16,
-    backgroundColor: `${colors.colorThirdBlue}a3`,
-  },
-  buttonClose: {
-    backgroundColor: colors.colorFourthRed,
-  },
-  textStyle: {
-    color: colors.textWhite,
-    fontWeight: 'bold',
-    textAlign: 'center',
   },
   centeredView: {
     flex: 1,
@@ -185,10 +186,8 @@ const styles = StyleSheet.create({
     margin: 20,
     width: '80%',
     textAlign: 'center',
-    backgroundColor: colors.colorPrimary,
     borderRadius: 20,
     padding: 35,
-    shadowColor: colors.colorThirdBlue,
     shadowOffset: {
       width: 0,
       height: 16,
@@ -204,7 +203,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalUserImage: { height: 65, width: 65, borderRadius: 50, marginRight: 16 },
-  modalUserText: { color: colors.TextGray, fontSize: 18 },
+  modalUserText: { fontSize: 18 },
 })
 
 export default HomeScreen

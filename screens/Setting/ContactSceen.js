@@ -1,16 +1,23 @@
+import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { SafeAreaView, StatusBar, StyleSheet, Text } from 'react-native'
+import { useToggle } from '../../hooks/useToggle'
 
 const ContactSceen = () => {
+  const { colors } = useTheme()
+  const { darkTheme } = useToggle()
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
+    <SafeAreaView
+      style={[styles.safeArea, { backgroundColor: colors.primary }]}
+      edges={['top', 'left', 'right']}
+    >
       <StatusBar
         animated={true}
         showHideTransition={'slide'}
-        barStyle='light-content'
-        backgroundColor='#192734'
+        barStyle={darkTheme ? 'light-content' : 'dark-content'}
+        backgroundColor={colors.primary}
       />
-      <Text style={styles.text}>ActivityScreen</Text>
+      <Text style={[{ color: colors.text }]}>ContactScreen</Text>
     </SafeAreaView>
   )
 }
@@ -20,7 +27,6 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     justifyContent: 'space-between',
-    backgroundColor: '#192734',
   },
   text: {
     color: 'white',
