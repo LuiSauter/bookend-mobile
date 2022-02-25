@@ -11,6 +11,19 @@ export const colors = {
   TextGray: '#4D5B66',
 }
 
+export const colorsLight = {
+  colorPrimary: '#F5FDFF',
+  colorSecondary: '#e2e8f0',
+  colorThirdBlue: '#0099ff',
+  colorThirPuple: '#5046bb',
+  colorThirdYellow: '#ffc540',
+  colorFourthRed: '#ef4444',
+  colorUnderlay: '#bae6fdaa',
+  colorLikeRed: '#ff1c85',
+  text: '#121213',
+  TextGray: '#4D5B66',
+}
+
 export const colorsRandom = [
   '#2666CF',
   '#8A39E1',
