@@ -6,21 +6,27 @@ import UserScreen from '../screens/UserScreen'
 import NameUser from '../components/NameUser'
 import DetailScreen from '../screens/DetailScreen'
 
-// import DrawerHome from './DrawerNavigator'
 import SettingScreen from '../screens/SettingScreen'
 import AccountScreen from '../screens/Setting/AccountScreen'
 import ActivityScreen from '../screens/Setting/ActivityScreen'
 import ContactSceen from '../screens/Setting/ContactSceen'
 import DisplayScreen from '../screens/Setting/DisplayScreen'
-import { colors } from '../config/colors'
 import DrawerNavigator from './DrawerNavigator'
+import { useTheme } from '@react-navigation/native'
 
 const Stack = createNativeStackNavigator()
 
 const Navigation = () => {
+  const { colors } = useTheme()
   return (
     <Stack.Navigator>
-      <Stack.Group>
+      <Stack.Group
+        screenOptions={{
+          headerStyle: { backgroundColor: colors.primary },
+          headerTitleStyle: { color: colors.text },
+          headerTintColor: colors.text,
+        }}
+      >
         <Stack.Screen
           name='TabNavigation'
           component={DrawerNavigator}
@@ -39,12 +45,9 @@ const Navigation = () => {
                 {...props}
                 name={route.params.name}
                 verified={route.params.verified}
-                fontSize={15}
+                fontSize={17}
               />
             ),
-            headerStyle: { backgroundColor: colors.colorPrimary },
-            headerTitleStyle: { color: colors.textWhite },
-            headerTintColor: colors.textWhite,
           })}
         />
         <Stack.Screen
@@ -52,9 +55,6 @@ const Navigation = () => {
           component={DetailScreen}
           options={() => ({
             title: 'Book',
-            headerStyle: { backgroundColor: colors.colorPrimary },
-            headerTitleStyle: { color: colors.textWhite },
-            headerTintColor: colors.textWhite,
           })}
         />
         <Stack.Screen
@@ -62,9 +62,6 @@ const Navigation = () => {
           component={SettingScreen}
           options={() => ({
             title: 'Ajustes',
-            headerStyle: { backgroundColor: colors.colorPrimary },
-            headerTitleStyle: { color: colors.textWhite },
-            headerTintColor: colors.textWhite,
           })}
         />
         <Stack.Screen
@@ -72,9 +69,6 @@ const Navigation = () => {
           component={AccountScreen}
           options={() => ({
             title: 'Tu cuenta',
-            headerStyle: { backgroundColor: colors.colorPrimary },
-            headerTitleStyle: { color: colors.textWhite },
-            headerTintColor: colors.textWhite,
           })}
         />
         <Stack.Screen
@@ -82,9 +76,6 @@ const Navigation = () => {
           component={ActivityScreen}
           options={() => ({
             title: 'Tu actividad',
-            headerStyle: { backgroundColor: colors.colorPrimary },
-            headerTitleStyle: { color: colors.textWhite },
-            headerTintColor: colors.textWhite,
           })}
         />
         <Stack.Screen
@@ -92,9 +83,6 @@ const Navigation = () => {
           component={ContactSceen}
           options={() => ({
             title: 'Contacto del desarrollador',
-            headerStyle: { backgroundColor: colors.colorPrimary },
-            headerTitleStyle: { color: colors.textWhite },
-            headerTintColor: colors.textWhite,
           })}
         />
         <Stack.Screen
@@ -102,9 +90,6 @@ const Navigation = () => {
           component={DisplayScreen}
           options={() => ({
             title: 'Pantalla y idiomas',
-            headerStyle: { backgroundColor: colors.colorPrimary },
-            headerTitleStyle: { color: colors.textWhite },
-            headerTintColor: colors.textWhite,
           })}
         />
       </Stack.Group>
