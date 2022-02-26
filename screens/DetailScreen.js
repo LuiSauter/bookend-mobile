@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react'
 import {
-  ActivityIndicator,
   Image,
   SafeAreaView,
   ScrollView,
@@ -12,12 +11,10 @@ import {
   View,
 } from 'react-native'
 import { FINDONE_POST, GET_DOMINANT_COLOR } from '../post/graphql-queries'
-import { FIND_USER_BY_USER } from '../user/graphql-queries'
 import { useQuery } from '@apollo/client'
 import ImageView from 'react-native-image-viewing'
 
 import NameUser from '../components/NameUser'
-import userDefault from '../assets/img/default-user.png'
 import MultipleButtons from '../components/MultipleButtons'
 import BtnOptions from '../components/Button/BtnOptions'
 import { useToggle } from '../hooks/useToggle'
@@ -44,10 +41,9 @@ const DetailScreen = ({ route, navigation }) => {
   const { colors } = useTheme()
   const [isVisible, setIsVisible] = useState(false)
   const { data: dataDominantColor } = useQuery(GET_DOMINANT_COLOR, { variables: { image: image } })
-  const { data, loading } = useQuery(FINDONE_POST, {
+  const { data } = useQuery(FINDONE_POST, {
     variables: { id: id },
   })
-  const { data: dataUser } = useQuery(FIND_USER_BY_USER, { variables: { user: user } })
 
   return (
     <SafeAreaView
@@ -83,102 +79,70 @@ const DetailScreen = ({ route, navigation }) => {
       <ScrollView style={styles.postContainer}>
         <View style={styles.userTextContainer}>
           <View style={styles.userImgContainer}>
-            {dataUser?.findUserById ? (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('UserScreen', {
-                    name: name,
-                    username: username,
-                    verified: verified,
-                  })
-                }
-                activeOpacity={0.6}
-              >
-                <Image
-                  style={styles.userImg}
-                  source={{ uri: photo ? photo : dataUser?.findUserById.me.photo }}
-                />
-              </TouchableOpacity>
-            ) : (
-              <Image style={styles.userImg} source={userDefault} />
-            )}
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('UserScreen', {
+                  name: name,
+                  username: username,
+                  verified: verified,
+                })
+              }
+              activeOpacity={0.6}
+            >
+              <Image style={styles.userImg} source={{ uri: photo }} />
+            </TouchableOpacity>
           </View>
           <View style={styles.userTextItem}>
-            <NameUser
-              name={name ? name : dataUser?.findUserById.me.name}
-              verified={verified ? verified : dataUser?.findUserById.me.verified}
-              fontSize={16}
-            />
-            <Text style={[styles.userTextUsername, { color: colors.text }]}>
-              @{username ? username : dataUser?.findUserById.me.username}
-            </Text>
+            <NameUser name={name} verified={verified} fontSize={16} />
+            <Text style={[styles.userTextUsername, { color: colors.text }]}>@{username}</Text>
           </View>
           <BtnOptions username={username} user={user} />
         </View>
-        {loading ? (
-          <ActivityIndicator
-            color={colors.colorThirdBlue}
-            size='small'
-            style={{ display: 'flex', margin: 16 }}
-          />
-        ) : (
-          <>
-            <View style={styles.postItemDescription}>
-              <Text style={[styles.postItemTitle, { color: colors.colorThirdBlue }]}>
-                {title ? title : data?.findPost.title} - {author ? author : data?.findPost.author}
-              </Text>
-              <Text style={[styles.text, { color: colors.text }]}>
-                {description ? description : data?.findPost.description}
-              </Text>
-            </View>
-            <TouchableOpacity
-              onPress={() => setIsVisible(true)}
-              activeOpacity={0.6}
-              style={styles.postImgContainer}
-            >
-              <Image
-                style={styles.postImg}
-                source={{ uri: image ? image : data?.findPost.image }}
-              />
-            </TouchableOpacity>
+        <View style={styles.postItemDescription}>
+          <Text style={[styles.postItemTitle, { color: colors.colorThirdBlue }]}>
+            {title ? title : data?.findPost.title} - {author ? author : data?.findPost.author}
+          </Text>
+          <Text style={[styles.text, { color: colors.text }]}>
+            {description ? description : data?.findPost.description}
+          </Text>
+        </View>
+        <TouchableOpacity
+          onPress={() => setIsVisible(true)}
+          activeOpacity={0.6}
+          style={styles.postImgContainer}
+        >
+          <Image style={styles.postImg} source={{ uri: image ? image : data?.findPost.image }} />
+        </TouchableOpacity>
+        <Text
+          style={[[styles.userTextUsername, { color: colors.textGray }], { marginVertical: 10 }]}
+        >
+          {hourAndMinute}
+        </Text>
+        {(likes.length > 0 || comments.length > 0) && (
+          <View style={[styles.likesAndComments, { borderColor: colors.border }]}>
             <Text
-              style={[
-                [styles.userTextUsername, { color: colors.textGray }],
-                { marginVertical: 10 },
-              ]}
+              style={[[styles.userTextUsername, { color: colors.textGray }], { marginRight: 16 }]}
             >
-              {hourAndMinute}
+              <Text style={{ color: colors.text, fontWeight: '700' }}>
+                {data?.findPost ? data?.findPost.comments.length : comments.length}
+              </Text>{' '}
+              Comentarios
             </Text>
-            {(likes.length > 0 || comments.length > 0) && (
-              <View style={[styles.likesAndComments, { borderColor: colors.border }]}>
-                <Text
-                  style={[
-                    [styles.userTextUsername, { color: colors.textGray }],
-                    { marginRight: 16 },
-                  ]}
-                >
-                  <Text style={{ color: colors.text, fontWeight: '700' }}>
-                    {data?.findPost ? data?.findPost.comments.length : comments.length}
-                  </Text>{' '}
-                  Comentarios
-                </Text>
-                <Text style={[styles.userTextUsername, { color: colors.textGray }]}>
-                  <Text style={{ color: colors.text, fontWeight: '700' }}>
-                    {data?.findPost ? data?.findPost.likes.length : likes.length}
-                  </Text>{' '}
-                  Me gusta
-                </Text>
-              </View>
-            )}
-            {data?.findPost && (
-              <MultipleButtons
-                comments={comments.length ? comments.length : data?.findPost.comments.length}
-                likes={likes ? likes : data?.findPost.likes}
-                id={id}
-                bookDownload={bookUrl ? bookUrl : data?.findPost.bookUrl}
-              />
-            )}
-          </>
+            <Text style={[styles.userTextUsername, { color: colors.textGray }]}>
+              <Text style={{ color: colors.text, fontWeight: '700' }}>
+                {data?.findPost ? data?.findPost.likes.length : likes.length}
+              </Text>{' '}
+              Me gusta
+            </Text>
+          </View>
+        )}
+        {data?.findPost && (
+          <MultipleButtons
+            comments={comments.length ? comments.length : data?.findPost.comments.length}
+            likes={data?.findPost.likes}
+            id={id}
+            bookDownload={bookUrl ? bookUrl : data?.findPost.bookUrl}
+          />
         )}
       </ScrollView>
     </SafeAreaView>
