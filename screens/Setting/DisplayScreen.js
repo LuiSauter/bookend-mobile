@@ -12,7 +12,7 @@ const DisplayScreen = () => {
       <StatusBar
         animated={true}
         showHideTransition={'slide'}
-        barStyle='light-content'
+        barStyle={darkTheme ? 'light-content' : 'dark-content'}
         backgroundColor={colors.colorPrimary}
       />
       <View style={styles.item}>
@@ -54,7 +54,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
   },
   description: {
     fontSize: 15,
