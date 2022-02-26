@@ -78,21 +78,25 @@ const CustomDrawerContent = (props) => {
         </>
       )}
       <DrawerItem
-        icon={() => <HomeIcon name={'home'} size={22} style={styles.icon} color={colors.text} />}
+        icon={({ color }) => (
+          <HomeIcon name={'home-outline'} size={22} style={styles.icon} color={color} />
+        )}
         label='Inicio'
         labelStyle={styles.label}
         onPress={() => props.navigation.navigate('HomeScreen')}
       />
       <DrawerItem
-        icon={() => <Ionicons name={'book'} size={22} style={styles.icon} color={colors.text} />}
+        icon={({ color }) => (
+          <Ionicons name={'book-outline'} size={22} style={styles.icon} color={color} />
+        )}
         label='Libros'
         labelStyle={styles.label}
         onPress={() => props.navigation.navigate('BookScreen')}
       />
       {status === 'authenticated' && (
         <DrawerItem
-          icon={() => (
-            <Ionicons name='ios-person-outline' size={24} style={styles.icon} color={colors.text} />
+          icon={({ color }) => (
+            <Ionicons name='ios-person-outline' size={24} style={styles.icon} color={color} />
           )}
           label='Perfil'
           labelStyle={styles.label}
@@ -108,12 +112,12 @@ const CustomDrawerContent = (props) => {
       <DrawerItem
         label='Ajustes'
         labelStyle={styles.label}
-        icon={() => (
-          <Ionicons name='settings-outline' size={24} style={styles.icon} color={colors.text} />
+        icon={({ color }) => (
+          <Ionicons name='settings-outline' size={24} style={styles.icon} color={color} />
         )}
         onPress={() => props.navigation.navigate('SettingScreen')}
       />
-      <View style={[styles.login, { borderTopColor: colors.textGray }]}>
+      <View style={[styles.login, { borderTopColor: colors.textGray + '33' }]}>
         {status === 'authenticated' ? (
           <DrawerItem
             label='Cerrar sesión'
@@ -131,9 +135,9 @@ const CustomDrawerContent = (props) => {
         ) : (
           <DrawerItem
             label='Iniciar sesión'
-            labelStyle={[styles.label, { color: colors.text }]}
-            icon={() => (
-              <GoogleIcon name='google' size={24} style={styles.icon} color={colors.text} />
+            labelStyle={[styles.label]}
+            icon={({ color }) => (
+              <GoogleIcon name='google' size={24} style={styles.icon} color={color} />
             )}
             onPress={() => promptAsync()}
           />
