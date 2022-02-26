@@ -79,6 +79,7 @@ export const ALL_POST_RANKING = gql`
       title
       user
       author
+      createdAt
     }
   }
 `
