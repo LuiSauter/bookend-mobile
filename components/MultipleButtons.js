@@ -5,11 +5,10 @@ import BtnLike from './Button/BtnLike'
 import Comment from 'react-native-vector-icons/EvilIcons' //comment
 import Download from 'react-native-vector-icons/Feather' //share
 import Share from 'react-native-vector-icons/AntDesign' //sharealt
-import { useNavigation, useTheme } from '@react-navigation/native'
+import { useTheme } from '@react-navigation/native'
 
 const MultipleButtons = ({ comments, likes, id, user, hourAndMinute }) => {
   const { colors } = useTheme()
-  const navigation = useNavigation()
   return (
     <View style={styles.btnContainer}>
       <View style={styles.btn}>
@@ -30,9 +29,7 @@ const MultipleButtons = ({ comments, likes, id, user, hourAndMinute }) => {
           backgroundColor='transparent'
           borderRadius={50}
           color={colors.text}
-          onPress={() =>
-            navigation.navigate('DetailScreen', { id, user, hourAndMinute, likes, comments })
-          }
+          onPress={() => console.log('xd')}
           size={26}
           iconStyle={{ marginRight: 0 }}
           underlayColor='transparent'
