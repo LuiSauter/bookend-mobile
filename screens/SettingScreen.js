@@ -20,34 +20,39 @@ const data = [
     description:
       'Ve la informacion de tu cuenta y obtén más información acerca de las opciones de desactivación de la cuenta.',
     screen: 'AccountScreen',
+    icon: 'user',
   },
   {
     id: 1,
     title: 'Pantalla y idiomas',
     description: 'Administra como vez el contenido en Bookend.',
     screen: 'DisplayScreen',
+    icon: 'layout',
   },
   {
     id: 2,
     title: 'Tu actividad en Bookend',
     description: 'Consulta la informacion sobre a quien seguiste y que post te gustaron.',
     screen: 'ActivityScreen',
+    icon: 'eyeo',
   },
   {
     id: 3,
     title: 'Reporta un problema',
     description: 'Ayudanos a mejorar reportando un bug o problemas de rendimiento.',
     screen: 'ContactSceen',
+    icon: 'warning',
   },
   {
     id: 4,
     title: 'Contacto del desarrollador',
     description: 'Ayudanos a mejorar reportando un bug o problemas de rendimiento.',
     screen: 'ContactSceen',
+    icon: 'rocket1',
   },
 ]
 
-const Item = ({ title, description, screen }) => {
+const Item = ({ title, description, screen, icon }) => {
   const navigation = useNavigation()
   const { colors } = useTheme()
   return (
@@ -56,6 +61,12 @@ const Item = ({ title, description, screen }) => {
       underlayColor={colors.colorUnderlay}
     >
       <View style={styles.item}>
+        <AntDesignIcon
+          name={icon}
+          size={24}
+          style={{ marginRight: 0, padding: 0 }}
+          color={colors.textGray}
+        />
         <View style={styles.text}>
           <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
           <Text style={[styles.description, { color: colors.textGray }]}>{description}</Text>
@@ -76,7 +87,7 @@ const SettingScreen = () => {
   const { colors } = useTheme()
 
   const renderItem = ({ item }) => (
-    <Item title={item.title} screen={item.screen} description={item.description} />
+    <Item title={item.title} screen={item.screen} description={item.description} icon={item.icon} />
   )
 
   return (
@@ -111,13 +122,12 @@ const styles = StyleSheet.create({
   text: {
     display: 'flex',
     flexDirection: 'column',
-    width: '90%',
+    width: '75%',
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
   },
   description: {
-    fontSize: 15,
+    fontSize: 14,
   },
 })
