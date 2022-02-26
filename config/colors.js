@@ -8,7 +8,7 @@ export const colors = {
   colorUnderlay: '#0003',
   colorLikeRed: '#ff1c85',
   textWhite: '#F5FDFF',
-  TextGray: '#4D5B66',
+  TextGray: '#728493',
 }
 
 export const colorsLight = {
@@ -20,7 +20,7 @@ export const colorsLight = {
   colorFourthRed: '#ef4444',
   colorUnderlay: '#bae6fdaa',
   colorLikeRed: '#ff1c85',
-  text: '#121213',
+  text: '#000',
   TextGray: '#4D5B66',
 }
 
