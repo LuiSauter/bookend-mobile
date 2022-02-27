@@ -61,15 +61,17 @@ const Item = ({ title, description, screen, icon }) => {
       underlayColor={colors.colorUnderlay}
     >
       <View style={styles.item}>
-        <AntDesignIcon
-          name={icon}
-          size={24}
-          style={{ marginRight: 0, padding: 0 }}
-          color={colors.textGray}
-        />
-        <View style={styles.text}>
-          <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
-          <Text style={[styles.description, { color: colors.textGray }]}>{description}</Text>
+        <View style={styles.textContainer}>
+          <AntDesignIcon
+            name={icon}
+            size={24}
+            style={{ marginRight: 16, padding: 0 }}
+            color={colors.textGray}
+          />
+          <View style={styles.text}>
+            <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
+            <Text style={[styles.description, { color: colors.textGray }]}>{description}</Text>
+          </View>
         </View>
         <AntDesignIcon
           name='right'
@@ -119,10 +121,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
   },
+  textContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   text: {
     display: 'flex',
     flexDirection: 'column',
-    width: '75%',
+    width: '80%',
   },
   title: {
     fontSize: 18,

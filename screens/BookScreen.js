@@ -11,7 +11,7 @@ const BookScreen = () => {
   return (
     <SafeAreaView
       style={[styles.safeArea, { backgroundColor: colors.primary }]}
-      edges={['top', 'left', 'right']}
+      edges={['top', 'left', 'right', 'bottom']}
     >
       <StatusBar
         animated={true}

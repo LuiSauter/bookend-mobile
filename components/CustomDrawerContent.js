@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect } from 'react'
-import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer'
 import { useLazyQuery } from '@apollo/client'
 
@@ -77,72 +77,74 @@ const CustomDrawerContent = (props) => {
           <Text style={[styles.textBookend, { color: colors.colorThirdBlue }]}>Bookend</Text>
         </>
       )}
-      <DrawerItem
-        icon={({ color }) => (
-          <HomeIcon name={'home-outline'} size={22} style={styles.icon} color={color} />
-        )}
-        label='Inicio'
-        labelStyle={styles.label}
-        onPress={() => props.navigation.navigate('HomeScreen')}
-      />
-      <DrawerItem
-        icon={({ color }) => (
-          <Ionicons name={'book-outline'} size={22} style={styles.icon} color={color} />
-        )}
-        label='Libros'
-        labelStyle={styles.label}
-        onPress={() => props.navigation.navigate('BookScreen')}
-      />
-      {status === 'authenticated' && (
+      <ScrollView>
         <DrawerItem
           icon={({ color }) => (
-            <Ionicons name='ios-person-outline' size={24} style={styles.icon} color={color} />
+            <HomeIcon name={'home-outline'} size={22} style={styles.icon} color={color} />
           )}
-          label='Perfil'
+          label='Inicio'
           labelStyle={styles.label}
-          onPress={() =>
-            props.navigation.navigate('UserScreen', {
-              name: data?.findUser.me.name,
-              username: data?.findUser.me.username,
-              verified: data?.findUser.verified,
-            })
-          }
+          onPress={() => props.navigation.navigate('HomeScreen')}
         />
-      )}
-      <DrawerItem
-        label='Ajustes'
-        labelStyle={styles.label}
-        icon={({ color }) => (
-          <Ionicons name='settings-outline' size={24} style={styles.icon} color={color} />
-        )}
-        onPress={() => props.navigation.navigate('SettingScreen')}
-      />
-      <View style={[styles.login, { borderTopColor: colors.textGray + '33' }]}>
-        {status === 'authenticated' ? (
+        <DrawerItem
+          icon={({ color }) => (
+            <Ionicons name={'book-outline'} size={22} style={styles.icon} color={color} />
+          )}
+          label='Libros'
+          labelStyle={styles.label}
+          onPress={() => props.navigation.navigate('BookScreen')}
+        />
+        {status === 'authenticated' && (
           <DrawerItem
-            label='Cerrar sesión'
-            labelStyle={{ color: `${colors.colorFourthRed}a5`, fontSize: 19, fontWeight: '500' }}
-            icon={() => (
-              <SignOutIcon
-                name='log-out-outline'
-                size={24}
-                style={styles.icon}
-                color={`${colors.colorFourthRed}a5`}
-              />
-            )}
-            onPress={() => signOut()}
-          />
-        ) : (
-          <DrawerItem
-            label='Iniciar sesión'
-            labelStyle={[styles.label]}
             icon={({ color }) => (
-              <GoogleIcon name='google' size={24} style={styles.icon} color={color} />
+              <Ionicons name='ios-person-outline' size={24} style={styles.icon} color={color} />
             )}
-            onPress={() => promptAsync()}
+            label='Perfil'
+            labelStyle={styles.label}
+            onPress={() =>
+              props.navigation.navigate('UserScreen', {
+                name: data?.findUser.me.name,
+                username: data?.findUser.me.username,
+                verified: data?.findUser.verified,
+              })
+            }
           />
         )}
-      </View>
+        <DrawerItem
+          label='Ajustes'
+          labelStyle={styles.label}
+          icon={({ color }) => (
+            <Ionicons name='settings-outline' size={24} style={styles.icon} color={color} />
+          )}
+          onPress={() => props.navigation.navigate('SettingScreen')}
+        />
+        <View style={[styles.login, { borderTopColor: colors.textGray + '33' }]}>
+          {status === 'authenticated' ? (
+            <DrawerItem
+              label='Cerrar sesión'
+              labelStyle={{ color: `${colors.colorFourthRed}a5`, fontSize: 19, fontWeight: '500' }}
+              icon={() => (
+                <SignOutIcon
+                  name='log-out-outline'
+                  size={24}
+                  style={styles.icon}
+                  color={`${colors.colorFourthRed}a5`}
+                />
+              )}
+              onPress={() => signOut()}
+            />
+          ) : (
+            <DrawerItem
+              label='Iniciar sesión'
+              labelStyle={[styles.label]}
+              icon={({ color }) => (
+                <GoogleIcon name='google' size={24} style={styles.icon} color={color} />
+              )}
+              onPress={() => promptAsync()}
+            />
+          )}
+        </View>
+      </ScrollView>
     </DrawerContentScrollView>
   )
 }
