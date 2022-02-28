@@ -140,9 +140,7 @@ const CustomDrawerContent = (props) => {
               icon={({ color }) => (
                 <GoogleIcon name='google' size={24} style={styles.icon} color={color} />
               )}
-              onPress={() =>
-                promptAsync({ useProxy: true, redirectUri: 'https://auth.expo.io/@sauter/bookend' })
-              }
+              onPress={() => promptAsync({ useProxy: true, showInRecents: true })}
             />
           )}
         </View>
