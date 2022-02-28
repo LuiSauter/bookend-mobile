@@ -97,6 +97,7 @@ export const SEARCH_POST_AUTHOR_USER = gql`
       user
       likes
       author
+      createdAt
     }
     searchBooks(words: $words) {
       bookUrl
@@ -109,6 +110,7 @@ export const SEARCH_POST_AUTHOR_USER = gql`
       user
       likes
       author
+      createdAt
     }
     searchUsers(name: $words) {
       name
