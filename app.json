@@ -14,9 +14,11 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": ["**/*"],
-    "scheme": "mycoolredirect",
+    "scheme": "com.sauter.bookend",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sauter.bookend",
+      "buildNumber": "3"
     },
     "android": {
       "adaptiveIcon": {
