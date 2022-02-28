@@ -74,7 +74,6 @@ const AllPostItem = ({
         onPress={() =>
           navigation.navigate('DetailScreen', {
             id: id,
-            randomColor: colorsRandom[Math.floor(Math.random() * colorsRandom.length)],
             createdAt,
             image,
             title,

@@ -8,9 +8,11 @@ export const ToggleStateProvider = ({ children }) => {
   const scheme = useColorScheme()
   const [modalVisible, setModalVisible] = useState(false)
   const [darkTheme, setDarkTheme] = useState(scheme === 'dark')
+  const [word, setWord] = useState('')
 
   const handleModalVisible = () => setModalVisible(!modalVisible)
   const handleDarkTheme = () => setDarkTheme(!darkTheme)
+  const handleChangeWord = (text) => setWord(text)
 
   return (
     <ToggleContext.Provider
@@ -19,6 +21,8 @@ export const ToggleStateProvider = ({ children }) => {
         handleModalVisible,
         darkTheme,
         handleDarkTheme,
+        word,
+        handleChangeWord,
       }}
     >
       {children}
