@@ -38,9 +38,8 @@ const AllPost = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
   const [refreshing, setRefreshing] = useState(false)
-  const [getAllPost, { data, loading, refetch }] = useLazyQuery(ALL_POSTS)
+  const [getAllPost, { data, refetch }] = useLazyQuery(ALL_POSTS)
   const { data: allPostsCount } = useQuery(ALL_POSTS_COUNT)
-  // const { googleAuth } = useAuth()
 
   useEffect(() => {
     let cleanup = true
@@ -66,7 +65,7 @@ const AllPost = () => {
         <ActivityIndicator
           style={{ marginBottom: 16 }}
           color={colors.colorThirdBlue}
-          size='large'
+          size='small'
         />
       )
     )
@@ -89,14 +88,7 @@ const AllPost = () => {
 
   return (
     <View style={styles.container}>
-      {loading && (
-        <ActivityIndicator
-          style={{ flex: 1, paddingTop: 24, paddingBottom: 16 }}
-          color={colors.colorThirdBlue}
-          size='large'
-        />
-      )}
-      {data?.allPosts && (
+      {data?.allPosts ? (
         <FlatList
           data={data?.allPosts}
           renderItem={renderItem}
@@ -116,15 +108,21 @@ const AllPost = () => {
             />
           }
         />
+      ) : (
+        <ActivityIndicator
+          style={{ flex: 1, paddingTop: 24, paddingBottom: 16 }}
+          color={colors.colorThirdBlue}
+          size='large'
+        />
       )}
     </View>
   )
 }
+
+export default AllPost
 
 const styles = StyleSheet.create({
   container: {
     height: '100%',
   },
 })
-
-export default AllPost

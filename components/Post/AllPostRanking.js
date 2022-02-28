@@ -65,7 +65,7 @@ const AllPostRanking = () => {
         <ActivityIndicator
           style={{ flex: 1, marginVertical: 16, width: '100%' }}
           color={colors.colorThirdBlue}
-          size='large'
+          size='small'
         />
       )
     )
@@ -87,14 +87,7 @@ const AllPostRanking = () => {
 
   return (
     <View style={{ height: '100%' }}>
-      {loading && (
-        <ActivityIndicator
-          style={{ flex: 1, width: '100%', height: '100%' }}
-          color={colors.colorThirdBlue}
-          size='large'
-        />
-      )}
-      {data?.allPostRanking && (
+      {data?.allPostRanking ? (
         <FlatList
           data={data?.allPostRanking}
           renderItem={renderItem}
@@ -115,6 +108,12 @@ const AllPostRanking = () => {
               onRefresh={onRefresh}
             />
           }
+        />
+      ) : (
+        <ActivityIndicator
+          style={{ flex: 1, width: '100%', height: '100%' }}
+          color={colors.colorThirdBlue}
+          size='large'
         />
       )}
     </View>
