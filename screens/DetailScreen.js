@@ -23,7 +23,7 @@ import { useTheme } from '@react-navigation/native'
 const DetailScreen = ({ route, navigation }) => {
   const {
     id,
-    bookUrl,
+    // bookUrl,
     comments,
     likes,
     image,
@@ -136,14 +136,7 @@ const DetailScreen = ({ route, navigation }) => {
             </Text>
           </View>
         )}
-        {data?.findPost && (
-          <MultipleButtons
-            comments={comments.length ? comments.length : data?.findPost.comments.length}
-            likes={data?.findPost.likes}
-            id={id}
-            bookDownload={bookUrl ? bookUrl : data?.findPost.bookUrl}
-          />
-        )}
+        <MultipleButtons id={id} />
       </ScrollView>
     </SafeAreaView>
   )

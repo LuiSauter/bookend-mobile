@@ -7,7 +7,7 @@ import Download from 'react-native-vector-icons/Feather' //share
 import Share from 'react-native-vector-icons/AntDesign' //sharealt
 import { useTheme } from '@react-navigation/native'
 
-const MultipleButtons = ({ comments, likes, id }) => {
+const MultipleButtons = ({ id }) => {
   const { colors } = useTheme()
   return (
     <View style={styles.btnContainer}>
@@ -34,9 +34,9 @@ const MultipleButtons = ({ comments, likes, id }) => {
           iconStyle={{ marginRight: 0 }}
           underlayColor='transparent'
         />
-        <Text style={[styles.text, { color: colors.text }]}>{comments.length}</Text>
+        <Text style={[styles.text, { color: colors.text }]}>0</Text>
       </View>
-      <BtnLike id={id} likes={likes.length} />
+      <BtnLike id={id} />
       <View style={styles.btn}>
         <Download.Button
           name='download'
