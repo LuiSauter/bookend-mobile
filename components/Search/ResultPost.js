@@ -81,7 +81,6 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     aspectRatio: 9 / 13,
     height: 'auto',
-    // width: 110,
     marginRight: 10,
     borderRadius: 16,
   },
