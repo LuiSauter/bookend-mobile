@@ -117,7 +117,10 @@ const HomeScreen = () => {
                 ]}
                 disabled={!request}
                 onPress={() => {
-                  promptAsync()
+                  promptAsync({
+                    useProxy: true,
+                    redirectUri: 'https://auth.expo.io/@sauter/bookend',
+                  })
                   handleModalVisible()
                 }}
                 activeOpacity={0.7}
