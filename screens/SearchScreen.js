@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react'
 import { useTheme } from '@react-navigation/native'
@@ -8,7 +9,6 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  TouchableHighlight,
   TouchableOpacity,
   View,
 } from 'react-native'
@@ -48,10 +48,19 @@ const renderItemUser = ({ item }) => (
 const keyExtractor = (item) => item.id.toString()
 const keyExtractorUser = (item) => item.user.toString()
 
+const NOT_FOUND_STATE = 'No se encontraron resultados.'
+
+const TextNotFound = ({ color }) => (
+  <Text style={[styles.textNotFound, { color: color }]}>
+    {NOT_FOUND_STATE} <Text style={{ fontSize: 20 }}>🦉</Text>
+  </Text>
+)
+
 const SearchScreen = () => {
   const { colors } = useTheme()
   const { darkTheme, word } = useToggle()
   const [filter, setFilter] = useState({ book: true, author: false, user: false })
+  const { book, author, user } = filter
   const [getResults, { data, loading }] = useLazyQuery(SEARCH_POST_AUTHOR_USER)
 
   useEffect(() => {
@@ -65,25 +74,6 @@ const SearchScreen = () => {
       cleanup = false
     }
   }, [word])
-
-  // const renderLoader = () => {
-  //   return (
-  //     loading && (
-  //       <ActivityIndicator
-  //         style={{ marginBottom: 16 }}
-  //         color={colors.colorThirdBlue}
-  //         size='large'
-  //       />
-  //     )
-  //   )
-  // }
-
-  // const loadMoreItem = () => {
-  //   if (allPostsCount && allPostsCount?.postCount === data?.allPosts.length) {
-  //     return setIsLoading(false)
-  //   }
-  //   setCurrentPage(currentPage + INITIAL_PAGE)
-  // }
 
   return (
     <SafeAreaView
@@ -146,32 +136,38 @@ const SearchScreen = () => {
           </Text>
         </TouchableOpacity>
       </View>
-      {loading && (
-        <ActivityIndicator
-          style={{ marginBottom: 16 }}
-          color={colors.colorThirdBlue}
-          size='large'
-        />
-      )}
-      <FlatList
-        data={
-          filter.author
-            ? data?.searchBooks.length > 0 && data?.searchBooks
-            : filter.book && data?.searchBooksAuthor.length > 0 && data?.searchBooksAuthor
-        }
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-        onEndReachedThreshold={0}
-        removeClippedSubviews={true}
-      />
-      {data?.searchUsers.length > 0 && (
+      {book
+        ? data?.searchBooks.length === 0 && <TextNotFound color={colors.textGray} />
+        : author
+        ? data?.searchBooksAuthor.length === 0 && <TextNotFound color={colors.textGray} />
+        : user
+        ? data?.searchUsers.length === 0 && <TextNotFound color={colors.textGray} />
+        : null}
+      {word.length !== 0 ? (
         <FlatList
-          data={data?.searchUsers}
-          renderItem={renderItemUser}
-          keyExtractor={keyExtractorUser}
-          onEndReachedThreshold={0}
-          removeClippedSubviews={true}
+          ListHeaderComponent={() =>
+            loading && (
+              <ActivityIndicator
+                style={{ marginBottom: 16 }}
+                color={colors.colorThirdBlue}
+                size='small'
+              />
+            )
+          }
+          data={
+            book
+              ? data?.searchBooks.length > 0 && data?.searchBooks
+              : author
+              ? data?.searchBooksAuthor.length > 0 && data?.searchBooksAuthor
+              : user
+              ? data?.searchUsers.length > 0 && data?.searchUsers
+              : []
+          }
+          renderItem={filter.user ? renderItemUser : renderItem}
+          keyExtractor={filter.user ? keyExtractorUser : keyExtractor}
         />
+      ) : (
+        <Text style={{ textAlign: 'center' }}>@Bookend</Text>
       )}
     </SafeAreaView>
   )
@@ -197,4 +193,5 @@ const styles = StyleSheet.create({
     paddingBottom: 2,
     fontSize: 16,
   },
+  textNotFound: { textAlign: 'center', textAlignVertical: 'center', height: '100%', fontSize: 15 },
 })
