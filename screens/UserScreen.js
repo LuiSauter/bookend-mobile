@@ -3,13 +3,14 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
+  RefreshControl,
   SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
   View,
 } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useLazyQuery } from '@apollo/client'
 import { FIND_PROFILE } from '../user/graphql-queries'
 import NameUser from '../components/NameUser'
@@ -25,13 +26,16 @@ const INITIAL_PAGE = 6
 const UserScreen = ({ route }) => {
   const { username } = route.params
   const { googleAuth } = useAuth()
+  const { email } = googleAuth
   const { colors } = useTheme()
   const { darkTheme } = useToggle()
-  const { email } = googleAuth
+
+  const [refreshing, setRefreshing] = useState(false)
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
   const [isLoading, setIsLoading] = useState(true)
+
   const [getProfile, { data }] = useLazyQuery(FIND_PROFILE)
-  const [getAllPost, { data: dataAllPosts, refetch, loading }] = useLazyQuery(ALL_POST_BY_USER)
+  const [getAllPost, { data: dataAllPosts, refetch }] = useLazyQuery(ALL_POST_BY_USER)
   const [getCountAllPost, { data: CountAllPosts }] = useLazyQuery(ALL_POST_BY_USER_COUNT)
 
   useEffect(() => {
@@ -64,8 +68,8 @@ const UserScreen = ({ route }) => {
 
   const renderLoader = () => {
     return isLoading ? (
-      <View style={{ marginBottom: 10 }}>
-        <ActivityIndicator size='large' color={colors.colorThirdBlue} />
+      <View style={{ marginVertical: 16 }}>
+        <ActivityIndicator size='small' color={colors.colorThirdBlue} />
       </View>
     ) : null
   }
@@ -98,6 +102,14 @@ const UserScreen = ({ route }) => {
     setCurrentPage(currentPage + INITIAL_PAGE)
   }
 
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true)
+    await refetch({ pageSize: INITIAL_PAGE, skipValue: 0 })
+    setCurrentPage(INITIAL_PAGE)
+    setIsLoading(true)
+    setRefreshing(false)
+  }, [])
+
   return (
     <SafeAreaView
       style={[styles.safeArea, { backgroundColor: colors.primary }]}
@@ -109,14 +121,7 @@ const UserScreen = ({ route }) => {
         barStyle={darkTheme ? 'light-content' : 'dark-content'}
         backgroundColor={colors.primary}
       />
-      {loading && (
-        <ActivityIndicator
-          style={{ marginVertical: 16 }}
-          size='large'
-          color={colors.colorThirdBlue}
-        />
-      )}
-      {dataAllPosts?.allPostsByUsername && (
+      {dataAllPosts?.allPostsByUsername ? (
         <FlatList
           ListHeaderComponent={() => (
             <>
@@ -175,6 +180,23 @@ const UserScreen = ({ route }) => {
           ListFooterComponent={renderLoader}
           onEndReached={loadMoreItem}
           onEndReachedThreshold={0}
+          refreshControl={
+            <RefreshControl
+              progressBackgroundColor={colors.primary}
+              refreshing={refreshing}
+              colors={[colors.colorThirdBlue]}
+              onRefresh={onRefresh}
+            />
+          }
+        />
+      ) : (
+        <ActivityIndicator
+          style={{
+            paddingVertical: 16,
+            flex: 1,
+          }}
+          size='large'
+          color={colors.colorThirdBlue}
         />
       )}
     </SafeAreaView>
