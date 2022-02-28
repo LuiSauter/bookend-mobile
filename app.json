@@ -23,7 +23,6 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#192734"
       },
-      "googleServicesFile": "./google-services.json",
       "package": "com.sauter.bookend",
       "versionCode": 1
     },
