@@ -12,12 +12,13 @@ import { FIND_USER } from '../user/graphql-queries'
 import { useAuth } from '../hooks/useAuth'
 import bookendLogo from '../assets/img/default-user.png'
 import { useTheme } from '@react-navigation/native'
+import Search from '../components/Search/Search'
 
 const Tab = createBottomTabNavigator()
 
 const TabNavigator = () => {
   const { colors } = useTheme()
-  const { handleModalVisible } = useToggle()
+  const { handleModalVisible, handleChangeWord, word } = useToggle()
   const { googleAuth } = useAuth()
   const [getFindUserByEmail, { data, loading }] = useLazyQuery(FIND_USER, {
     variables: { email: googleAuth.email },
@@ -40,7 +41,7 @@ const TabNavigator = () => {
         tabBarActiveTintColor: colors.colorThirdBlue,
         tabBarStyle: {
           backgroundColor: colors.primary,
-          borderTopColor: colors.textGray,
+          borderTopColor: `${colors.textGray}aa`,
         },
         tabBarShowLabel: false,
         headerStyle: { backgroundColor: colors.primary },
@@ -122,6 +123,10 @@ const TabNavigator = () => {
         component={SearchScreen}
         options={{
           title: 'Search',
+          headerTitle: () => (
+            <Search onChangeText={handleChangeWord} value={word} placeholder='buscar en bookend' />
+          ),
+          headerTitleAlign: 'center',
           tabBarIcon: ({ color }) => (
             <Icon
               name={color === colors.colorThirdBlue ? 'search' : 'search-outline'}
