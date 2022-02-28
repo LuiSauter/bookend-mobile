@@ -5,12 +5,18 @@ import IconOcticons from 'react-native-vector-icons/Octicons'
 import { useTheme } from '@react-navigation/native'
 
 const NameUser = ({ name, verified, fontSize }) => {
-  const { colors } = useTheme()
+  const { colors, dark } = useTheme()
   return (
     <Text style={[styles.userTextName, { fontSize: fontSize, color: colors.text }]}>
       <Text>{name} </Text>
       <Text>
-        {verified && <IconOcticons name='verified' color={colors.colorThirdBlue} size={fontSize} />}
+        {verified && (
+          <IconOcticons
+            name='verified'
+            color={dark ? colors.white : colors.colorThirdBlue}
+            size={fontSize}
+          />
+        )}
       </Text>
     </Text>
   )
