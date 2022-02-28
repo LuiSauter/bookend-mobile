@@ -83,3 +83,40 @@ export const ALL_POST_RANKING = gql`
     }
   }
 `
+
+export const SEARCH_POST_AUTHOR_USER = gql`
+  query searhPostAuthorUser($words: String!) {
+    searchBooksAuthor(words: $words) {
+      bookUrl
+      comments
+      description
+      id
+      image
+      tags
+      title
+      user
+      likes
+      author
+    }
+    searchBooks(words: $words) {
+      bookUrl
+      comments
+      description
+      id
+      image
+      tags
+      title
+      user
+      likes
+      author
+    }
+    searchUsers(name: $words) {
+      name
+      username
+      user
+      email
+      photo
+      verified
+    }
+  }
+`

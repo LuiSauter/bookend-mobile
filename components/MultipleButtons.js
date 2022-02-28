@@ -7,7 +7,7 @@ import Download from 'react-native-vector-icons/Feather' //share
 import Share from 'react-native-vector-icons/AntDesign' //sharealt
 import { useTheme } from '@react-navigation/native'
 
-const MultipleButtons = ({ comments, likes, id, user, hourAndMinute }) => {
+const MultipleButtons = ({ comments, likes, id }) => {
   const { colors } = useTheme()
   return (
     <View style={styles.btnContainer}>
