@@ -3,7 +3,6 @@ import React from 'react'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { ApolloClient, ApolloProvider } from '@apollo/client'
 import { InMemoryCache } from '@apollo/client/cache/inmemory/inMemoryCache'
-import * as WebBrowser from 'expo-web-browser'
 
 import { ToggleStateProvider } from './context/toggleContext'
 import Navigator from './navigation'
@@ -20,8 +19,6 @@ const client = new ApolloClient({
   cache,
   defaultOptions: { watchQuery: { fetchPolicy: 'cache-and-network' } },
 })
-
-WebBrowser.maybeCompleteAuthSession()
 
 const App = () => {
   return (
