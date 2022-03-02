@@ -12,7 +12,7 @@ import bookendLogo from '../assets/img/default-user.png'
 import HomeIcon from 'react-native-vector-icons/Ionicons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import SignOutIcon from 'react-native-vector-icons/Ionicons'
-import GoogleIcon from 'react-native-vector-icons/AntDesign'
+import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import { auth } from '../lib/auth'
 import { useTheme } from '@react-navigation/native'
 
@@ -94,6 +94,22 @@ const CustomDrawerContent = (props) => {
           labelStyle={styles.label}
           onPress={() => props.navigation.navigate('BookScreen')}
         />
+        <DrawerItem
+          icon={({ color }) => (
+            <AntDesignIcon name={'pluscircleo'} size={22} style={styles.icon} color={color} />
+          )}
+          label='Añadir libros'
+          labelStyle={styles.label}
+          onPress={() =>
+            props.navigation.navigate('AddPostScreen', {
+              name: data?.findUser.me.name,
+              username: data?.findUser.me.username,
+              verified: data?.findUser.verified,
+              email: data?.findUser.me.email,
+              photo: data?.findUser.me.photo,
+            })
+          }
+        />
         {status === 'authenticated' && (
           <DrawerItem
             icon={({ color }) => (
@@ -138,7 +154,7 @@ const CustomDrawerContent = (props) => {
               label='Iniciar sesión'
               labelStyle={[styles.label]}
               icon={({ color }) => (
-                <GoogleIcon name='google' size={24} style={styles.icon} color={color} />
+                <AntDesignIcon name='google' size={24} style={styles.icon} color={color} />
               )}
               onPress={() => promptAsync({ useProxy: true, showInRecents: true })}
             />
