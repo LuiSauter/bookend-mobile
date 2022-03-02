@@ -13,6 +13,7 @@ import ContactSceen from '../screens/Setting/ContactSceen'
 import DisplayScreen from '../screens/Setting/DisplayScreen'
 import DrawerNavigator from './DrawerNavigator'
 import { useTheme } from '@react-navigation/native'
+import AddPostScreen from '../screens/AddPostScreen'
 
 const Stack = createNativeStackNavigator()
 
@@ -92,6 +93,7 @@ const Navigation = () => {
             title: 'Pantalla y idiomas',
           })}
         />
+        <Stack.Screen name='AddPostScreen' component={AddPostScreen} options={{ title: '' }} />
       </Stack.Group>
     </Stack.Navigator>
   )

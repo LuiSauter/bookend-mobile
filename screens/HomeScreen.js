@@ -33,10 +33,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     let cleanup = true
-    if (cleanup) {
-      if (token !== '') getProfile({ variables: { email: email } })
-    }
-
+    if (cleanup && token !== '') getProfile({ variables: { email: email } })
     return () => (cleanup = false)
   }, [token])
 
