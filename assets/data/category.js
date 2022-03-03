@@ -1,0 +1,17 @@
+export const categorys = [
+  { tag: 'Physics', id: 0 },
+  { tag: 'Astronomy', id: 1 },
+  { tag: 'Time', id: 2 },
+  { tag: 'Space', id: 3 },
+  { tag: 'Universe', id: 4 },
+  { tag: 'Scientists', id: 5 },
+  { tag: 'Astrophysics', id: 6 },
+  { tag: 'Planet', id: 7 },
+  { tag: 'Theory', id: 8 },
+  { tag: 'Philosophy', id: 9 },
+  { tag: 'Quantum', id: 10 },
+  { tag: 'Future', id: 11 },
+  { tag: 'Elements', id: 12 },
+  { tag: 'Cosmology', id: 13 },
+  { tag: 'Science', id: 14 },
+]
