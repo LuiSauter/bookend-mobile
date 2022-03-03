@@ -14,6 +14,7 @@ import DisplayScreen from '../screens/Setting/DisplayScreen'
 import DrawerNavigator from './DrawerNavigator'
 import { useTheme } from '@react-navigation/native'
 import AddPostScreen from '../screens/AddPostScreen'
+import { Text, TouchableHighlight } from 'react-native'
 
 const Stack = createNativeStackNavigator()
 
@@ -93,7 +94,33 @@ const Navigation = () => {
             title: 'Pantalla y idiomas',
           })}
         />
-        <Stack.Screen name='AddPostScreen' component={AddPostScreen} options={{ title: '' }} />
+        <Stack.Screen
+          name='AddPostScreen'
+          component={AddPostScreen}
+          options={{
+            title: '',
+            headerRight: () => (
+              <TouchableHighlight
+                onPress={() => console.log('submit')}
+                underlayColor={colors.colorUnderlay}
+              >
+                <Text
+                  style={{
+                    backgroundColor: colors.colorThirdBlue,
+                    color: colors.white,
+                    borderRadius: 10,
+                    paddingHorizontal: 16,
+                    paddingTop: 4,
+                    paddingBottom: 6,
+                    fontSize: 16,
+                  }}
+                >
+                  Post
+                </Text>
+              </TouchableHighlight>
+            ),
+          }}
+        />
       </Stack.Group>
     </Stack.Navigator>
   )
