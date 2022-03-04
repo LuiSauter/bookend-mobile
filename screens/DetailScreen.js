@@ -35,6 +35,12 @@ const DetailScreen = ({ route, navigation }) => {
     username,
     verified,
     photo,
+    descriptionUser,
+    location,
+    followers,
+    following,
+    email,
+    website,
     hourAndMinute,
   } = route.params
   const { darkTheme } = useToggle()
@@ -85,6 +91,14 @@ const DetailScreen = ({ route, navigation }) => {
                   name: name,
                   username: username,
                   verified: verified,
+                  photo: photo,
+                  description: descriptionUser,
+                  user: user,
+                  location: location,
+                  followers: followers,
+                  following: following,
+                  email: email,
+                  website: website,
                 })
               }
               activeOpacity={0.6}

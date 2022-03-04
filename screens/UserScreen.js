@@ -12,7 +12,6 @@ import {
 } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useLazyQuery } from '@apollo/client'
-import { FIND_PROFILE } from '../user/graphql-queries'
 import NameUser from '../components/NameUser'
 import { ALL_POST_BY_USER, ALL_POST_BY_USER_COUNT } from '../post/graphql-queries'
 import AllPostItem from '../components/Post/AllPostItem'
@@ -24,7 +23,19 @@ import { useToggle } from '../hooks/useToggle'
 const INITIAL_PAGE = 6
 
 const UserScreen = ({ route }) => {
-  const { username } = route.params
+  const {
+    username,
+    name,
+    verified,
+    photo,
+    description,
+    user,
+    location,
+    followers,
+    following,
+    email: userEmail,
+    website,
+  } = route.params
   const { googleAuth } = useAuth()
   const { email } = googleAuth
   const { colors } = useTheme()
@@ -34,7 +45,6 @@ const UserScreen = ({ route }) => {
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
   const [isLoading, setIsLoading] = useState(true)
 
-  const [getProfile, { data }] = useLazyQuery(FIND_PROFILE)
   const [getAllPost, { data: dataAllPosts, refetch }] = useLazyQuery(ALL_POST_BY_USER)
   const [getCountAllPost, { data: CountAllPosts }] = useLazyQuery(ALL_POST_BY_USER_COUNT)
 
@@ -42,7 +52,6 @@ const UserScreen = ({ route }) => {
     let cleanup = true
     if (cleanup) {
       if (username) {
-        getProfile({ variables: { username: username } })
         getAllPost({
           variables: { pageSize: INITIAL_PAGE, skipValue: 0, username: username },
         })
@@ -121,84 +130,57 @@ const UserScreen = ({ route }) => {
         barStyle={darkTheme ? 'light-content' : 'dark-content'}
         backgroundColor={colors.primary}
       />
-      {dataAllPosts?.allPostsByUsername ? (
-        <FlatList
-          ListHeaderComponent={() => (
-            <>
-              <View style={styles.profilePresentation}>
-                <Image
-                  blurRadius={100}
-                  style={styles.imageBackground}
-                  source={{ uri: data?.findProfile.me.photo }}
-                />
-                <Image
-                  style={[styles.profileImage, { borderColor: colors.primary }]}
-                  source={{ uri: data?.findProfile.me.photo }}
-                />
+      <FlatList
+        ListHeaderComponent={() => (
+          <>
+            <View style={styles.profilePresentation}>
+              <Image blurRadius={100} style={styles.imageBackground} source={{ uri: photo }} />
+              <Image
+                style={[styles.profileImage, { borderColor: colors.primary }]}
+                source={{ uri: photo }}
+              />
+            </View>
+            <View style={{ marginHorizontal: 16, marginTop: 10 }}>
+              <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                <NameUser name={name} verified={verified} fontSize={20} />
+                {userEmail !== email && <BtnFollow username={username} user={user} />}
               </View>
-              <View style={{ marginHorizontal: 16, marginTop: 10 }}>
-                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                  <NameUser
-                    name={data?.findProfile.me.name}
-                    verified={data?.findProfile.me.verified}
-                    fontSize={20}
-                  />
-                  {data?.findProfile.me.email !== email && (
-                    <BtnFollow username={username} user={data?.findProfile.me.user} />
-                  )}
-                </View>
-                <Text style={[styles.textOpacity, { color: colors.textGray }]}>
-                  @{data?.findProfile.me.username}
+              <Text style={[styles.textOpacity, { color: colors.textGray }]}>@{username}</Text>
+              <Text style={[styles.text, { color: colors.text }]}>{description}</Text>
+              <View style={styles.textPresentation}>
+                <Text style={[styles.textOpacity, { color: colors.textGray }]}>{location}</Text>
+                <Text style={{ fontSize: 15, color: colors.colorThirdBlue, marginLeft: 16 }}>
+                  {website}
+                </Text>
+              </View>
+              <View style={styles.textPresentation}>
+                <Text style={[styles.text, { marginRight: 16, color: colors.text }]}>
+                  {followers.length}
+                  <Text style={{ color: colors.textGray }}> Following</Text>
                 </Text>
                 <Text style={[styles.text, { color: colors.text }]}>
-                  {data?.findProfile.description}
+                  {following.length}
+                  <Text style={{ color: colors.textGray }}> Followers</Text>
                 </Text>
-                <View style={styles.textPresentation}>
-                  <Text style={[styles.textOpacity, { color: colors.textGray }]}>
-                    {data?.findProfile.location}
-                  </Text>
-                  <Text style={{ fontSize: 15, color: colors.colorThirdBlue, marginLeft: 16 }}>
-                    {data?.findProfile.website}
-                  </Text>
-                </View>
-                <View style={styles.textPresentation}>
-                  <Text style={[styles.text, { marginRight: 16, color: colors.text }]}>
-                    {data?.findProfile.followers.length}
-                    <Text style={{ color: colors.textGray }}> Following</Text>
-                  </Text>
-                  <Text style={[styles.text, { color: colors.text }]}>
-                    {data?.findProfile.following.length}
-                    <Text style={{ color: colors.textGray }}> Followers</Text>
-                  </Text>
-                </View>
               </View>
-            </>
-          )}
-          data={dataAllPosts?.allPostsByUsername}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          ListFooterComponent={renderLoader}
-          onEndReached={loadMoreItem}
-          onEndReachedThreshold={0}
-          refreshControl={
-            <RefreshControl
-              progressBackgroundColor={colors.primary}
-              refreshing={refreshing}
-              colors={[colors.colorThirdBlue]}
-              onRefresh={onRefresh}
-            />
-          }
-        />
-      ) : (
-        <ActivityIndicator
-          style={{
-            paddingVertical: 16,
-            flex: 1,
-          }}
-          size='large'
-          color={colors.colorThirdBlue}
-        />
-      )}
+            </View>
+          </>
+        )}
+        data={dataAllPosts?.allPostsByUsername}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        ListFooterComponent={renderLoader}
+        onEndReached={loadMoreItem}
+        onEndReachedThreshold={0}
+        refreshControl={
+          <RefreshControl
+            progressBackgroundColor={colors.primary}
+            refreshing={refreshing}
+            colors={[colors.colorThirdBlue]}
+            onRefresh={onRefresh}
+          />
+        }
+      />
     </SafeAreaView>
   )
 }

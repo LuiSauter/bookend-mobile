@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer'
 import { useLazyQuery } from '@apollo/client'
@@ -94,37 +94,47 @@ const CustomDrawerContent = (props) => {
           labelStyle={styles.label}
           onPress={() => props.navigation.navigate('BookScreen')}
         />
-        <DrawerItem
-          icon={({ color }) => (
-            <AntDesignIcon name={'pluscircleo'} size={22} style={styles.icon} color={color} />
-          )}
-          label='Añadir libros'
-          labelStyle={styles.label}
-          onPress={() =>
-            props.navigation.navigate('AddPostScreen', {
-              name: data?.findUser.me.name,
-              username: data?.findUser.me.username,
-              verified: data?.findUser.verified,
-              email: data?.findUser.me.email,
-              photo: data?.findUser.me.photo,
-            })
-          }
-        />
         {status === 'authenticated' && (
-          <DrawerItem
-            icon={({ color }) => (
-              <Ionicons name='ios-person-outline' size={24} style={styles.icon} color={color} />
-            )}
-            label='Perfil'
-            labelStyle={styles.label}
-            onPress={() =>
-              props.navigation.navigate('UserScreen', {
-                name: data?.findUser.me.name,
-                username: data?.findUser.me.username,
-                verified: data?.findUser.verified,
-              })
-            }
-          />
+          <Fragment>
+            <DrawerItem
+              icon={({ color }) => (
+                <AntDesignIcon name={'pluscircleo'} size={22} style={styles.icon} color={color} />
+              )}
+              label='Añadir libros'
+              labelStyle={styles.label}
+              onPress={() =>
+                props.navigation.navigate('AddPostScreen', {
+                  name: data?.findUser.me.name,
+                  username: data?.findUser.me.username,
+                  verified: data?.findUser.verified,
+                  email: data?.findUser.me.email,
+                  photo: data?.findUser.me.photo,
+                })
+              }
+            />
+            <DrawerItem
+              icon={({ color }) => (
+                <Ionicons name='ios-person-outline' size={24} style={styles.icon} color={color} />
+              )}
+              label='Perfil'
+              labelStyle={styles.label}
+              onPress={() =>
+                props.navigation.navigate('UserScreen', {
+                  name: data?.findUser.me.name,
+                  username: data?.findUser.me.username,
+                  verified: data?.findUser.verified,
+                  photo: data?.findUser.me.photo,
+                  description: data?.findUser.description,
+                  user: data?.findUser.me.user,
+                  location: data?.findUser.location,
+                  followers: data?.findUser.followers,
+                  following: data?.findUser.following,
+                  email: data?.findUser.me.email,
+                  website: data?.findUser.website,
+                })
+              }
+            />
+          </Fragment>
         )}
         <DrawerItem
           label='Ajustes'

@@ -84,6 +84,12 @@ const AllPostItem = ({
             username: data?.findUserById.me.username,
             verified: data?.findUserById.me.verified,
             photo: data?.findUserById.me.photo,
+            descriptionUser: data?.findUserById.description,
+            location: data?.findUserById.location,
+            followers: data?.findUserById.followers,
+            following: data?.findUserById.following,
+            email: data?.findUserById.me.email,
+            website: data?.findUserById.website,
             hourAndMinute,
             bookUrl,
             comments,
@@ -100,6 +106,14 @@ const AllPostItem = ({
                     name: data?.findUserById.me.name,
                     username: data?.findUserById.me.username,
                     verified: data?.findUserById.me.verified,
+                    photo: data?.findUserById.me.photo,
+                    description: data?.findUserById.description,
+                    user: data?.findUserById.me.user,
+                    location: data?.findUserById.location,
+                    followers: data?.findUserById.followers,
+                    following: data?.findUserById.following,
+                    email: data?.findUserById.me.email,
+                    website: data?.findUserById.website,
                   })
                 }
                 activeOpacity={0.6}
