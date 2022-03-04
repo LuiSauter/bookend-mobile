@@ -1,125 +1,142 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react'
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableHighlight,
-  TouchableOpacity,
-  View,
-} from 'react-native'
-import * as ImagePicker from 'expo-image-picker'
+import React, { Fragment, useEffect, useState } from 'react'
+import { Image, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import { useTheme } from '@react-navigation/native'
 import EntypoIcon from 'react-native-vector-icons/Entypo'
 import NameUser from '../NameUser'
+import { categorys } from '../../assets/data/category'
 
-const INITIAL_STATE = {
-  localUri: null,
-  width: 0,
-  height: 0,
+const INITIAL_POST_STATE = {
+  title: '',
+  description: [],
+  author: '',
+  bookUrl: '',
+  image: '',
+  tags: [],
 }
 
-const NewPost = ({ name, username, verified, photo, email }) => {
+const NewPost = ({ name, username, verified, photo, email, handleDisabled, addPost }) => {
   const { colors } = useTheme()
-  const [selectedImage, setSelectedImage] = useState(INITIAL_STATE)
-  const [first, setfirst] = useState()
+  const [postState, setPostState] = useState(INITIAL_POST_STATE)
+  const { author, bookUrl, description, image, tags, title } = postState
 
-  const openImagePickerAsync = async () => {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
-    if (permissionResult.granted === false) {
-      alert('¡Se requiere permiso para acceder a las images!')
-      return
+  useEffect(() => {
+    let cleanup = true
+    if (cleanup) {
+      if (
+        title !== '' &&
+        description.length !== 0 &&
+        author !== '' &&
+        bookUrl !== '' &&
+        image !== '' &&
+        tags.length !== 0
+      ) {
+        const newData = { ...postState, email: email }
+        handleDisabled(false)
+        addPost(newData)
+      } else {
+        handleDisabled(true)
+        addPost({})
+      }
     }
-
-    const pickerResult = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [2, 3],
-      quality: 0.5,
-    })
-    if (pickerResult.cancelled) return setSelectedImage(INITIAL_STATE)
-    setSelectedImage({
-      localUri: pickerResult.uri,
-      width: pickerResult.width,
-      height: pickerResult.height,
-    })
-  }
+    return () => {
+      cleanup = false
+    }
+  }, [author, bookUrl, description, image, tags, title])
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.me}>
-        <Image source={{ uri: photo }} style={styles.mePhoto} />
-        <View>
-          <NameUser name={name} verified={verified} fontSize={17} />
-          <Text style={{ color: colors.textGray }}>@{username}</Text>
-        </View>
-      </View>
-      <View>
-        <TextInput
-          placeholder='Título'
-          placeholderTextColor={`${colors.colorThirdBlue}aa`}
-          multiline={true}
-          style={[styles.title, { color: colors.colorThirdBlue }]}
-        />
-        <TextInput
-          placeholder='Descripción'
-          placeholderTextColor={colors.textGray}
-          multiline={true}
-          style={[styles.text, { color: colors.text }]}
-        />
-        <TextInput
-          placeholder='Autor'
-          placeholderTextColor={colors.textGray}
-          multiline={true}
-          style={[styles.text, { color: colors.text }]}
-        />
-        <TextInput
-          placeholder='Url del libro (google.drive)'
-          placeholderTextColor={colors.textGray}
-          style={[styles.text, { color: colors.text }]}
-        />
-        {selectedImage.localUri !== null && (
-          <TouchableOpacity
-            onPress={openImagePickerAsync}
-            style={styles.btnChangeImage}
-            activeOpacity={0.6}
-          >
-            <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-              <EntypoIcon
-                name='cross'
-                color={colors.textGray}
-                size={30}
-                iconStyle={{ marginRight: 0 }}
-                style={styles.crossIcon}
-              />
-              <Text>Cambiar imagen</Text>
-            </View>
-          </TouchableOpacity>
-        )}
-        {selectedImage.localUri === null ? (
-          <TouchableHighlight
-            onPress={openImagePickerAsync}
-            underlayColor={colors.colorUnderlay}
-            style={[styles.squeleton, { backgroundColor: `${colors.textGray}33` }]}
-          >
-            <EntypoIcon
-              name='image'
-              backgroundColor='transparent'
-              borderRadius={50}
-              color={colors.textGray}
-              size={35}
-              iconStyle={{ marginRight: 0 }}
-            />
-          </TouchableHighlight>
-        ) : (
-          <View style={styles.imageContainer}>
-            <Image source={{ uri: selectedImage.localUri }} style={styles.image} />
+    <Fragment>
+      <ScrollView style={styles.container}>
+        <View style={styles.me}>
+          <Image source={{ uri: photo }} style={styles.mePhoto} />
+          <View>
+            <NameUser name={name} verified={verified} fontSize={17} />
+            <Text style={{ color: colors.textGray }}>@{username}</Text>
           </View>
-        )}
-      </View>
-    </ScrollView>
+        </View>
+        <View>
+          <TextInput
+            placeholder='Título'
+            placeholderTextColor={`${colors.colorThirdBlue}aa`}
+            onChangeText={(title) => setPostState((prevState) => ({ ...prevState, title }))}
+            value={title}
+            style={[styles.title, { color: colors.colorThirdBlue }]}
+          />
+          <TextInput
+            placeholder='Descripción'
+            placeholderTextColor={colors.textGray}
+            multiline={true}
+            onChangeText={(description) =>
+              setPostState((prevState) => ({ ...prevState, description: description.split('\n') }))
+            }
+            style={[styles.text, { color: colors.text }]}
+          />
+          <TextInput
+            placeholder='Autor'
+            placeholderTextColor={colors.textGray}
+            multiline={true}
+            onChangeText={(author) => setPostState((prevState) => ({ ...prevState, author }))}
+            value={author}
+            style={[styles.text, { color: colors.text }]}
+          />
+          <TextInput
+            placeholder='Url del libro (google.drive)'
+            placeholderTextColor={colors.textGray}
+            onChangeText={(bookUrl) => setPostState((prevState) => ({ ...prevState, bookUrl }))}
+            value={bookUrl}
+            style={[styles.text, { color: colors.colorThirPuple }]}
+          />
+          {postState.bookUrl !== '' ? (
+            <Image source={{ uri: postState.bookUrl }} style={styles.image} />
+          ) : (
+            <View style={[styles.squeleton, { backgroundColor: `${colors.textGray}33` }]}>
+              <EntypoIcon
+                name='image'
+                backgroundColor='transparent'
+                borderRadius={50}
+                color={colors.textGray}
+                size={35}
+                iconStyle={{ marginRight: 0 }}
+              />
+            </View>
+          )}
+          <Text style={[styles.text, { color: colors.text, marginTop: 10 }]}>
+            Etiqueta tu publicación
+          </Text>
+          <View style={styles.labels}>
+            {categorys.map((tag) => {
+              const isMatch = postState.tags.some((item) => item === tag.tag)
+              return (
+                <Text
+                  key={tag.id}
+                  onPress={() => {
+                    if (!isMatch)
+                      setPostState((prevState) => ({
+                        ...prevState,
+                        tags: [...prevState.tags, tag.tag],
+                      }))
+                    else
+                      setPostState((prevState) => ({
+                        ...prevState,
+                        tags: postState.tags.filter((tagState) => tagState !== tag.tag),
+                      }))
+                  }}
+                  style={[
+                    styles.tag,
+                    {
+                      color: isMatch ? colors.white : colors.text,
+                      backgroundColor: isMatch ? colors.colorThirdBlue : 'transparent',
+                    },
+                  ]}
+                >
+                  {tag.tag}
+                </Text>
+              )
+            })}
+          </View>
+        </View>
+      </ScrollView>
+    </Fragment>
   )
 }
 
@@ -174,7 +191,20 @@ const styles = StyleSheet.create({
   squeleton: {
     justifyContent: 'center',
     alignItems: 'center',
-    aspectRatio: 1 / 1,
+    aspectRatio: 2 / 1,
     borderRadius: 16,
+  },
+  labels: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingBottom: 16,
+  },
+  tag: {
+    fontSize: 16,
+    marginRight: 10,
+    marginBottom: 10,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 2,
   },
 })

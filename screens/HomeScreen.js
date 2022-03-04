@@ -131,11 +131,7 @@ const HomeScreen = () => {
               </TouchableOpacity>
             )}
             <TouchableOpacity
-              style={[
-                styles.button,
-                { backgroundColor: colors.colorFourthRed },
-                // { backgroundColor: colors.colorThirdBlue },
-              ]}
+              style={[styles.button, { backgroundColor: colors.colorFourthRed }]}
               onPress={() => handleModalVisible()}
               activeOpacity={0.7}
             >

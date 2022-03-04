@@ -4,7 +4,7 @@ import React from 'react'
 import NewPost from '../components/Post/NewPost'
 import { useTheme } from '@react-navigation/native'
 
-const AddPostScreen = ({ route }) => {
+const AddPostScreen = ({ route, handleDisabled, addPost }) => {
   const { name, username, verified, photo, email } = route.params
   const { colors, dark } = useTheme()
   return (
@@ -18,7 +18,15 @@ const AddPostScreen = ({ route }) => {
         barStyle={dark ? 'light-content' : 'dark-content'}
         backgroundColor={colors.primary}
       />
-      <NewPost name={name} username={username} verified={verified} photo={photo} email={email} />
+      <NewPost
+        name={name}
+        username={username}
+        verified={verified}
+        photo={photo}
+        email={email}
+        handleDisabled={handleDisabled}
+        addPost={addPost}
+      />
     </SafeAreaView>
   )
 }

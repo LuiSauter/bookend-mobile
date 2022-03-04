@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React from 'react'
+import React, { useState } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import UserScreen from '../screens/UserScreen'
@@ -14,12 +14,18 @@ import DisplayScreen from '../screens/Setting/DisplayScreen'
 import DrawerNavigator from './DrawerNavigator'
 import { useTheme } from '@react-navigation/native'
 import AddPostScreen from '../screens/AddPostScreen'
-import { Text, TouchableHighlight } from 'react-native'
+import { StyleSheet, Text, TouchableHighlight } from 'react-native'
+import { usePost } from '../hooks/usePost'
 
 const Stack = createNativeStackNavigator()
 
 const Navigation = () => {
   const { colors } = useTheme()
+  const { isDisabled, handleDisabled, addNewPost } = usePost()
+  const [currentData, setCurrentData] = useState(null)
+  const addPost = (data) => {
+    setCurrentData(data)
+  }
   return (
     <Stack.Navigator>
       <Stack.Group
@@ -96,34 +102,46 @@ const Navigation = () => {
         />
         <Stack.Screen
           name='AddPostScreen'
-          component={AddPostScreen}
           options={{
             title: '',
             headerRight: () => (
               <TouchableHighlight
-                onPress={() => console.log('submit')}
+                onPress={() => currentData !== null && addNewPost(currentData)}
                 underlayColor={colors.colorUnderlay}
+                disabled={isDisabled}
               >
                 <Text
-                  style={{
-                    backgroundColor: colors.colorThirdBlue,
-                    color: colors.white,
-                    borderRadius: 10,
-                    paddingHorizontal: 16,
-                    paddingTop: 4,
-                    paddingBottom: 6,
-                    fontSize: 16,
-                  }}
+                  style={[
+                    styles.btnPost,
+                    {
+                      backgroundColor: isDisabled ? '#09fa' : colors.colorThirdBlue,
+                      color: colors.white,
+                    },
+                  ]}
                 >
                   Post
                 </Text>
               </TouchableHighlight>
             ),
           }}
-        />
+        >
+          {(props) => (
+            <AddPostScreen {...props} handleDisabled={handleDisabled} addPost={addPost} />
+          )}
+        </Stack.Screen>
       </Stack.Group>
     </Stack.Navigator>
   )
 }
 
 export default Navigation
+
+const styles = StyleSheet.create({
+  btnPost: {
+    borderRadius: 10,
+    paddingHorizontal: 16,
+    paddingTop: 4,
+    paddingBottom: 6,
+    fontSize: 16,
+  },
+})
