@@ -1,3 +1,4 @@
+import React, { useState } from 'react'
 import {
   View,
   Text,
@@ -7,20 +8,19 @@ import {
   TouchableHighlight,
   StatusBar,
 } from 'react-native'
-import React, { useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { useNavigation, useTheme } from '@react-navigation/native'
 import ImageView from 'react-native-image-viewing'
 import PropTypes from 'prop-types'
 
 import { FIND_USER_BY_USER } from '../../user/graphql-queries'
-import userDefault from '../../assets/img/default-user.png'
-import useTimeAgo from '../../hooks/useTimeAgo'
-import NameUser from '../NameUser'
 import { GET_DOMINANT_COLOR } from '../../post/graphql-queries'
+import { colorsRandom } from '../../config/colors'
+import userDefault from '../../assets/img/default-user.png'
+import NameUser from '../NameUser'
 import MultipleButtons from '../MultipleButtons'
 import BtnOptions from '../Button/BtnOptions'
-import { colorsRandom } from '../../config/colors'
+import useTimeAgo from '../../hooks/useTimeAgo'
 
 const AllPostItem = ({
   bookUrl,
@@ -68,6 +68,8 @@ const AllPostItem = ({
         }
         swipeToCloseEnabled={false}
         doubleTapToZoomEnabled={true}
+        presentationStyle='overFullScreen'
+        FooterComponent={() => <MultipleButtons id={id} />}
       />
       <TouchableHighlight
         underlayColor={colors.colorUnderlay}
@@ -142,7 +144,11 @@ const AllPostItem = ({
               <Text style={[styles.postItemTitle, { color: colors.colorThirdBlue }]}>
                 {title} - {author}
               </Text>
-              <Text style={[styles.text, { color: colors.text }]}>{description}</Text>
+              <Text style={[styles.text, { color: colors.text }]}>
+                {description.join('\n').length < 200
+                  ? description.join('\n')
+                  : `${description.join('\n').toString().substring(0, 200)}...`}
+              </Text>
             </View>
             <TouchableOpacity
               onPress={() => {
@@ -161,7 +167,7 @@ const AllPostItem = ({
                   }}
                 />
               ) : (
-                <Image style={styles.postImg} source={{ uri: image }} />
+                <Image style={styles.postImg} resizeMethod='resize' source={{ uri: image }} />
               )}
             </TouchableOpacity>
             <MultipleButtons id={id} />
@@ -222,10 +228,16 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   postImgContainer: {
-    maxHeight: 350,
+    height: 350,
+    flex: 1,
+    justifyContent: 'flex-start',
+    overflow: 'hidden',
+    borderRadius: 12,
+    backgroundColor: '#09fa',
   },
   postImg: {
-    height: '100%',
+    width: '100%',
+    aspectRatio: 2 / 3,
     borderRadius: 12,
     resizeMode: 'cover',
   },
