@@ -86,8 +86,15 @@ const NewPost = ({ name, username, verified, photo, email, handleDisabled, addPo
             value={bookUrl}
             style={[styles.text, { color: colors.colorThirPuple }]}
           />
-          {postState.bookUrl !== '' ? (
-            <Image source={{ uri: postState.bookUrl }} style={styles.image} />
+          <TextInput
+            placeholder='Url de la imagen previa'
+            placeholderTextColor={colors.textGray}
+            onChangeText={(image) => setPostState((prevState) => ({ ...prevState, image }))}
+            value={image}
+            style={[styles.text, { color: colors.colorThirdBlue }]}
+          />
+          {postState.image !== '' ? (
+            <Image source={{ uri: postState.image }} style={styles.image} />
           ) : (
             <View style={[styles.squeleton, { backgroundColor: `${colors.textGray}33` }]}>
               <EntypoIcon
