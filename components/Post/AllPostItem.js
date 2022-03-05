@@ -68,8 +68,6 @@ const AllPostItem = ({
         }
         swipeToCloseEnabled={false}
         doubleTapToZoomEnabled={true}
-        presentationStyle='overFullScreen'
-        FooterComponent={() => <MultipleButtons id={id} />}
       />
       <TouchableHighlight
         underlayColor={colors.colorUnderlay}

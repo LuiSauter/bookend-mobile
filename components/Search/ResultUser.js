@@ -5,11 +5,14 @@ import BtnFollow from '../Button/BtnFollow'
 import { useNavigation, useTheme } from '@react-navigation/native'
 import NameUser from '../NameUser'
 import { useAuth } from '../../hooks/useAuth'
+import { useQuery } from '@apollo/client'
+import { FIND_USER } from '../../user/graphql-queries'
 
 const ResultUser = ({ name, username, user, email, photo, verified }) => {
   const { colors } = useTheme()
   const navigation = useNavigation()
   const { googleAuth } = useAuth()
+  const { data } = useQuery(FIND_USER, { variables: { email: email } })
   return (
     <TouchableHighlight
       onPress={() =>
@@ -17,6 +20,14 @@ const ResultUser = ({ name, username, user, email, photo, verified }) => {
           name: name,
           username: username,
           verified: verified,
+          user: user,
+          email: email,
+          photo: data?.findUser ? data?.findUser.me.photo : '',
+          description: data?.findUser ? data?.findUser.description : '',
+          location: data?.findUser ? data?.findUser.location : '',
+          followers: data?.findUser ? data?.findUser.followers : [],
+          following: data?.findUser ? data?.findUser.following : [],
+          website: data?.findUser ? data?.findUser.website : '',
         })
       }
       underlayColor={colors.colorUnderlay}

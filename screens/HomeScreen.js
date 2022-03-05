@@ -77,7 +77,7 @@ const HomeScreen = () => {
                 ]}
                 disabled={!request}
                 onPress={() => {
-                  promptAsync({ useProxy: true })
+                  promptAsync({ useProxy: false })
                   handleModalVisible()
                 }}
                 activeOpacity={0.7}
