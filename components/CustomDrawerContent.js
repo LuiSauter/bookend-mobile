@@ -22,9 +22,7 @@ const CustomDrawerContent = (props) => {
   const { googleAuth } = useAuth()
   const { email, status } = googleAuth
 
-  const [getFindUserByEmail, { data, loading }] = useLazyQuery(FIND_USER, {
-    variables: { email: email },
-  })
+  const [getFindUserByEmail, { data }] = useLazyQuery(FIND_USER)
 
   useEffect(() => {
     let cleanup = true
@@ -43,7 +41,7 @@ const CustomDrawerContent = (props) => {
       contentContainerStyle={[styles.container, { backgroundColor: colors.primary }]}
     >
       {status === 'authenticated' ? (
-        loading ? (
+        data?.findUser === undefined ? (
           <ActivityIndicator color={colors.colorThirdBlue} size='small' style={styles.loading} />
         ) : (
           <>
@@ -66,6 +64,14 @@ const CustomDrawerContent = (props) => {
                   name: data?.findUser.me.name,
                   username: data?.findUser.me.username,
                   verified: data?.findUser.verified,
+                  photo: data?.findUser.me.photo,
+                  description: data?.findUser.description,
+                  user: data?.findUser.me.user,
+                  location: data?.findUser.location,
+                  followers: data?.findUser.followers,
+                  following: data?.findUser.following,
+                  email: data?.findUser.me.email,
+                  website: data?.findUser.website,
                 })
               }
             />
@@ -166,7 +172,7 @@ const CustomDrawerContent = (props) => {
               icon={({ color }) => (
                 <AntDesignIcon name='google' size={24} style={styles.icon} color={color} />
               )}
-              onPress={() => promptAsync({ useProxy: true, showInRecents: true })}
+              onPress={() => promptAsync({ useProxy: true })}
             />
           )}
         </View>
