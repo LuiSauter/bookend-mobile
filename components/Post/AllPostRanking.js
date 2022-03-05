@@ -39,7 +39,7 @@ const AllPostRanking = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
   const [refreshing, setRefreshing] = useState(false)
-  const [getAllPostRank, { data, loading, refetch }] = useLazyQuery(ALL_POST_RANKING)
+  const [getAllPostRank, { data, refetch }] = useLazyQuery(ALL_POST_RANKING)
   const { data: allPostsCount } = useQuery(ALL_POSTS_COUNT)
 
   useEffect(() => {
