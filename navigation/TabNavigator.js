@@ -1,18 +1,17 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect } from 'react'
-import { ActivityIndicator, Image, StyleSheet, TouchableHighlight, View } from 'react-native'
+import React from 'react'
+import { Image, StyleSheet, TouchableHighlight, View } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import Icon from 'react-native-vector-icons/Ionicons'
+import { useTheme } from '@react-navigation/native'
+
 import HomeScreen from '../screens/HomeScreen'
 import BookScreen from '../screens/BookScreen'
 import SearchScreen from '../screens/SearchScreen'
-import Icon from 'react-native-vector-icons/Ionicons'
-import { useToggle } from '../hooks/useToggle'
-import { useLazyQuery } from '@apollo/client'
-import { FIND_USER } from '../user/graphql-queries'
-import { useAuth } from '../hooks/useAuth'
-import bookendLogo from '../assets/img/default-user.png'
-import { useTheme } from '@react-navigation/native'
 import Search from '../components/Search/Search'
+import bookendLogo from '../assets/img/default-user.png'
+import { useToggle } from '../hooks/useToggle'
+import { useAuth } from '../hooks/useAuth'
 
 const Tab = createBottomTabNavigator()
 
@@ -20,20 +19,6 @@ const TabNavigator = () => {
   const { colors } = useTheme()
   const { handleModalVisible, handleChangeWord, word } = useToggle()
   const { googleAuth } = useAuth()
-  const [getFindUserByEmail, { data, loading }] = useLazyQuery(FIND_USER, {
-    variables: { email: googleAuth.email },
-  })
-
-  useEffect(() => {
-    let cleanup = true
-    if (cleanup) {
-      googleAuth.email && getFindUserByEmail({ variables: { email: googleAuth.email } })
-    }
-
-    return () => {
-      cleanup = false
-    }
-  }, [googleAuth.email])
 
   return (
     <Tab.Navigator
@@ -70,10 +55,8 @@ const TabNavigator = () => {
                 style={[styles.bookendLogo, { backgroundColor: colors.textWhite }]}
                 source={bookendLogo}
               />
-            ) : loading ? (
-              <ActivityIndicator color={colors.colorThirdBlue} size='large' />
             ) : (
-              <Image style={styles.bookendLogo} source={{ uri: data?.findUser.me.photo }} />
+              <Image style={styles.bookendLogo} source={{ uri: googleAuth.image }} />
             )}
           </TouchableHighlight>
         ),

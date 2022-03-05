@@ -17,7 +17,6 @@ export const FIND_USER = gql`
     findUser(email: $email) {
       followers
       following
-      verified
       id
       description
       location
@@ -30,6 +29,7 @@ export const FIND_USER = gql`
         user
         username
         email
+        verified
       }
     }
   }
