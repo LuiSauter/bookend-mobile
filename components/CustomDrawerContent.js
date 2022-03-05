@@ -172,7 +172,7 @@ const CustomDrawerContent = (props) => {
               icon={({ color }) => (
                 <AntDesignIcon name='google' size={24} style={styles.icon} color={color} />
               )}
-              onPress={() => promptAsync({ useProxy: true })}
+              onPress={() => promptAsync({ useProxy: false })}
             />
           )}
         </View>
