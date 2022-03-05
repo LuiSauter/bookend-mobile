@@ -1,20 +1,20 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react'
+import { StyleSheet, Text, TouchableHighlight } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { useTheme } from '@react-navigation/native'
 
 import UserScreen from '../screens/UserScreen'
-import NameUser from '../components/NameUser'
 import DetailScreen from '../screens/DetailScreen'
-
 import SettingScreen from '../screens/SettingScreen'
 import AccountScreen from '../screens/Setting/AccountScreen'
 import ActivityScreen from '../screens/Setting/ActivityScreen'
 import ContactSceen from '../screens/Setting/ContactSceen'
 import DisplayScreen from '../screens/Setting/DisplayScreen'
-import DrawerNavigator from './DrawerNavigator'
-import { useTheme } from '@react-navigation/native'
 import AddPostScreen from '../screens/AddPostScreen'
-import { StyleSheet, Text, TouchableHighlight } from 'react-native'
+
+import NameUser from '../components/NameUser'
+import DrawerNavigator from './DrawerNavigator'
 import { usePost } from '../hooks/usePost'
 
 const Stack = createNativeStackNavigator()
@@ -38,10 +38,7 @@ const Navigation = () => {
         <Stack.Screen
           name='TabNavigation'
           component={DrawerNavigator}
-          options={{
-            headerShown: false,
-            title: 'Inicio',
-          }}
+          options={{ headerShown: false, title: 'Inicio' }}
         />
         <Stack.Screen
           name='UserScreen'
@@ -61,52 +58,43 @@ const Navigation = () => {
         <Stack.Screen
           name='DetailScreen'
           component={DetailScreen}
-          options={() => ({
-            title: 'Book',
-          })}
+          options={() => ({ title: 'Book' })}
         />
         <Stack.Screen
           name='SettingScreen'
           component={SettingScreen}
-          options={() => ({
-            title: 'Ajustes',
-          })}
+          options={() => ({ title: 'Ajustes' })}
         />
         <Stack.Screen
           name='AccountScreen'
           component={AccountScreen}
-          options={() => ({
-            title: 'Tu cuenta',
-          })}
+          options={() => ({ title: 'Tu cuenta' })}
         />
         <Stack.Screen
           name='ActivityScreen'
           component={ActivityScreen}
-          options={() => ({
-            title: 'Tu actividad',
-          })}
+          options={() => ({ title: 'Tu actividad' })}
         />
         <Stack.Screen
           name='ContactSceen'
           component={ContactSceen}
-          options={() => ({
-            title: 'Contacto del desarrollador',
-          })}
+          options={() => ({ title: 'Contacto del desarrollador' })}
         />
         <Stack.Screen
           name='DisplayScreen'
           component={DisplayScreen}
-          options={() => ({
-            title: 'Pantalla y idiomas',
-          })}
+          options={() => ({ title: 'Pantalla y idiomas' })}
         />
         <Stack.Screen
           name='AddPostScreen'
-          options={{
+          options={({ navigation }) => ({
             title: '',
             headerRight: () => (
               <TouchableHighlight
-                onPress={() => currentData !== null && addNewPost(currentData)}
+                onPress={() => {
+                  currentData !== null && addNewPost(currentData)
+                  navigation.navigate('HomeScreen')
+                }}
                 underlayColor={colors.colorUnderlay}
                 disabled={isDisabled}
               >
@@ -123,7 +111,7 @@ const Navigation = () => {
                 </Text>
               </TouchableHighlight>
             ),
-          }}
+          })}
         >
           {(props) => (
             <AddPostScreen {...props} handleDisabled={handleDisabled} addPost={addPost} />
