@@ -57,7 +57,7 @@ const ResultPost = ({
           <Text style={[styles.description, { color: colors.textGray }]}>
             {description.join(' ').length < 120
               ? description
-              : `${description.toString().substring(0, 120)}...`}
+              : `${description.join(' ').toString().substring(0, 120)}...`}
           </Text>
           <MultipleButtons comments={comments} likes={likes} id={id} />
         </View>

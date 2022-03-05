@@ -67,7 +67,7 @@ const DetailScreen = ({ route, navigation }) => {
         />
       )}
       <ImageView
-        images={[{ uri: image ? image : data?.findPost.image }]}
+        images={[{ uri: image }]}
         imageIndex={0}
         visible={isVisible}
         onRequestClose={() => {
@@ -114,18 +114,16 @@ const DetailScreen = ({ route, navigation }) => {
         </View>
         <View style={styles.postItemDescription}>
           <Text style={[styles.postItemTitle, { color: colors.colorThirdBlue }]}>
-            {title ? title : data?.findPost.title} - {author ? author : data?.findPost.author}
+            {title} - {author}
           </Text>
-          <Text style={[styles.text, { color: colors.text }]}>
-            {description ? description : data?.findPost.description}
-          </Text>
+          <Text style={[styles.text, { color: colors.text }]}>{description.join('\n')}</Text>
         </View>
         <TouchableOpacity
           onPress={() => setIsVisible(true)}
           activeOpacity={0.6}
           style={styles.postImgContainer}
         >
-          <Image style={styles.postImg} source={{ uri: image ? image : data?.findPost.image }} />
+          <Image style={styles.postImg} source={{ uri: image }} />
         </TouchableOpacity>
         <Text
           style={[[styles.userTextUsername, { color: colors.textGray }], { marginVertical: 10 }]}

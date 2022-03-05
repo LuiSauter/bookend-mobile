@@ -1,41 +1,22 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect } from 'react'
-import {
-  ActivityIndicator,
-  Image,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native'
-import { useLazyQuery } from '@apollo/client'
+import React from 'react'
+import { SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useTheme } from '@react-navigation/native'
 import GoogleIcon from 'react-native-vector-icons/AntDesign'
 
 import AllPost from '../components/Post/AllPost'
-import NameUser from '../components/NameUser'
 import ModalSignIn from '../components/ModalSignIn'
-import { useToggle } from '../hooks/useToggle'
-import { FIND_USER } from '../user/graphql-queries'
-import { useAuth } from '../hooks/useAuth'
 import { auth } from '../lib/auth'
+import { useToggle } from '../hooks/useToggle'
+import { useAuth } from '../hooks/useAuth'
 
 const HomeScreen = () => {
   const { googleAuth } = useAuth()
   const { colors } = useTheme()
   const { handleModalVisible, darkTheme } = useToggle()
 
-  const { status, email, token } = googleAuth
-  const [getProfile, { data }] = useLazyQuery(FIND_USER)
+  const { status } = googleAuth
   const { promptAsync, request, signOut } = auth()
-
-  useEffect(() => {
-    let cleanup = true
-    if (cleanup && token !== '') getProfile({ variables: { email: email } })
-    return () => (cleanup = false)
-  }, [token])
 
   return (
     <SafeAreaView
@@ -57,26 +38,8 @@ const HomeScreen = () => {
               { backgroundColor: colors.primary, shadowColor: colors.colorThirdBlue },
             ]}
           >
-            {status === 'authenticated' ? (
-              data?.findUser ? (
-                <View style={styles.modalUser}>
-                  <Image style={styles.modalUserImage} source={{ uri: data?.findUser.me.photo }} />
-                  <View>
-                    <NameUser
-                      fontSize={19}
-                      name={data?.findUser.me.name}
-                      verified={data?.findUser.verified}
-                    />
-                    <Text style={[styles.modalUserText, { color: colors.textGray }]}>
-                      @{data?.findUser.me.username}
-                    </Text>
-                  </View>
-                </View>
-              ) : (
-                <ActivityIndicator color={colors.colorThirdBlue} size='large' />
-              )
-            ) : (
-              <Text style={[styles.text, { color: colors.text }]}>Sign In</Text>
+            {status === 'unauthenticated' && (
+              <Text style={[styles.text, { color: colors.text, marginBottom: 10 }]}>Sign In</Text>
             )}
             {googleAuth.status === 'authenticated' ? (
               <TouchableOpacity
@@ -96,7 +59,7 @@ const HomeScreen = () => {
                 }}
                 activeOpacity={0.7}
               >
-                <Text style={{ color: colors.text, fontSize: 18, fontWeight: 'bold' }}>
+                <Text style={{ color: colors.white, fontSize: 18, fontWeight: 'bold' }}>
                   Sign Out
                 </Text>
               </TouchableOpacity>
@@ -114,7 +77,7 @@ const HomeScreen = () => {
                 ]}
                 disabled={!request}
                 onPress={() => {
-                  promptAsync({ useProxy: true, showInRecents: true })
+                  promptAsync({ useProxy: true })
                   handleModalVisible()
                 }}
                 activeOpacity={0.7}
@@ -143,6 +106,8 @@ const HomeScreen = () => {
     </SafeAreaView>
   )
 }
+
+export default HomeScreen
 
 const styles = StyleSheet.create({
   safeArea: {
@@ -174,29 +139,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 30,
+    backgroundColor: '#0002',
   },
   modalView: {
-    margin: 20,
     width: '80%',
     textAlign: 'center',
     borderRadius: 20,
-    padding: 35,
-    shadowOffset: {
-      width: 0,
-      height: 16,
-    },
+    padding: 30,
+    shadowOffset: { width: 0, height: 16 },
     shadowOpacity: 0.25,
-    shadowRadius: 4,
+    shadowRadius: 10,
     elevation: 32,
   },
-  modalUser: {
-    paddingBottom: 16,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  modalUserImage: { height: 65, width: 65, borderRadius: 50, marginRight: 16 },
-  modalUserText: { fontSize: 18 },
 })
-
-export default HomeScreen

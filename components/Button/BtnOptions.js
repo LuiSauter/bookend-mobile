@@ -1,20 +1,21 @@
 /* eslint-disable react/prop-types */
-import { useLazyQuery } from '@apollo/client'
-import { useTheme } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu'
+import { useLazyQuery } from '@apollo/client'
+import { useTheme } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/Ionicons'
-import { useAuth } from '../../hooks/useAuth'
+import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu'
+
 import { FIND_USER } from '../../user/graphql-queries'
 import BtnFollow from './BtnFollow'
+import { useAuth } from '../../hooks/useAuth'
 
 const BtnOptions = ({ username, user }) => {
   const { colors } = useTheme()
   const [visible, setVisible] = useState(false)
-  const [getUserByEmail, { data: dataUser }] = useLazyQuery(FIND_USER)
   const { googleAuth } = useAuth()
   const { status, email } = googleAuth
+  const [getUserByEmail, { data: dataUser }] = useLazyQuery(FIND_USER)
 
   useEffect(() => {
     let cleanup = true
@@ -39,6 +40,7 @@ const BtnOptions = ({ username, user }) => {
           <Icon.Button
             backgroundColor='transparent'
             name='ellipsis-vertical'
+            color={colors.textGray}
             iconStyle={{ marginRight: 0 }}
             size={15}
             borderRadius={50}
@@ -51,10 +53,7 @@ const BtnOptions = ({ username, user }) => {
         <View style={{ margin: 16 }}>
           <MenuItem
             pressColor={colors.colorUnderlay}
-            textStyle={{
-              color: colors.text,
-              fontSize: 18,
-            }}
+            textStyle={{ color: colors.text, fontSize: 18 }}
             onPress={hideMenu}
             style={{ borderRadius: 12 }}
           >
@@ -63,11 +62,7 @@ const BtnOptions = ({ username, user }) => {
           {dataUser?.findUser.me.user !== user && (
             <MenuItem
               pressColor='transparent'
-              textStyle={{
-                color: colors.text,
-                fontSize: 18,
-                width: '130%',
-              }}
+              textStyle={{ color: colors.text, fontSize: 18, width: '130%' }}
             >
               <View
                 style={{
@@ -77,13 +72,7 @@ const BtnOptions = ({ username, user }) => {
                   alignItems: 'center',
                 }}
               >
-                <Text
-                  style={{
-                    color: colors.text,
-                    fontSize: 18,
-                    textAlign: 'center',
-                  }}
-                >
+                <Text style={{ color: colors.text, fontSize: 18, textAlign: 'center' }}>
                   @{username}
                 </Text>
                 <BtnFollow username={username} user={user} />
