@@ -101,14 +101,14 @@ const BtnLike = ({ id }) => {
           name='heart-outline'
           backgroundColor='transparent'
           borderRadius={50}
-          color={colors.text}
+          color={colors.textGray}
           onPress={() => handleLike(id)}
           size={22}
           iconStyle={{ marginRight: 0 }}
           underlayColor='transparent'
         />
       )}
-      <Text style={{ fontSize: 17, color: like ? colors.colorLikeRed : colors.text }}>
+      <Text style={{ fontSize: 17, color: like ? colors.colorLikeRed : colors.textGray }}>
         {likeCount}
       </Text>
     </View>
