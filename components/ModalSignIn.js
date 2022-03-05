@@ -8,7 +8,7 @@ export default function ModalSignIn({ children }) {
   return (
     <View>
       <Modal
-        animationType='none'
+        animationType='fade'
         transparent={true}
         statusBarTranslucent={true}
         hardwareAccelerated={true}
