@@ -1,9 +1,14 @@
 <div id="top"></div>
 <br />
 <div align="center">
+  <div style="display:flex; flex-direction:row; flex-wrap:wrap">
   <a href="https://bookendd.vercel.app/">
     <img src="/assets/img/bookend-logo.png" alt="nextjs" width="120" height="100">
   </a>
+  <img src="https://d33wubrfki0l68.cloudfront.net/554c3b0e09cf167f0281fda839a5433f2040b349/ecfc9/img/header_logo.svg" alt="" width="110">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/64/Android_logo_2019_%28stacked%29.svg" alt="" width="100">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/IOS_logo.svg" alt="" width="100">
+</div>
   <h3 align="center">Bookend - (android & iOS)</h3>
  
 [![Contributors][contributors-shield]][contributors-url]
