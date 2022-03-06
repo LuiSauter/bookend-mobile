@@ -28,10 +28,10 @@ Bookend-mobile is a mobile application to share books and it was thanks to the i
  
 # About The Project
 <div align="center" style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center;align-items: center">
-  <img src="https://raw.githubusercontent.com/LuiSauter/bookend-mobile/main/assets/img/Screenshot-2-dark.webp" alt="" width="300">
-  <img src="https://raw.githubusercontent.com/LuiSauter/bookend-mobile/main/assets/img/Screenshot-1-light.webp" alt="" width="300">
-  <img src="https://raw.githubusercontent.com/LuiSauter/bookend-mobile/main/assets/img/Screenshot-1-dark.webp" alt="" width="300">
-  <img src="https://raw.githubusercontent.com/LuiSauter/bookend-mobile/main/assets/img/Screenshot-3-dark.webp" alt="" width="300">
+  <img src="https://raw.githubusercontent.com/LuiSauter/bookend-mobile/main/assets/img/Screenshot-2-dark.webp" alt="" width="280">
+  <img src="https://raw.githubusercontent.com/LuiSauter/bookend-mobile/main/assets/img/Screenshot-1-light.webp" alt="" width="280">
+  <img src="https://raw.githubusercontent.com/LuiSauter/bookend-mobile/main/assets/img/Screenshot-1-dark.webp" alt="" width="280">
+  <img src="https://raw.githubusercontent.com/LuiSauter/bookend-mobile/main/assets/img/Screenshot-3-dark.webp" alt="" width="280">
 </div>
 
 Bookend is a mobile application to share books and it was thanks to the idea that arose when I was looking to carry out fullstack development practices, and I asked myself, can I develop a social network? thanks to this I have learned a lot!
