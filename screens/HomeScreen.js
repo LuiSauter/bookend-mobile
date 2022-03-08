@@ -35,7 +35,11 @@ const HomeScreen = () => {
           <View
             style={[
               styles.modalView,
-              { backgroundColor: colors.primary, shadowColor: colors.colorThirdBlue },
+              {
+                backgroundColor: colors.primary,
+                shadowColor: colors.colorThirdBlue,
+                borderColor: colors.border,
+              },
             ]}
           >
             {status === 'unauthenticated' && (
@@ -150,5 +154,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 10,
     elevation: 32,
+    borderWidth: 1,
   },
 })

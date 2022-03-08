@@ -20,6 +20,7 @@ const light = {
     colorLikeRed: colorsLight.colorLikeRed,
     white: '#fff',
     text: colorsLight.text,
+    border: colors.border,
   },
 }
 
@@ -39,6 +40,7 @@ const dark = {
     colorLikeRed: colors.colorLikeRed,
     white: '#fff',
     text: colors.textWhite,
+    border: colors.border,
   },
 }
 
