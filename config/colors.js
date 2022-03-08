@@ -9,6 +9,7 @@ export const colors = {
   colorLikeRed: '#ff1c85',
   textWhite: '#F5FDFF',
   TextGray: '#728493',
+  border: '#93a3b833',
 }
 
 export const colorsLight = {
@@ -22,6 +23,7 @@ export const colorsLight = {
   colorLikeRed: '#ff1c85',
   text: '#000',
   TextGray: '#4D5B66',
+  border: '#64748b',
 }
 
 export const colorsRandom = [
