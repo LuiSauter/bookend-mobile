@@ -35,7 +35,7 @@ const BtnOptions = ({ username, user }) => {
     <View style={styles.container}>
       <Menu
         visible={visible}
-        style={[styles.menu, { backgroundColor: colors.secondary }]}
+        style={[styles.menu, { backgroundColor: colors.secondary, borderColor: colors.border }]}
         anchor={
           <Icon.Button
             backgroundColor='transparent'
@@ -79,7 +79,7 @@ const BtnOptions = ({ username, user }) => {
               </View>
             </MenuItem>
           )}
-          <MenuDivider color={colors.textGray} />
+          <MenuDivider color={colors.border} />
           <MenuItem
             textStyle={{ color: colors.colorFourthRed, fontSize: 18 }}
             pressColor={colors.colorUnderlay}
@@ -104,5 +104,6 @@ const styles = StyleSheet.create({
     width: '90%',
     flex: 1,
     borderRadius: 16,
+    borderWidth: 1,
   },
 })

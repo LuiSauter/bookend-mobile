@@ -132,7 +132,7 @@ const AllPostItem = ({
                   verified={data?.findUserById.me.verified}
                   fontSize={16}
                 />
-                <Text style={[styles.userTextUsername, { color: colors.text }]}>
+                <Text style={[styles.userTextUsername, { color: colors.textGray }]}>
                   @{data?.findUserById.me.username} · {timeago}
                 </Text>
               </View>
@@ -153,7 +153,7 @@ const AllPostItem = ({
                 setIsVisible(true)
               }}
               activeOpacity={0.6}
-              style={styles.postImgContainer}
+              style={[styles.postImgContainer, { borderColor: colors.border }]}
             >
               {loading ? (
                 <View
@@ -231,13 +231,14 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     overflow: 'hidden',
     borderRadius: 12,
-    backgroundColor: '#09fa',
+    borderWidth: 1,
   },
   postImg: {
     width: '100%',
     aspectRatio: 2 / 3,
     borderRadius: 12,
     resizeMode: 'cover',
+    // borderWidth: 1,
   },
 })
 
