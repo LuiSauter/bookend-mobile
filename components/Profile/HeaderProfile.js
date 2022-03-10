@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import { useTheme } from '@react-navigation/native'
 import React, { Fragment } from 'react'
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
+import { useNavigation, useTheme } from '@react-navigation/native'
 import BtnFollow from '../Button/BtnFollow'
 import NameUser from '../NameUser'
 
@@ -18,21 +18,37 @@ const HeaderProfile = ({
   userEmail,
   following,
   location,
+  dominantColor,
 }) => {
   const { colors } = useTheme()
+  const navigation = useNavigation()
   return (
     <Fragment>
       <View style={styles.profilePresentation}>
-        <Image blurRadius={100} style={styles.imageBackground} source={{ uri: photo }} />
+        <Image
+          blurRadius={100}
+          style={[styles.imageBackground, { tintColor: dominantColor }]}
+          source={{ uri: photo }}
+        />
         <Image
           style={[styles.profileImage, { borderColor: colors.primary }]}
           source={{ uri: photo }}
         />
       </View>
-      <View style={{ marginHorizontal: 16, marginTop: 10 }}>
-        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+      <View style={{ marginHorizontal: 16, marginVertical: 10 }}>
+        <View style={styles.name}>
           <NameUser name={name} verified={verified} fontSize={20} />
           {userEmail !== email && <BtnFollow username={username} user={user} />}
+          {userEmail === email && (
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => navigation.navigate('UpdateScreen')}
+            >
+              <Text style={[styles.edit, { borderColor: colors.text, color: colors.text }]}>
+                Edit Profile
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
         <Text style={[styles.textOpacity, { color: colors.textGray }]}>@{username}</Text>
         <Text style={[styles.text, { color: colors.text }]}>{description}</Text>
@@ -60,6 +76,19 @@ const HeaderProfile = ({
 export default HeaderProfile
 
 const styles = StyleSheet.create({
+  edit: {
+    borderWidth: 1,
+    borderRadius: 16,
+    paddingHorizontal: 10,
+    paddingBottom: 3,
+    paddingTop: 4,
+  },
+  name: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   text: {
     fontSize: 16,
     marginTop: 12,
@@ -69,6 +98,7 @@ const styles = StyleSheet.create({
   },
   profilePresentation: {
     alignItems: 'center',
+    position: 'relative',
   },
   imageBackground: {
     ...StyleSheet.absoluteFill,
@@ -92,7 +122,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     resizeMode: 'cover',
     borderRadius: 50,
-    zIndex: 1,
+    // zIndex: 1,
     position: 'relative',
   },
   textPresentation: { flex: 1, flexDirection: 'row' },

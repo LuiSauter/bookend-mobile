@@ -15,6 +15,7 @@ import SignOutIcon from 'react-native-vector-icons/Ionicons'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import { auth } from '../lib/auth'
 import { useTheme } from '@react-navigation/native'
+import { GET_DOMINANT_COLOR } from '../post/graphql-queries'
 
 const CustomDrawerContent = (props) => {
   const { colors } = useTheme()
@@ -23,13 +24,23 @@ const CustomDrawerContent = (props) => {
   const { email, status } = googleAuth
 
   const [getFindUserByEmail, { data }] = useLazyQuery(FIND_USER)
+  const [getColor, { data: dataDominantColor }] = useLazyQuery(GET_DOMINANT_COLOR)
+
+  useEffect(() => {
+    let cleanup = true
+    if (cleanup) {
+      data?.findUser.me.photo && getColor({ variables: { image: data?.findUser.me.photo } })
+    }
+    return () => {
+      cleanup = false
+    }
+  }, [data?.findUser])
 
   useEffect(() => {
     let cleanup = true
     if (cleanup) {
       status === 'authenticated' && getFindUserByEmail({ variables: { email: email } })
     }
-
     return () => {
       cleanup = false
     }
@@ -52,7 +63,7 @@ const CustomDrawerContent = (props) => {
                   <NameUser
                     name={data?.findUser.me.name}
                     fontSize={17}
-                    verified={data?.findUser.verified}
+                    verified={data?.findUser.me.verified}
                   />
                   <Text style={{ fontSize: 16, color: colors.textGray }}>
                     @{data?.findUser.me.username}
@@ -63,8 +74,9 @@ const CustomDrawerContent = (props) => {
                 props.navigation.navigate('UserScreen', {
                   name: data?.findUser.me.name,
                   username: data?.findUser.me.username,
-                  verified: data?.findUser.verified,
+                  verified: data?.findUser.me.verified,
                   photo: data?.findUser.me.photo,
+                  dominantColor: dataDominantColor?.getColors,
                   description: data?.findUser.description,
                   user: data?.findUser.me.user,
                   location: data?.findUser.location,
@@ -128,8 +140,9 @@ const CustomDrawerContent = (props) => {
                 props.navigation.navigate('UserScreen', {
                   name: data?.findUser.me.name,
                   username: data?.findUser.me.username,
-                  verified: data?.findUser.verified,
+                  verified: data?.findUser.me.verified,
                   photo: data?.findUser.me.photo,
+                  dominantColor: dataDominantColor?.getColors,
                   description: data?.findUser.description,
                   user: data?.findUser.me.user,
                   location: data?.findUser.location,

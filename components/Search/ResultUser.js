@@ -7,21 +7,25 @@ import NameUser from '../NameUser'
 import { useAuth } from '../../hooks/useAuth'
 import { useQuery } from '@apollo/client'
 import { FIND_USER } from '../../user/graphql-queries'
+import { GET_DOMINANT_COLOR } from '../../post/graphql-queries'
 
 const ResultUser = ({ name, username, user, email, photo, verified }) => {
   const { colors } = useTheme()
   const navigation = useNavigation()
   const { googleAuth } = useAuth()
   const { data } = useQuery(FIND_USER, { variables: { email: email } })
+  const { data: userDominantColor } = useQuery(GET_DOMINANT_COLOR, { variables: { image: photo } })
+
   return (
     <TouchableHighlight
       onPress={() =>
         navigation.navigate('UserScreen', {
-          name: name,
-          username: username,
-          verified: verified,
+          name: data?.findUser ? data?.findUser.me.name : '',
+          username: data?.findUser ? data?.findUser.me.username : '',
+          verified: data?.findUser ? data?.findUser.me.verified : '',
           user: user,
           email: email,
+          dominantColor: userDominantColor?.getColors,
           photo: data?.findUser ? data?.findUser.me.photo : '',
           description: data?.findUser ? data?.findUser.description : '',
           location: data?.findUser ? data?.findUser.location : '',
@@ -32,7 +36,7 @@ const ResultUser = ({ name, username, user, email, photo, verified }) => {
       }
       underlayColor={colors.colorUnderlay}
     >
-      <View style={styles.item}>
+      <View style={[styles.item, { borderColor: colors.border }]}>
         <View style={styles.textItem}>
           <Image source={{ uri: photo }} style={styles.image} />
           <View style={styles.text}>
@@ -69,6 +73,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 14,
+    borderBottomWidth: 1,
   },
   image: {
     borderRadius: 50,

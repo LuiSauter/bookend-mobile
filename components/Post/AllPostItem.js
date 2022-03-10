@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   TouchableHighlight,
   StatusBar,
 } from 'react-native'
-import { useQuery } from '@apollo/client'
+import { useLazyQuery, useQuery } from '@apollo/client'
 import { useNavigation, useTheme } from '@react-navigation/native'
 import ImageView from 'react-native-image-viewing'
 import PropTypes from 'prop-types'
@@ -42,6 +42,17 @@ const AllPostItem = ({
 
   const { data, loading } = useQuery(FIND_USER_BY_USER, { variables: { user: user } })
   const { data: dataDominantColor } = useQuery(GET_DOMINANT_COLOR, { variables: { image: image } })
+  const [getColor, { data: userDominantColor }] = useLazyQuery(GET_DOMINANT_COLOR)
+
+  useEffect(() => {
+    let cleanup = true
+    if (cleanup) {
+      data?.findUserById.me.photo && getColor({ variables: { image: data?.findUserById.me.photo } })
+    }
+    return () => {
+      cleanup = false
+    }
+  }, [data?.findUserById])
 
   return (
     <>
@@ -62,9 +73,7 @@ const AllPostItem = ({
         onRequestClose={() => setIsVisible(false)}
         animationType='fade'
         backgroundColor={
-          dataDominantColor?.getColors
-            ? `rgb(${dataDominantColor?.getColors}), 0.9`
-            : colors.primary
+          dataDominantColor?.getColors ? `rgb(${dataDominantColor?.getColors})` : colors.primary
         }
         swipeToCloseEnabled={false}
         doubleTapToZoomEnabled={true}
@@ -107,6 +116,7 @@ const AllPostItem = ({
                     username: data?.findUserById.me.username,
                     verified: data?.findUserById.me.verified,
                     photo: data?.findUserById.me.photo,
+                    dominantColor: userDominantColor?.getColors,
                     description: data?.findUserById.description,
                     user: data?.findUserById.me.user,
                     location: data?.findUserById.location,
@@ -168,7 +178,9 @@ const AllPostItem = ({
                 <Image style={styles.postImg} resizeMethod='resize' source={{ uri: image }} />
               )}
             </TouchableOpacity>
-            <MultipleButtons id={id} />
+            <View style={{ paddingVertical: 4 }}>
+              <MultipleButtons id={id} />
+            </View>
           </View>
         </View>
       </TouchableHighlight>
@@ -203,10 +215,10 @@ const styles = StyleSheet.create({
   userTextItem: {
     flex: 1,
     flexDirection: 'row',
+    overflow: 'hidden',
   },
   userTextUsername: {
     fontSize: 14.5,
-    overflow: 'hidden',
   },
   postItem: {
     flex: 1,
@@ -238,7 +250,6 @@ const styles = StyleSheet.create({
     aspectRatio: 2 / 3,
     borderRadius: 12,
     resizeMode: 'cover',
-    // borderWidth: 1,
   },
 })
 

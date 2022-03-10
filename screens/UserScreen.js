@@ -14,7 +14,6 @@ import { ALL_POST_BY_USER, ALL_POST_BY_USER_COUNT } from '../post/graphql-querie
 import AllPostItem from '../components/Post/AllPostItem'
 import { useAuth } from '../hooks/useAuth'
 import { useTheme } from '@react-navigation/native'
-import { useToggle } from '../hooks/useToggle'
 import HeaderProfile from '../components/Profile/HeaderProfile'
 
 const INITIAL_PAGE = 6
@@ -32,11 +31,11 @@ const UserScreen = ({ route }) => {
     following,
     email: userEmail,
     website,
+    dominantColor,
   } = route.params
   const { googleAuth } = useAuth()
   const { email } = googleAuth
   const { colors } = useTheme()
-  const { darkTheme } = useToggle()
 
   const [refreshing, setRefreshing] = useState(false)
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
@@ -123,9 +122,9 @@ const UserScreen = ({ route }) => {
     >
       <StatusBar
         animated={true}
-        showHideTransition={'slide'}
-        barStyle={darkTheme ? 'light-content' : 'dark-content'}
-        backgroundColor={colors.primary}
+        showHideTransition='fade'
+        barStyle={'light-content'}
+        backgroundColor={dominantColor ? `rgb(${dominantColor})` : colors.primary}
       />
       <FlatList
         ListHeaderComponent={() => (
@@ -142,6 +141,7 @@ const UserScreen = ({ route }) => {
             userEmail={userEmail}
             following={following}
             location={location}
+            dominantColor={`rgb(${dominantColor})`}
           />
         )}
         data={dataAllPosts?.allPostsByUsername}
