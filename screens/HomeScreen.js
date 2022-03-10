@@ -25,7 +25,7 @@ const HomeScreen = () => {
     >
       <StatusBar
         animated={true}
-        showHideTransition={'slide'}
+        showHideTransition={'fade'}
         barStyle={darkTheme ? 'light-content' : 'dark-content'}
         backgroundColor={colors.primary}
       />

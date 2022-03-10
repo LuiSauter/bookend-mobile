@@ -52,7 +52,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingRight: 10,
-    paddingVertical: 10,
   },
   btn: {
     display: 'flex',

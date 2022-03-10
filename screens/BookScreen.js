@@ -13,7 +13,7 @@ const BookScreen = () => {
     >
       <StatusBar
         animated={true}
-        showHideTransition={'slide'}
+        showHideTransition={'fade'}
         barStyle={dark ? 'light-content' : 'dark-content'}
         backgroundColor={colors.primary}
       />

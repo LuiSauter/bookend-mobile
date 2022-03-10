@@ -4,10 +4,15 @@ import React from 'react'
 import IconOcticons from 'react-native-vector-icons/Octicons'
 import { useTheme } from '@react-navigation/native'
 
-const NameUser = ({ name, verified, fontSize }) => {
+const NameUser = ({ name, verified, fontSize, color = '' }) => {
   const { colors, dark } = useTheme()
   return (
-    <Text style={[styles.userTextName, { fontSize: fontSize, color: colors.text }]}>
+    <Text
+      style={[
+        styles.userTextName,
+        { fontSize: fontSize, color: color !== '' ? colors.white : colors.text },
+      ]}
+    >
       <Text>{name} </Text>
       <Text>
         {verified && (

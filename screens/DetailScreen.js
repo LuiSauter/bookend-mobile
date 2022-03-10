@@ -47,6 +47,7 @@ const DetailScreen = ({ route, navigation }) => {
   const { colors } = useTheme()
   const [isVisible, setIsVisible] = useState(false)
   const { data: dataDominantColor } = useQuery(GET_DOMINANT_COLOR, { variables: { image: image } })
+  const { data: userDominantColor } = useQuery(GET_DOMINANT_COLOR, { variables: { image: photo } })
   const { data } = useQuery(FINDONE_POST, {
     variables: { id: id },
   })
@@ -56,7 +57,7 @@ const DetailScreen = ({ route, navigation }) => {
       style={[styles.safeArea, { backgroundColor: colors.primary }]}
       edges={['top', 'left', 'right']}
     >
-      {isVisible && (
+      {isVisible ? (
         <StatusBar
           barStyle={darkTheme ? 'light-content' : 'dark-content'}
           animated={true}
@@ -64,6 +65,13 @@ const DetailScreen = ({ route, navigation }) => {
           backgroundColor={
             dataDominantColor?.getColors ? `rgb(${dataDominantColor?.getColors})` : colors.primary
           }
+        />
+      ) : (
+        <StatusBar
+          barStyle={darkTheme ? 'light-content' : 'dark-content'}
+          animated={true}
+          showHideTransition={'none'}
+          backgroundColor={colors.primary}
         />
       )}
       <ImageView
@@ -92,6 +100,7 @@ const DetailScreen = ({ route, navigation }) => {
                   username: username,
                   verified: verified,
                   photo: photo,
+                  dominantColor: userDominantColor?.getColors,
                   description: descriptionUser,
                   user: user,
                   location: location,
@@ -121,7 +130,7 @@ const DetailScreen = ({ route, navigation }) => {
         <TouchableOpacity
           onPress={() => setIsVisible(true)}
           activeOpacity={0.6}
-          style={styles.postImgContainer}
+          style={[styles.postImgContainer, { borderColor: colors.border }]}
         >
           <Image style={styles.postImg} source={{ uri: image }} />
         </TouchableOpacity>
@@ -148,7 +157,9 @@ const DetailScreen = ({ route, navigation }) => {
             </Text>
           </View>
         )}
-        <MultipleButtons id={id} />
+        <View style={{ paddingVertical: 4 }}>
+          <MultipleButtons id={id} />
+        </View>
       </ScrollView>
     </SafeAreaView>
   )
@@ -208,11 +219,17 @@ const styles = StyleSheet.create({
     lineHeight: 27,
   },
   postImgContainer: {
-    maxHeight: 500,
+    minHeight: 500,
+    flex: 1,
+    justifyContent: 'flex-start',
+    overflow: 'hidden',
     borderRadius: 12,
+    borderWidth: 1,
   },
   postImg: {
     height: '100%',
+    width: '100%',
+    aspectRatio: 2 / 3,
     borderRadius: 12,
     resizeMode: 'cover',
   },
