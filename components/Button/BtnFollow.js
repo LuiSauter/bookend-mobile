@@ -6,32 +6,20 @@ import { Text, TouchableHighlight } from 'react-native'
 import { useAuth } from '../../hooks/useAuth'
 import { useToggle } from '../../hooks/useToggle'
 import { FOLLOW_USER, UNFOLLOW_USER } from '../../user/graphql-mutation'
-import { FIND_PROFILE, FIND_USER } from '../../user/graphql-queries'
+import { FIND_USER } from '../../user/graphql-queries'
 
-const BtnFollow = ({ username, user }) => {
+const BtnFollow = ({ user }) => {
   const { handleModalVisible } = useToggle()
   const { googleAuth } = useAuth()
   const { colors } = useTheme()
   const { status, email } = googleAuth
   const [getUserByEmail, { data: dataUser }] = useLazyQuery(FIND_USER)
   const [getFollow] = useMutation(FOLLOW_USER, {
-    refetchQueries: [
-      { query: FIND_USER, variables: { email: email } },
-      {
-        query: FIND_PROFILE,
-        variables: { username: username },
-      },
-    ],
+    refetchQueries: [{ query: FIND_USER, variables: { email: email } }],
   })
 
   const [getUnFollow] = useMutation(UNFOLLOW_USER, {
-    refetchQueries: [
-      { query: FIND_USER, variables: { email: email } },
-      {
-        query: FIND_PROFILE,
-        variables: { username: username },
-      },
-    ],
+    refetchQueries: [{ query: FIND_USER, variables: { email: email } }],
   })
 
   useEffect(() => {
@@ -68,8 +56,9 @@ const BtnFollow = ({ username, user }) => {
           borderWidth: 1,
           borderRadius: 16,
           borderColor: colors.text,
-          paddingVertical: 4,
           paddingHorizontal: 10,
+          paddingBottom: 3,
+          paddingTop: 3,
           fontSize: 16,
         }}
       >
@@ -87,8 +76,9 @@ const BtnFollow = ({ username, user }) => {
           color: colors.white,
           backgroundColor: colors.colorThirdBlue,
           borderRadius: 16,
-          paddingVertical: 4,
-          paddingHorizontal: 12,
+          paddingHorizontal: 10,
+          paddingBottom: 4,
+          paddingTop: 2,
           fontSize: 16,
         }}
       >

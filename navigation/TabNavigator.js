@@ -26,11 +26,15 @@ const TabNavigator = () => {
         tabBarActiveTintColor: colors.colorThirdBlue,
         tabBarStyle: {
           backgroundColor: colors.primary,
-          borderColor: colors.border,
-          borderWidth: 1,
+          borderColor: `${colors.border}22`,
+          borderTopWidth: 1,
         },
         tabBarShowLabel: false,
-        headerStyle: { backgroundColor: colors.primary },
+        headerStyle: {
+          backgroundColor: colors.primary,
+          borderColor: `${colors.border}22`,
+          borderBottomWidth: 1,
+        },
         headerTitleStyle: { color: colors.text },
         headerTintColor: colors.text,
         tabBarButton: (props) => <TouchableHighlight underlayColor='#0002' {...props} />,
