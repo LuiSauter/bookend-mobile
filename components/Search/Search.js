@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
+import React from 'react'
 import { StyleSheet, TextInput } from 'react-native'
-import React, { useState } from 'react'
 import { useTheme } from '@react-navigation/native'
 
 const Search = (props) => {
