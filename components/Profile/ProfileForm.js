@@ -5,7 +5,7 @@ import { useNavigation, useTheme } from '@react-navigation/native'
 import { Picker } from '@react-native-picker/picker'
 import { UPDATE_PROFILE } from '../../user/graphql-mutation'
 import { useMutation } from '@apollo/client'
-import { FIND_USER } from '../../user/graphql-queries'
+import { ALL_USERS, FIND_USER, FIND_USER_BY_USER } from '../../user/graphql-queries'
 
 const ProfileForm = ({
   name,
@@ -17,6 +17,7 @@ const ProfileForm = ({
   website,
   gender,
   id,
+  user,
 }) => {
   const { colors } = useTheme()
   const [profile, setProfile] = useState({
@@ -31,13 +32,17 @@ const ProfileForm = ({
     id: id,
   })
   const navigation = useNavigation()
-  const [updateProfile] = useMutation(UPDATE_PROFILE, {
-    refetchQueries: [{ query: FIND_USER, variables: { email: email } }],
+
+  const [updateProfile, { reset }] = useMutation(UPDATE_PROFILE, {
+    refetchQueries: [
+      { query: FIND_USER, variables: { email: email } },
+      { query: FIND_USER_BY_USER, variables: { user: user } },
+      { query: ALL_USERS },
+    ],
   })
 
   const handleUpdate = () => {
     const { description, gender, location, name, photo, username, website, id } = profile
-    console.log(description, gender, location, name, photo, username, website, id)
     if (
       description !== '' &&
       gender !== '' &&
@@ -58,7 +63,8 @@ const ProfileForm = ({
           location: location,
         },
       })
-      navigation.navigate('HomeScreen')
+      reset()
+      navigation.navigate('TabNavigation')
     }
   }
 

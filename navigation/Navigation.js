@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, TouchableHighlight } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { useTheme } from '@react-navigation/native'
+import { useNavigation, useTheme } from '@react-navigation/native'
 
 import UserScreen from '../screens/UserScreen'
 import DetailScreen from '../screens/DetailScreen'
@@ -16,6 +16,8 @@ import AddPostScreen from '../screens/AddPostScreen'
 import NameUser from '../components/NameUser'
 import DrawerNavigator from './DrawerNavigator'
 import { usePost } from '../hooks/usePost'
+import { auth } from '../lib/auth'
+import UpdateScreen from '../screens/UpdateScreen'
 
 const Stack = createNativeStackNavigator()
 
@@ -23,34 +25,47 @@ const Navigation = () => {
   const { colors } = useTheme()
   const { isDisabled, handleDisabled, addNewPost } = usePost()
   const [currentData, setCurrentData] = useState(null)
+  const { message } = auth()
+  const navigation = useNavigation()
+
   const addPost = (data) => {
     setCurrentData(data)
   }
+
+  if (message === 'signup') navigation.navigate('UpdateScreen')
+
   return (
     <Stack.Navigator>
-      <Stack.Group
-        screenOptions={{
-          headerStyle: { backgroundColor: colors.primary },
-          headerTitleStyle: { color: colors.text },
-          headerTintColor: colors.text,
-        }}
-      >
+      <Stack.Group>
         <Stack.Screen
           name='TabNavigation'
           component={DrawerNavigator}
           options={{ headerShown: false, title: 'Inicio' }}
         />
         <Stack.Screen
+          name='UpdateScreen'
+          component={UpdateScreen}
+          options={{
+            title: 'Update profile',
+            headerStyle: { backgroundColor: colors.primary },
+            headerTitleStyle: { color: colors.text },
+            headerTintColor: colors.text,
+          }}
+        />
+        <Stack.Screen
           name='UserScreen'
           component={UserScreen}
           options={({ route }) => ({
             title: '',
+            headerStyle: { backgroundColor: `rgb(${route.params.dominantColor})` },
+            headerTintColor: 'white',
             headerTitle: (props) => (
               <NameUser
                 {...props}
                 name={route.params.name}
-                verified={route.params.verified}
+                verified={false}
                 fontSize={17}
+                color='white'
               />
             ),
           })}
@@ -58,37 +73,72 @@ const Navigation = () => {
         <Stack.Screen
           name='DetailScreen'
           component={DetailScreen}
-          options={() => ({ title: 'Book' })}
+          options={() => ({
+            title: 'Book',
+            headerStyle: {
+              backgroundColor: colors.primary,
+            },
+            headerTitleStyle: { color: colors.text },
+            headerTintColor: colors.text,
+          })}
         />
         <Stack.Screen
           name='SettingScreen'
           component={SettingScreen}
-          options={() => ({ title: 'Ajustes' })}
+          options={() => ({
+            title: 'Ajustes',
+            headerStyle: { backgroundColor: colors.primary },
+            headerTitleStyle: { color: colors.text },
+            headerTintColor: colors.text,
+          })}
         />
         <Stack.Screen
           name='AccountScreen'
           component={AccountScreen}
-          options={() => ({ title: 'Tu cuenta' })}
+          options={() => ({
+            title: 'Tu cuenta',
+            headerStyle: { backgroundColor: colors.primary },
+            headerTitleStyle: { color: colors.text },
+            headerTintColor: colors.text,
+          })}
         />
         <Stack.Screen
           name='ActivityScreen'
           component={ActivityScreen}
-          options={() => ({ title: 'Tu actividad' })}
+          options={() => ({
+            title: 'Tu actividad',
+            headerStyle: { backgroundColor: colors.primary },
+            headerTitleStyle: { color: colors.text },
+            headerTintColor: colors.text,
+          })}
         />
         <Stack.Screen
           name='ContactSceen'
           component={ContactSceen}
-          options={() => ({ title: 'Contacto del desarrollador' })}
+          options={() => ({
+            title: 'Contacto del desarrollador',
+            headerStyle: { backgroundColor: colors.primary },
+            headerTitleStyle: { color: colors.text },
+            headerTintColor: colors.text,
+          })}
         />
         <Stack.Screen
           name='DisplayScreen'
           component={DisplayScreen}
-          options={() => ({ title: 'Pantalla y idiomas' })}
+          options={() => ({
+            title: 'Pantalla y idiomas',
+            headerStyle: { backgroundColor: colors.primary },
+            headerTitleStyle: { color: colors.text },
+            headerTintColor: colors.text,
+          })}
         />
         <Stack.Screen
           name='AddPostScreen'
           options={({ navigation }) => ({
             title: '',
+            headerStyle: { backgroundColor: colors.primary },
+            headerTitleStyle: { color: colors.text },
+            headerTintColor: colors.text,
             headerRight: () => (
               <TouchableHighlight
                 onPress={() => {
