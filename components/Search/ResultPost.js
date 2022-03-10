@@ -39,6 +39,12 @@ const ResultPost = ({
           username: data?.findUserById.me.username,
           verified: data?.findUserById.me.verified,
           photo: data?.findUserById.me.photo,
+          descriptionUser: data?.findUserById.description,
+          location: data?.findUserById.location,
+          followers: data?.findUserById.followers,
+          following: data?.findUserById.following,
+          email: data?.findUserById.me.email,
+          website: data?.findUserById.website,
           hourAndMinute,
           bookUrl,
           comments,
@@ -47,7 +53,7 @@ const ResultPost = ({
       }
       underlayColor={colors.colorUnderlay}
     >
-      <View style={styles.container}>
+      <View style={[styles.container, { borderColor: colors.border }]}>
         <Image source={{ uri: image }} style={styles.image} />
         <View style={styles.textItem}>
           <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
@@ -73,13 +79,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     paddingHorizontal: 10,
-    paddingVertical: 5,
-    marginVertical: 10,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
   },
   image: {
     flex: 1,
     resizeMode: 'cover',
-    aspectRatio: 9 / 13,
+    aspectRatio: 9 / 14,
     height: 'auto',
     marginRight: 10,
     borderRadius: 16,
@@ -89,7 +95,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   title: {
-    fontSize: 16,
+    fontSize: 15,
   },
   description: {
     paddingVertical: 8,

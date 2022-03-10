@@ -25,6 +25,7 @@ const AllPostRankItem = ({
   const date = Number(createdAt)
   const { hourAndMinute } = useTimeAgo(date)
   const { data } = useQuery(FIND_USER_BY_USER, { variables: { user: user } })
+
   return (
     <TouchableHighlight
       onPress={() =>
@@ -42,6 +43,12 @@ const AllPostRankItem = ({
           username: data?.findUserById.me.username,
           verified: data?.findUserById.me.verified,
           photo: data?.findUserById.me.photo,
+          descriptionUser: data?.findUserById.description,
+          location: data?.findUserById.location,
+          followers: data?.findUserById.followers,
+          following: data?.findUserById.following,
+          email: data?.findUserById.me.email,
+          website: data?.findUserById.website,
           hourAndMinute,
           bookUrl,
           comments,
