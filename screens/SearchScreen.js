@@ -17,6 +17,7 @@ import { useLazyQuery } from '@apollo/client'
 import { SEARCH_POST_AUTHOR_USER } from '../post/graphql-queries'
 import ResultPost from '../components/Search/ResultPost'
 import ResultUser from '../components/Search/ResultUser'
+import AllUsers from '../components/AllUsers'
 
 const renderItem = ({ item }) => (
   <ResultPost
@@ -86,7 +87,7 @@ const SearchScreen = () => {
         barStyle={darkTheme ? 'light-content' : 'dark-content'}
         backgroundColor={colors.primary}
       />
-      <View style={styles.btnFilter}>
+      <View style={[styles.btnFilter, { borderColor: colors.border }]}>
         <TouchableOpacity
           onPress={() => setFilter({ book: true, author: false, user: false })}
           activeOpacity={0.8}
@@ -148,7 +149,7 @@ const SearchScreen = () => {
           ListHeaderComponent={() =>
             loading && (
               <ActivityIndicator
-                style={{ marginBottom: 16 }}
+                style={{ marginVertical: 16 }}
                 color={colors.colorThirdBlue}
                 size='small'
               />
@@ -167,7 +168,7 @@ const SearchScreen = () => {
           keyExtractor={filter.user ? keyExtractorUser : keyExtractor}
         />
       ) : (
-        <Text style={{ textAlign: 'center' }}>@Bookend</Text>
+        <AllUsers />
       )}
     </SafeAreaView>
   )
@@ -185,7 +186,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 12,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
   },
   text: {
     borderRadius: 16,
