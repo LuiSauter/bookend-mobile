@@ -77,7 +77,7 @@ const NewPost = ({ name, username, verified, photo, email, handleDisabled, addPo
             multiline={true}
             onChangeText={(author) => setPostState((prevState) => ({ ...prevState, author }))}
             value={author}
-            style={[styles.text, { color: colors.text }]}
+            style={[styles.text, { color: colors.text, fontWeight: 'bold' }]}
           />
           <TextInput
             placeholder='Url del libro (google.drive)'

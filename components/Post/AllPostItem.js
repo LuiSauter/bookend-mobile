@@ -58,9 +58,9 @@ const AllPostItem = ({
     <>
       {isVisible && (
         <StatusBar
-          barStyle='light-content'
+          barStyle={'light-content'}
           animated={true}
-          showHideTransition={'none'}
+          showHideTransition={'fade'}
           backgroundColor={
             dataDominantColor?.getColors ? `rgb(${dataDominantColor?.getColors})` : colors.primary
           }
