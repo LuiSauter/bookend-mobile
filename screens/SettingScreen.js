@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-import { useNavigation, useTheme } from '@react-navigation/native'
 import React from 'react'
 import {
   SafeAreaView,
@@ -10,6 +9,7 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native'
+import { useNavigation, useTheme } from '@react-navigation/native'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import { useToggle } from '../hooks/useToggle'
 
@@ -19,7 +19,7 @@ const data = [
     title: 'Tu cuenta',
     description:
       'Ve la informacion de tu cuenta y obtén más información acerca de las opciones de desactivación de la cuenta.',
-    screen: 'AccountScreen',
+    screen: '',
     icon: 'user',
   },
   {
@@ -33,21 +33,21 @@ const data = [
     id: 2,
     title: 'Tu actividad en Bookend',
     description: 'Consulta la informacion sobre a quien seguiste y que post te gustaron.',
-    screen: 'ActivityScreen',
+    screen: '',
     icon: 'eyeo',
   },
   {
     id: 3,
     title: 'Reporta un problema',
     description: 'Ayudanos a mejorar reportando un bug o problemas de rendimiento.',
-    screen: 'ContactSceen',
+    screen: '',
     icon: 'warning',
   },
   {
     id: 4,
     title: 'Contacto del desarrollador',
     description: 'Ayudanos a mejorar reportando un bug o problemas de rendimiento.',
-    screen: 'ContactSceen',
+    screen: '',
     icon: 'rocket1',
   },
 ]
@@ -57,8 +57,8 @@ const Item = ({ title, description, screen, icon }) => {
   const { colors } = useTheme()
   return (
     <TouchableHighlight
-      onPress={() => navigation.navigate(screen)}
-      underlayColor={colors.colorUnderlay}
+      onPress={() => screen !== '' && navigation.navigate(screen)}
+      underlayColor={screen !== '' ? colors.colorUnderlay : 'transparent'}
     >
       <View style={styles.item}>
         <View style={styles.textContainer}>

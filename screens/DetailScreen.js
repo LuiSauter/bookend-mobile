@@ -52,8 +52,6 @@ const DetailScreen = ({ route, navigation }) => {
     variables: { id: id },
   })
 
-  console.log(bookUrl)
-
   return (
     <SafeAreaView
       style={[styles.safeArea, { backgroundColor: colors.primary }]}
@@ -61,9 +59,9 @@ const DetailScreen = ({ route, navigation }) => {
     >
       {isVisible ? (
         <StatusBar
-          barStyle={darkTheme ? 'light-content' : 'dark-content'}
+          barStyle={'light-content'}
           animated={true}
-          showHideTransition={'none'}
+          showHideTransition={'fade'}
           backgroundColor={
             dataDominantColor?.getColors ? `rgb(${dataDominantColor?.getColors})` : colors.primary
           }

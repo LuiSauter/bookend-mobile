@@ -114,22 +114,24 @@ const CustomDrawerContent = (props) => {
         />
         {status === 'authenticated' && (
           <Fragment>
-            <DrawerItem
-              icon={({ color }) => (
-                <AntDesignIcon name={'pluscircleo'} size={22} style={styles.icon} color={color} />
-              )}
-              label='Añadir libros'
-              labelStyle={styles.label}
-              onPress={() =>
-                props.navigation.navigate('AddPostScreen', {
-                  name: data?.findUser.me.name,
-                  username: data?.findUser.me.username,
-                  verified: data?.findUser.verified,
-                  email: data?.findUser.me.email,
-                  photo: data?.findUser.me.photo,
-                })
-              }
-            />
+            {data?.findUser && (
+              <DrawerItem
+                icon={({ color }) => (
+                  <AntDesignIcon name={'pluscircleo'} size={22} style={styles.icon} color={color} />
+                )}
+                label='Añadir libros'
+                labelStyle={styles.label}
+                onPress={() =>
+                  props.navigation.navigate('AddPostScreen', {
+                    name: data?.findUser.me.name,
+                    username: data?.findUser.me.username,
+                    verified: data?.findUser.me.verified,
+                    email: data?.findUser.me.email,
+                    photo: data?.findUser.me.photo,
+                  })
+                }
+              />
+            )}
             <DrawerItem
               icon={({ color }) => (
                 <Ionicons name='ios-person-outline' size={24} style={styles.icon} color={color} />

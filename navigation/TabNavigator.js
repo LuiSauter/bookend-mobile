@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Image, StyleSheet, TouchableHighlight, View } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -12,6 +12,8 @@ import Search from '../components/Search/Search'
 import bookendLogo from '../assets/img/default-user.png'
 import { useToggle } from '../hooks/useToggle'
 import { useAuth } from '../hooks/useAuth'
+import { useLazyQuery } from '@apollo/client'
+import { FIND_USER } from '../user/graphql-queries'
 
 const Tab = createBottomTabNavigator()
 
@@ -19,6 +21,18 @@ const TabNavigator = () => {
   const { colors } = useTheme()
   const { handleModalVisible, handleChangeWord, word } = useToggle()
   const { googleAuth } = useAuth()
+  const [getUser, { data }] = useLazyQuery(FIND_USER)
+
+  useEffect(() => {
+    let cleanup = true
+    if (cleanup) {
+      googleAuth.status === 'authenticated' && getUser({ variables: { email: googleAuth.email } })
+    }
+
+    return () => {
+      cleanup = false
+    }
+  }, [googleAuth.status])
 
   return (
     <Tab.Navigator
@@ -61,7 +75,10 @@ const TabNavigator = () => {
                 source={bookendLogo}
               />
             ) : (
-              <Image style={styles.bookendLogo} source={{ uri: googleAuth.image }} />
+              <Image
+                style={styles.bookendLogo}
+                source={{ uri: data?.findUser ? data?.findUser.me.photo : googleAuth.image }}
+              />
             )}
           </TouchableHighlight>
         ),
@@ -73,7 +90,6 @@ const TabNavigator = () => {
     >
       <Tab.Screen
         name='HomeScreen'
-        component={HomeScreen}
         options={() => ({
           title: 'Inicio',
           tabBarIcon: ({ color }) => (
@@ -91,7 +107,15 @@ const TabNavigator = () => {
             />
           ),
         })}
-      />
+      >
+        {(props) => (
+          <HomeScreen
+            {...props}
+            name={data?.findUser ? data?.findUser.me.name : googleAuth.name}
+            verified={data?.findUser ? data?.findUser.me.verified : false}
+          />
+        )}
+      </Tab.Screen>
       <Tab.Screen
         name='BookScreen'
         component={BookScreen}

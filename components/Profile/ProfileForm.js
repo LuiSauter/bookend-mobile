@@ -20,6 +20,7 @@ const ProfileForm = ({
   user,
 }) => {
   const { colors } = useTheme()
+  const [error, setError] = useState('')
   const [profile, setProfile] = useState({
     name: name,
     username: username,
@@ -43,15 +44,7 @@ const ProfileForm = ({
 
   const handleUpdate = () => {
     const { description, gender, location, name, photo, username, website, id } = profile
-    if (
-      description !== '' &&
-      gender !== '' &&
-      location &&
-      name !== '' &&
-      photo !== '' &&
-      username !== '' &&
-      website !== ''
-    ) {
+    if (description !== '' && gender !== '' && name !== '' && photo !== '' && username !== '') {
       updateProfile({
         variables: {
           name: name,
@@ -65,61 +58,76 @@ const ProfileForm = ({
       })
       reset()
       navigation.navigate('TabNavigation')
+    } else {
+      setError(' es requerido')
     }
   }
+
+  const textColor = { color: colors.text }
+  const inputColor = { color: colors.text, backgroundColor: colors.secondary }
+  const textError = (
+    <Text style={{ color: `${colors.colorFourthRed}cc`, fontSize: 18 }}>{error}</Text>
+  )
 
   return (
     <Fragment>
       <View style={styles.imageContainer}>
-        <Image source={{ uri: photo }} resizeMode='cover' style={styles.image} />
+        <Image
+          source={{ uri: photo }}
+          resizeMode='cover'
+          style={[styles.image, { borderColor: colors.textGray }]}
+        />
       </View>
-      <Text style={styles.text}>
-        Name <Text style={{ color: colors.colorThirdBlue }}>*</Text>
+      <Text style={[styles.text, textColor]}>
+        Nombre <Text style={{ color: colors.colorThirdBlue }}>*</Text>
+        {profile.name === '' && textError}
       </Text>
       <TextInput
         placeholder='Write your name'
-        placeholderTextColor={'#ccc'}
+        placeholderTextColor={colors.textGray}
         value={profile.name}
         defaultValue={profile.name}
         onChangeText={(name) => setProfile((prevState) => ({ ...prevState, name: name }))}
-        style={[styles.input, { color: 'white', backgroundColor: colors.border }]}
+        style={[styles.input, inputColor]}
       />
-      <Text style={styles.text}>
+      <Text style={[styles.text, textColor]}>
         Username <Text style={{ color: colors.colorThirdBlue }}>*</Text>
+        {profile.username === '' && textError}
       </Text>
       <TextInput
         placeholder='Write a username'
-        placeholderTextColor={'#ccc'}
+        placeholderTextColor={colors.textGray}
         value={profile.username}
         defaultValue={profile.username}
         onChangeText={(username) =>
           setProfile((prevState) => ({ ...prevState, username: username }))
         }
-        style={[styles.input, { color: 'white', backgroundColor: colors.border }]}
+        style={[styles.input, inputColor]}
       />
-      <Text style={styles.text}>
+      <Text style={[styles.text, textColor]}>
         Descripción <Text style={{ color: colors.colorThirdBlue }}>*</Text>
+        {profile.description.length === 0 && textError}
       </Text>
       <TextInput
         placeholder='Write a description'
-        placeholderTextColor={'#ccc'}
+        placeholderTextColor={colors.textGray}
         value={profile.description}
         defaultValue={profile.description}
         multiline={true}
         onChangeText={(description) =>
           setProfile((prevState) => ({ ...prevState, description: description }))
         }
-        style={[styles.input, { color: 'white', backgroundColor: colors.border }]}
+        style={[styles.input, inputColor]}
       />
-      <Text style={styles.text}>Email</Text>
+      <Text style={[styles.text, textColor]}>Email</Text>
       <TextInput
         placeholder={email}
-        placeholderTextColor={'#aaa'}
+        placeholderTextColor={colors.textGray}
         value={email}
         editable={false}
-        style={[styles.input, { color: colors.text, backgroundColor: colors.border }]}
+        style={[styles.input, inputColor, { opacity: 0.6 }]}
       />
-      <Text style={styles.text}>
+      <Text style={[styles.text, textColor]}>
         Gender <Text style={{ color: colors.colorThirdBlue }}>*</Text>
       </Text>
       <Picker
@@ -132,32 +140,32 @@ const ProfileForm = ({
       >
         <Picker.Item label='Male' value='male' />
         <Picker.Item label='Female' value='female' />
+        <Picker.Item label='Otro' value='other' />
       </Picker>
-      <Text style={styles.text}>
-        Website <Text style={{ color: colors.colorThirdBlue }}>*</Text>
-      </Text>
-      <TextInput
-        placeholder={'Website'}
-        placeholderTextColor={'#aaa'}
-        value={profile.website}
-        defaultValue={profile.website}
-        onChangeText={(website) => setProfile((prevState) => ({ ...prevState, website: website }))}
-        style={[styles.input, { color: 'white', backgroundColor: colors.border }]}
-      />
-      <Text style={styles.text}>
+      <Text style={[styles.text, textColor]}>
         Location <Text style={{ color: colors.colorThirdBlue }}>*</Text>
+        {profile.location === '' && textError}
       </Text>
       <TextInput
         placeholder='Tokio, Japón'
-        placeholderTextColor='#aaa'
+        placeholderTextColor={colors.textGray}
         value={profile.location}
         defaultValue={profile.location}
         onChangeText={(location) =>
           setProfile((prevState) => ({ ...prevState, location: location }))
         }
-        style={[styles.input, { color: 'white', backgroundColor: colors.border }]}
+        style={[styles.input, inputColor]}
       />
-      <Text style={{ color: colors.textGray }}>
+      <Text style={[styles.text, textColor]}>Website</Text>
+      <TextInput
+        placeholder={'Website'}
+        placeholderTextColor={colors.textGray}
+        value={profile.website}
+        defaultValue={profile.website}
+        onChangeText={(website) => setProfile((prevState) => ({ ...prevState, website: website }))}
+        style={[styles.input, inputColor]}
+      />
+      <Text style={[styles.text, { color: colors.textGray }]}>
         <Text style={{ color: colors.colorThirdBlue }}>* </Text>
         Fields required
       </Text>
@@ -167,16 +175,9 @@ const ProfileForm = ({
         style={{ marginVertical: 16, borderRadius: 10 }}
       >
         <Text
-          style={{
-            backgroundColor: colors.colorThirdBlue,
-            borderRadius: 10,
-            padding: 6,
-            textAlign: 'center',
-            fontSize: 16,
-            color: colors.text,
-          }}
+          style={[styles.submit, { backgroundColor: colors.colorThirdBlue, color: colors.white }]}
         >
-          Submit
+          Actualizar
         </Text>
       </TouchableHighlight>
     </Fragment>
@@ -186,20 +187,19 @@ const ProfileForm = ({
 export default ProfileForm
 
 const styles = StyleSheet.create({
-  form: {},
   imageContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    marginVertical: 16,
   },
   image: {
     width: 120,
     height: 120,
     borderRadius: 100,
-    marginTop: 16,
+    borderWidth: 3,
   },
   text: {
-    fontSize: 16,
-    color: '#fff',
+    fontSize: 17,
     paddingBottom: 10,
   },
   input: {
@@ -209,5 +209,11 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     width: '100%',
     marginBottom: 16,
+  },
+  submit: {
+    borderRadius: 10,
+    padding: 6,
+    textAlign: 'center',
+    fontSize: 20,
   },
 })
