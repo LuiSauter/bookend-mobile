@@ -9,8 +9,9 @@ import ModalSignIn from '../components/ModalSignIn'
 import { auth } from '../lib/auth'
 import { useToggle } from '../hooks/useToggle'
 import { useAuth } from '../hooks/useAuth'
+import NameUser from '../components/NameUser'
 
-const HomeScreen = () => {
+const HomeScreen = ({ name, verified }) => {
   const { googleAuth } = useAuth()
   const { colors } = useTheme()
   const { handleModalVisible, darkTheme } = useToggle()
@@ -42,8 +43,12 @@ const HomeScreen = () => {
               },
             ]}
           >
-            {status === 'unauthenticated' && (
-              <Text style={[styles.text, { color: colors.text, marginBottom: 10 }]}>Sign In</Text>
+            {status === 'unauthenticated' ? (
+              <Text style={[styles.text, { color: colors.text }]}>Sign In</Text>
+            ) : (
+              <View style={styles.signed}>
+                <NameUser name={name} verified={verified} fontSize={20} />
+              </View>
             )}
             {googleAuth.status === 'authenticated' ? (
               <TouchableOpacity
@@ -54,7 +59,7 @@ const HomeScreen = () => {
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    backgroundColor: `${colors.colorThirdBlue}a3`,
+                    backgroundColor: colors.colorFourthRed,
                   },
                 ]}
                 onPress={() => {
@@ -98,7 +103,7 @@ const HomeScreen = () => {
               </TouchableOpacity>
             )}
             <TouchableOpacity
-              style={[styles.button, { backgroundColor: colors.colorFourthRed }]}
+              style={[styles.button, { backgroundColor: colors.textGray }]}
               onPress={() => handleModalVisible()}
               activeOpacity={0.7}
             >
@@ -130,7 +135,6 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: 50,
     padding: 10,
-    elevation: 2,
     marginTop: 16,
   },
   buttonSignOut: {
@@ -149,11 +153,17 @@ const styles = StyleSheet.create({
     width: '80%',
     textAlign: 'center',
     borderRadius: 20,
-    padding: 30,
+    paddingHorizontal: 30,
+    paddingVertical: 30,
     shadowOffset: { width: 0, height: 16 },
     shadowOpacity: 0.25,
     shadowRadius: 10,
     elevation: 32,
     borderWidth: 1,
+  },
+  signed: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
   },
 })
