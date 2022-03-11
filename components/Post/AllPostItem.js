@@ -179,7 +179,7 @@ const AllPostItem = ({
               )}
             </TouchableOpacity>
             <View style={{ paddingVertical: 4 }}>
-              <MultipleButtons id={id} />
+              <MultipleButtons title={title} bookUrl={bookUrl} id={id} />
             </View>
           </View>
         </View>

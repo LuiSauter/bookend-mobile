@@ -65,7 +65,7 @@ const ResultPost = ({
               ? description
               : `${description.join(' ').toString().substring(0, 120)}...`}
           </Text>
-          <MultipleButtons comments={comments} likes={likes} id={id} />
+          <MultipleButtons title={title} bookUrl={bookUrl} id={id} />
         </View>
       </View>
     </TouchableHighlight>

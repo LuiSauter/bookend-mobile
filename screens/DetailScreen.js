@@ -23,7 +23,7 @@ import { useTheme } from '@react-navigation/native'
 const DetailScreen = ({ route, navigation }) => {
   const {
     id,
-    // bookUrl,
+    bookUrl,
     comments,
     likes,
     image,
@@ -51,6 +51,8 @@ const DetailScreen = ({ route, navigation }) => {
   const { data } = useQuery(FINDONE_POST, {
     variables: { id: id },
   })
+
+  console.log(bookUrl)
 
   return (
     <SafeAreaView
@@ -158,7 +160,7 @@ const DetailScreen = ({ route, navigation }) => {
           </View>
         )}
         <View style={{ paddingVertical: 4 }}>
-          <MultipleButtons id={id} />
+          <MultipleButtons title={title} bookUrl={bookUrl} id={id} />
         </View>
       </ScrollView>
     </SafeAreaView>

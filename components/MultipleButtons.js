@@ -1,13 +1,14 @@
 /* eslint-disable react/prop-types */
-import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import BtnLike from './Button/BtnLike'
 import IconEvilIcons from 'react-native-vector-icons/EvilIcons' //comment
 import IconAntDesign from 'react-native-vector-icons/AntDesign' //sharealt
-import { useTheme } from '@react-navigation/native'
+import { useNavigation, useTheme } from '@react-navigation/native'
 
-const MultipleButtons = ({ id }) => {
+const MultipleButtons = ({ id, bookUrl, title }) => {
   const { colors } = useTheme()
+  const navigation = useNavigation()
   return (
     <View style={styles.btnContainer}>
       <View style={styles.btn}>
@@ -36,9 +37,12 @@ const MultipleButtons = ({ id }) => {
         <Text style={[styles.text, { color: colors.textGray }]}>0</Text>
       </View>
       <BtnLike id={id} />
-      <View style={styles.btn}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('PdfScreen', { bookUrl, title })}
+        style={styles.btn}
+      >
         <Text style={[styles.text, { color: colors.textGray }]}>PDF</Text>
-      </View>
+      </TouchableOpacity>
     </View>
   )
 }
