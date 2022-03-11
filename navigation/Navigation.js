@@ -18,6 +18,7 @@ import DrawerNavigator from './DrawerNavigator'
 import { usePost } from '../hooks/usePost'
 import { auth } from '../lib/auth'
 import UpdateScreen from '../screens/UpdateScreen'
+import PdfScreen from '../screens/PdfScreen'
 
 const Stack = createNativeStackNavigator()
 
@@ -167,6 +168,17 @@ const Navigation = () => {
             <AddPostScreen {...props} handleDisabled={handleDisabled} addPost={addPost} />
           )}
         </Stack.Screen>
+        <Stack.Screen
+          name='PdfScreen'
+          component={PdfScreen}
+          options={() => ({
+            title: '',
+            headerTitleStyle: { color: colors.text },
+            headerTintColor: colors.textGray,
+            headerShown: true,
+            headerTransparent: true,
+          })}
+        />
       </Stack.Group>
     </Stack.Navigator>
   )
