@@ -58,8 +58,8 @@ const TextNotFound = ({ color }) => (
 )
 
 const SearchScreen = () => {
-  const { colors } = useTheme()
-  const { darkTheme, word } = useToggle()
+  const { colors, dark } = useTheme()
+  const { word } = useToggle()
   const [filter, setFilter] = useState({ book: true, author: false, user: false })
   const { book, author, user } = filter
   const [getResults, { data, loading }] = useLazyQuery(SEARCH_POST_AUTHOR_USER)
@@ -84,7 +84,7 @@ const SearchScreen = () => {
       <StatusBar
         animated={true}
         showHideTransition={'slide'}
-        barStyle={darkTheme ? 'light-content' : 'dark-content'}
+        barStyle={dark ? 'light-content' : 'dark-content'}
         backgroundColor={colors.primary}
       />
       <View style={[styles.btnFilter, { borderColor: colors.border }]}>

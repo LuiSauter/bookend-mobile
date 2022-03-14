@@ -13,8 +13,8 @@ import NameUser from '../components/NameUser'
 
 const HomeScreen = ({ name, verified }) => {
   const { googleAuth } = useAuth()
-  const { colors } = useTheme()
-  const { handleModalVisible, darkTheme } = useToggle()
+  const { colors, dark } = useTheme()
+  const { handleModalVisible } = useToggle()
 
   const { status } = googleAuth
   const { promptAsync, request, signOut } = auth()
@@ -27,7 +27,7 @@ const HomeScreen = ({ name, verified }) => {
       <StatusBar
         animated={true}
         showHideTransition={'fade'}
-        barStyle={darkTheme ? 'light-content' : 'dark-content'}
+        barStyle={dark ? 'light-content' : 'dark-content'}
         backgroundColor={colors.primary}
       />
       <AllPost />
