@@ -46,7 +46,6 @@ const dark = {
 
 const index = () => {
   const { darkTheme } = useToggle()
-
   return (
     <NavigationContainer theme={darkTheme ? dark : light}>
       <Navigation />

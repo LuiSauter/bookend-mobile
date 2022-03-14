@@ -20,7 +20,7 @@ const Tab = createBottomTabNavigator()
 const TabNavigator = () => {
   const { colors } = useTheme()
   const { handleModalVisible, handleChangeWord, word } = useToggle()
-  const { googleAuth } = useAuth()
+  const { googleAuth, handleGoogleAuthentication } = useAuth()
   const [getUser, { data }] = useLazyQuery(FIND_USER)
 
   useEffect(() => {
@@ -28,11 +28,28 @@ const TabNavigator = () => {
     if (cleanup) {
       googleAuth.status === 'authenticated' && getUser({ variables: { email: googleAuth.email } })
     }
-
     return () => {
       cleanup = false
     }
   }, [googleAuth.status])
+
+  useEffect(() => {
+    let cleanup = true
+    if (cleanup) {
+      googleAuth.status === 'authenticated' &&
+        data?.findUser &&
+        handleGoogleAuthentication({
+          email: googleAuth.email,
+          name: data?.findUser ? data?.findUser.me.name : googleAuth.name,
+          image: data?.findUser ? data?.findUser.me.photo : googleAuth.image,
+          status: googleAuth.status,
+          token: googleAuth.token,
+        })
+    }
+    return () => {
+      cleanup = false
+    }
+  }, [data?.findUser])
 
   return (
     <Tab.Navigator
@@ -103,6 +120,7 @@ const TabNavigator = () => {
     >
       <Tab.Screen
         name='HomeScreen'
+        component={HomeScreen}
         options={() => ({
           title: 'Inicio',
           tabBarIcon: ({ color }) => (
@@ -120,15 +138,7 @@ const TabNavigator = () => {
             />
           ),
         })}
-      >
-        {(props) => (
-          <HomeScreen
-            {...props}
-            name={data?.findUser ? data?.findUser.me.name : googleAuth.name}
-            verified={data?.findUser ? data?.findUser.me.verified : false}
-          />
-        )}
-      </Tab.Screen>
+      />
       <Tab.Screen
         name='BookScreen'
         component={BookScreen}
