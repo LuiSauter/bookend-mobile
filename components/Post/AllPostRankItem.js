@@ -93,10 +93,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   TextAndLikes: {
+    width: '100%',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginVertical: 4,
+    minHeight: 45,
   },
 })

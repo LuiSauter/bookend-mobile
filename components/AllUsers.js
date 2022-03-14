@@ -1,8 +1,9 @@
-import { StyleSheet, View, FlatList } from 'react-native'
+import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native'
 import React from 'react'
 import { useQuery } from '@apollo/client'
 import { ALL_USERS } from '../user/graphql-queries'
 import ResultUser from '../components/Search/ResultUser'
+import { useTheme } from '@react-navigation/native'
 
 const renderItem = ({ item }) => (
   <ResultUser
@@ -18,10 +19,15 @@ const renderItem = ({ item }) => (
 const keyExtractor = (item) => item.user.toString()
 
 const AllUsers = () => {
-  const { data } = useQuery(ALL_USERS)
+  const { data, loading } = useQuery(ALL_USERS)
+  const { colors } = useTheme()
   return (
     <View style={styles.container}>
-      <FlatList data={data?.allUsers} renderItem={renderItem} keyExtractor={keyExtractor} />
+      {loading ? (
+        <ActivityIndicator style={{ flex: 1 }} color={colors.colorThirdBlue} size='large' />
+      ) : (
+        <FlatList data={data?.allUsers} renderItem={renderItem} keyExtractor={keyExtractor} />
+      )}
     </View>
   )
 }

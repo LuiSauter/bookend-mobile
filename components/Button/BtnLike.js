@@ -91,7 +91,7 @@ const BtnLike = ({ id }) => {
           android_ripple={{
             color: `${colors.colorThirdPurple}33`,
             borderless: true,
-            radius: 18,
+            radius: 22,
           }}
           style={({ pressed }) => [{ backgroundColor: pressed ? 'transparent' : 'transparent' }]}
         >
@@ -109,9 +109,9 @@ const BtnLike = ({ id }) => {
         <Pressable
           onPress={() => handleLike(id)}
           android_ripple={{
-            color: `${colors.colorLikeRed}33`,
+            color: `${colors.colorLikeRed}55`,
             borderless: true,
-            radius: 18,
+            radius: 22,
           }}
           style={({ pressed }) => [
             { backgroundColor: pressed ? 'transparent' : 'transparent', paddingTop: 2 },

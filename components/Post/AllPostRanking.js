@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { RefreshControl, StyleSheet, View, ActivityIndicator } from 'react-native'
+import { RefreshControl, StyleSheet, ActivityIndicator } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { ALL_POSTS_COUNT, ALL_POST_RANKING } from '../../post/graphql-queries'
 import { useLazyQuery, useQuery } from '@apollo/client'
@@ -85,38 +85,34 @@ const AllPostRanking = () => {
     setRefreshing(false)
   }, [])
 
-  return (
-    <View style={{ height: '100%' }}>
-      {data?.allPostRanking ? (
-        <FlatList
-          data={data?.allPostRanking}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-          ListFooterComponent={renderLoader}
-          onEndReached={loadMoreItem}
-          getItemLayout={getItemLayout}
-          initialNumToRender={INITIAL_PAGE}
-          onEndReachedThreshold={0}
-          removeClippedSubviews={true}
-          numColumns={2}
-          columnWrapperStyle={styles.column}
-          refreshControl={
-            <RefreshControl
-              progressBackgroundColor={colors.primary}
-              refreshing={refreshing}
-              colors={[colors.colorThirdBlue]}
-              onRefresh={onRefresh}
-            />
-          }
+  return data?.allPostRanking ? (
+    <FlatList
+      data={data?.allPostRanking}
+      renderItem={renderItem}
+      keyExtractor={keyExtractor}
+      ListFooterComponent={renderLoader}
+      onEndReached={loadMoreItem}
+      getItemLayout={getItemLayout}
+      initialNumToRender={INITIAL_PAGE}
+      onEndReachedThreshold={0}
+      removeClippedSubviews={true}
+      numColumns={2}
+      columnWrapperStyle={styles.column}
+      refreshControl={
+        <RefreshControl
+          progressBackgroundColor={colors.primary}
+          refreshing={refreshing}
+          colors={[colors.colorThirdBlue]}
+          onRefresh={onRefresh}
         />
-      ) : (
-        <ActivityIndicator
-          style={{ flex: 1, width: '100%', height: '100%' }}
-          color={colors.colorThirdBlue}
-          size='large'
-        />
-      )}
-    </View>
+      }
+    />
+  ) : (
+    <ActivityIndicator
+      style={{ flex: 1, width: '100%', height: '100%' }}
+      color={colors.colorThirdBlue}
+      size='large'
+    />
   )
 }
 
