@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
-import { SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView, StatusBar, StyleSheet, Text, View, Pressable } from 'react-native'
 import { useTheme } from '@react-navigation/native'
 import GoogleIcon from 'react-native-vector-icons/AntDesign'
 
@@ -11,12 +11,11 @@ import { useToggle } from '../hooks/useToggle'
 import { useAuth } from '../hooks/useAuth'
 import NameUser from '../components/NameUser'
 
-const HomeScreen = ({ name, verified }) => {
+const HomeScreen = () => {
   const { googleAuth } = useAuth()
+  const { status, name } = googleAuth
   const { colors, dark } = useTheme()
   const { handleModalVisible } = useToggle()
-
-  const { status } = googleAuth
   const { promptAsync, request, signOut } = auth()
 
   return (
@@ -47,19 +46,20 @@ const HomeScreen = ({ name, verified }) => {
               <Text style={[styles.text, { color: colors.text }]}>Sign In</Text>
             ) : (
               <View style={styles.signed}>
-                <NameUser name={name} verified={verified} fontSize={20} />
+                <NameUser name={name} verified={false} fontSize={20} />
               </View>
             )}
             {googleAuth.status === 'authenticated' ? (
-              <TouchableOpacity
-                style={[
+              <Pressable
+                android_ripple={{ color: colors.primary }}
+                style={({ pressed }) => [
                   styles.buttonSignOut,
                   {
                     display: 'flex',
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    backgroundColor: colors.colorFourthRed,
+                    backgroundColor: pressed ? `${colors.colorFourthRed}aa` : colors.colorFourthRed,
                   },
                 ]}
                 onPress={() => {
@@ -71,17 +71,18 @@ const HomeScreen = ({ name, verified }) => {
                 <Text style={{ color: colors.white, fontSize: 18, fontWeight: 'bold' }}>
                   Sign Out
                 </Text>
-              </TouchableOpacity>
+              </Pressable>
             ) : (
-              <TouchableOpacity
-                style={[
+              <Pressable
+                android_ripple={{ color: colors.primary }}
+                style={({ pressed }) => [
                   styles.button,
                   {
                     display: 'flex',
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    backgroundColor: colors.colorThirdBlue,
+                    backgroundColor: pressed ? `${colors.colorThirdBlue}aa` : colors.colorThirdBlue,
                   },
                 ]}
                 disabled={!request}
@@ -89,7 +90,6 @@ const HomeScreen = ({ name, verified }) => {
                   promptAsync({ useProxy: false })
                   handleModalVisible()
                 }}
-                activeOpacity={0.7}
               >
                 <GoogleIcon
                   name='google'
@@ -100,15 +100,18 @@ const HomeScreen = ({ name, verified }) => {
                 <Text style={[styles.textButton, { color: colors.white, marginLeft: 16 }]}>
                   Sign with Google
                 </Text>
-              </TouchableOpacity>
+              </Pressable>
             )}
-            <TouchableOpacity
-              style={[styles.button, { backgroundColor: colors.textGray }]}
+            <Pressable
+              android_ripple={{ color: colors.primary }}
+              style={({ pressed }) => [
+                styles.button,
+                { backgroundColor: pressed ? `${colors.textGray}aa` : colors.textGray },
+              ]}
               onPress={() => handleModalVisible()}
-              activeOpacity={0.7}
             >
               <Text style={[styles.textButton, { color: colors.white }]}>Cancel</Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         </View>
       </ModalSignIn>
