@@ -15,7 +15,7 @@ const MultipleButtons = ({ id, bookUrl, title }) => {
         android_ripple={{
           color: `${colors.colorThirdPurple}33`,
           borderless: true,
-          radius: 18,
+          radius: 22,
         }}
         onPress={() => console.log('xd')}
         style={({ pressed }) => [{ backgroundColor: pressed ? 'transparent' : 'transparent' }]}
@@ -34,7 +34,7 @@ const MultipleButtons = ({ id, bookUrl, title }) => {
         android_ripple={{
           color: `${colors.colorThirdYellow}33`,
           borderless: true,
-          radius: 18,
+          radius: 22,
         }}
         onPress={() => console.log('xd')}
         style={({ pressed }) => [
@@ -57,7 +57,7 @@ const MultipleButtons = ({ id, bookUrl, title }) => {
         android_ripple={{
           color: `${colors.colorFourthRed}44`,
           borderless: true,
-          radius: 18,
+          radius: 22,
         }}
         style={({ pressed }) => [
           { backgroundColor: pressed ? 'transparent' : 'transparent', flexDirection: 'row' },
