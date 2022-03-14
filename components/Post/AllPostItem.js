@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  TouchableHighlight,
-  StatusBar,
-} from 'react-native'
+import { View, Text, Image, TouchableOpacity, StyleSheet, StatusBar, Pressable } from 'react-native'
 import { useLazyQuery, useQuery } from '@apollo/client'
 import { useNavigation, useTheme } from '@react-navigation/native'
 import ImageView from 'react-native-image-viewing'
@@ -78,8 +70,8 @@ const AllPostItem = ({
         swipeToCloseEnabled={false}
         doubleTapToZoomEnabled={true}
       />
-      <TouchableHighlight
-        underlayColor={colors.colorUnderlay}
+      <Pressable
+        // underlayColor={colors.colorUnderlay}
         onPress={() =>
           navigation.navigate('DetailScreen', {
             id: id,
@@ -105,6 +97,8 @@ const AllPostItem = ({
             likes,
           })
         }
+        android_ripple={{ color: colors.colorUnderlay }}
+        style={({ pressed }) => [{ backgroundColor: pressed ? 'transparent' : 'transparent' }]}
       >
         <View style={styles.postContainer}>
           <View style={styles.userImgContainer}>
@@ -136,16 +130,36 @@ const AllPostItem = ({
           </View>
           <View style={styles.postItem}>
             <View style={styles.userTextContainer}>
-              <View style={styles.userTextItem}>
-                <NameUser
-                  name={data?.findUserById.me.name}
-                  verified={data?.findUserById.me.verified}
-                  fontSize={16}
-                />
-                <Text style={[styles.userTextUsername, { color: colors.textGray }]}>
-                  @{data?.findUserById.me.username} · {timeago}
-                </Text>
-              </View>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={() =>
+                  navigation.navigate('UserScreen', {
+                    name: data?.findUserById.me.name,
+                    username: data?.findUserById.me.username,
+                    verified: data?.findUserById.me.verified,
+                    photo: data?.findUserById.me.photo,
+                    dominantColor: userDominantColor?.getColors,
+                    description: data?.findUserById.description,
+                    user: data?.findUserById.me.user,
+                    location: data?.findUserById.location,
+                    followers: data?.findUserById.followers,
+                    following: data?.findUserById.following,
+                    email: data?.findUserById.me.email,
+                    website: data?.findUserById.website,
+                  })
+                }
+              >
+                <View style={styles.userTextItem}>
+                  <NameUser
+                    name={data?.findUserById.me.name}
+                    verified={data?.findUserById.me.verified}
+                    fontSize={16}
+                  />
+                  <Text style={[styles.userTextUsername, { color: colors.textGray }]}>
+                    @{data?.findUserById.me.username} · {timeago}
+                  </Text>
+                </View>
+              </TouchableOpacity>
               <BtnOptions username={data?.findUserById.me.username} user={user} />
             </View>
             <View style={styles.postItemDescription}>
@@ -178,12 +192,12 @@ const AllPostItem = ({
                 <Image style={styles.postImg} resizeMethod='resize' source={{ uri: image }} />
               )}
             </TouchableOpacity>
-            <View style={{ paddingVertical: 4 }}>
+            <View style={{ paddingVertical: 10 }}>
               <MultipleButtons title={title} bookUrl={bookUrl} id={id} />
             </View>
           </View>
         </View>
-      </TouchableHighlight>
+      </Pressable>
     </>
   )
 }

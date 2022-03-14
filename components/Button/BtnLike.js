@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import { StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
+import { StyleSheet, Text, View, Pressable } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client'
 import { DISLIKE_POST, LIKE_POST } from '../../post/graphql-mutations'
@@ -86,29 +86,51 @@ const BtnLike = ({ id }) => {
   return (
     <View style={styles.btn}>
       {like ? (
-        <Icon.Button
-          name='heart'
-          backgroundColor='transparent'
-          borderRadius={50}
-          color={colors.colorLikeRed}
+        <Pressable
           onPress={() => handleDisLike(id)}
-          size={22}
-          iconStyle={{ marginRight: 0 }}
-          underlayColor='transparent'
-        />
+          android_ripple={{
+            color: `${colors.colorThirdPurple}33`,
+            borderless: true,
+            radius: 18,
+          }}
+          style={({ pressed }) => [{ backgroundColor: pressed ? 'transparent' : 'transparent' }]}
+        >
+          <Icon
+            name='heart'
+            backgroundColor='transparent'
+            borderRadius={50}
+            color={colors.colorLikeRed}
+            size={22}
+            iconStyle={{ marginRight: 0 }}
+            underlayColor='transparent'
+          />
+        </Pressable>
       ) : (
-        <Icon.Button
-          name='heart-outline'
-          backgroundColor='transparent'
-          borderRadius={50}
-          color={colors.textGray}
+        <Pressable
           onPress={() => handleLike(id)}
-          size={22}
-          iconStyle={{ marginRight: 0 }}
-          underlayColor='transparent'
-        />
+          android_ripple={{
+            color: `${colors.colorLikeRed}33`,
+            borderless: true,
+            radius: 18,
+          }}
+          style={({ pressed }) => [
+            { backgroundColor: pressed ? 'transparent' : 'transparent', paddingTop: 2 },
+          ]}
+        >
+          <Icon
+            name='heart-outline'
+            backgroundColor='transparent'
+            borderRadius={50}
+            color={colors.textGray}
+            size={22}
+            iconStyle={{ marginRight: 0 }}
+            underlayColor='transparent'
+          />
+        </Pressable>
       )}
-      <Text style={{ fontSize: 17, color: like ? colors.colorLikeRed : colors.textGray }}>
+      <Text
+        style={{ fontSize: 17, color: like ? colors.colorLikeRed : colors.textGray, marginLeft: 5 }}
+      >
         {likeCount}
       </Text>
     </View>

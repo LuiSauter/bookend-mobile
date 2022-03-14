@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, Pressable } from 'react-native'
 import { useLazyQuery } from '@apollo/client'
 import { useTheme } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -37,16 +37,28 @@ const BtnOptions = ({ username, user }) => {
         visible={visible}
         style={[styles.menu, { backgroundColor: colors.secondary, borderColor: colors.border }]}
         anchor={
-          <Icon.Button
-            backgroundColor='transparent'
-            name='ellipsis-vertical'
-            color={colors.textGray}
-            iconStyle={{ marginRight: 0 }}
-            size={15}
-            borderRadius={50}
+          <Pressable
+            android_ripple={{
+              color: colors.colorUnderlay,
+              borderless: true,
+              radius: 25,
+              foreground: true,
+            }}
             onPress={showMenu}
-            underlayColor={colors.colorUnderlay}
-          />
+            style={({ pressed }) => [
+              { backgroundColor: pressed ? 'transparent' : 'transparent', padding: 0 },
+            ]}
+          >
+            <Icon
+              backgroundColor='transparent'
+              name='ellipsis-vertical'
+              color={colors.textGray}
+              iconStyle={{ marginRight: 0 }}
+              size={15}
+              borderRadius={50}
+              underlayColor={colors.colorUnderlay}
+            />
+          </Pressable>
         }
         onRequestClose={hideMenu}
       >

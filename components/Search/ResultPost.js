@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Image, StyleSheet, Text, TouchableHighlight, View } from 'react-native'
+import { Image, StyleSheet, Text, Pressable, View } from 'react-native'
 import React from 'react'
 import MultipleButtons from '../MultipleButtons'
 import { useNavigation, useTheme } from '@react-navigation/native'
@@ -25,7 +25,7 @@ const ResultPost = ({
   const { colors } = useTheme()
   const { data } = useQuery(FIND_USER_BY_USER, { variables: { user: user } })
   return (
-    <TouchableHighlight
+    <Pressable
       onPress={() =>
         navigation.navigate('DetailScreen', {
           id: id,
@@ -51,7 +51,8 @@ const ResultPost = ({
           likes,
         })
       }
-      underlayColor={colors.colorUnderlay}
+      android_ripple={{ color: colors.colorUnderlay }}
+      style={({ pressed }) => [{ backgroundColor: pressed ? 'transparent' : 'transparent' }]}
     >
       <View style={[styles.container, { borderColor: colors.border }]}>
         <Image source={{ uri: image }} style={styles.image} />
@@ -68,7 +69,7 @@ const ResultPost = ({
           <MultipleButtons title={title} bookUrl={bookUrl} id={id} />
         </View>
       </View>
-    </TouchableHighlight>
+    </Pressable>
   )
 }
 
