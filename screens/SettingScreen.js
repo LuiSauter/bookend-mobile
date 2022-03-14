@@ -11,7 +11,6 @@ import {
 } from 'react-native'
 import { useNavigation, useTheme } from '@react-navigation/native'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
-import { useToggle } from '../hooks/useToggle'
 
 const data = [
   {
@@ -85,8 +84,7 @@ const Item = ({ title, description, screen, icon }) => {
 }
 
 const SettingScreen = () => {
-  const { darkTheme } = useToggle()
-  const { colors } = useTheme()
+  const { colors, dark } = useTheme()
 
   const renderItem = ({ item }) => (
     <Item title={item.title} screen={item.screen} description={item.description} icon={item.icon} />
@@ -100,7 +98,7 @@ const SettingScreen = () => {
       <StatusBar
         animated={true}
         showHideTransition={'slide'}
-        barStyle={darkTheme ? 'light-content' : 'dark-content'}
+        barStyle={dark ? 'light-content' : 'dark-content'}
         backgroundColor={colors.primary}
       />
       <FlatList data={data} renderItem={renderItem} keyExtractor={(item) => item.id} />

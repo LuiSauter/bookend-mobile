@@ -5,7 +5,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 // import { InMemoryCache } from '@apollo/client/cache/inmemory/inMemoryCache'
 import { URL_QL } from '@env'
-
 import { ToggleStateProvider } from './context/toggleContext'
 import Navigator from './navigation'
 import { AuthStateProvider } from './context/authContext'
@@ -28,7 +27,7 @@ const cache = new InMemoryCache({
 })
 
 const client = new ApolloClient({
-  uri: URL_QL,
+  uri: `${URL_QL}/api/graphql`,
   cache,
   // defaultOptions: { watchQuery: { fetchPolicy: 'cache-and-network' } },
 })

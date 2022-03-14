@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect } from 'react'
-import { Image, StyleSheet, TouchableHighlight, View } from 'react-native'
+import { Image, StyleSheet, TouchableHighlight, View, Pressable } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { useTheme } from '@react-navigation/native'
@@ -51,7 +51,20 @@ const TabNavigator = () => {
         },
         headerTitleStyle: { color: colors.text },
         headerTintColor: colors.text,
-        tabBarButton: (props) => <TouchableHighlight underlayColor='#0002' {...props} />,
+        tabBarButton: (props) => (
+          <Pressable
+            {...props}
+            android_ripple={{
+              color: colors.colorUnderlay,
+              borderless: true,
+              radius: 90,
+              foreground: true,
+            }}
+            style={({ pressed }) => [
+              { backgroundColor: pressed ? 'transparent' : 'transparent', flex: 1 },
+            ]}
+          />
+        ),
         headerLeft: () => (
           <View style={{ marginLeft: 12 }}>
             <Icon.Button

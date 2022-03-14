@@ -17,7 +17,6 @@ import ImageView from 'react-native-image-viewing'
 import NameUser from '../components/NameUser'
 import MultipleButtons from '../components/MultipleButtons'
 import BtnOptions from '../components/Button/BtnOptions'
-import { useToggle } from '../hooks/useToggle'
 import { useTheme } from '@react-navigation/native'
 
 const DetailScreen = ({ route, navigation }) => {
@@ -43,8 +42,7 @@ const DetailScreen = ({ route, navigation }) => {
     website,
     hourAndMinute,
   } = route.params
-  const { darkTheme } = useToggle()
-  const { colors } = useTheme()
+  const { colors, dark } = useTheme()
   const [isVisible, setIsVisible] = useState(false)
   const { data: dataDominantColor } = useQuery(GET_DOMINANT_COLOR, { variables: { image: image } })
   const { data: userDominantColor } = useQuery(GET_DOMINANT_COLOR, { variables: { image: photo } })
@@ -68,7 +66,7 @@ const DetailScreen = ({ route, navigation }) => {
         />
       ) : (
         <StatusBar
-          barStyle={darkTheme ? 'light-content' : 'dark-content'}
+          barStyle={dark ? 'light-content' : 'dark-content'}
           animated={true}
           showHideTransition={'none'}
           backgroundColor={colors.primary}
@@ -140,7 +138,7 @@ const DetailScreen = ({ route, navigation }) => {
           {hourAndMinute}
         </Text>
         {(likes.length > 0 || comments.length > 0) && (
-          <View style={[styles.likesAndComments, { borderColor: colors.border }]}>
+          <View style={styles.likesAndComments}>
             <Text
               style={[[styles.userTextUsername, { color: colors.textGray }], { marginRight: 16 }]}
             >
@@ -157,7 +155,7 @@ const DetailScreen = ({ route, navigation }) => {
             </Text>
           </View>
         )}
-        <View style={{ paddingVertical: 4 }}>
+        <View style={{ paddingVertical: 10, marginBottom: 10 }}>
           <MultipleButtons title={title} bookUrl={bookUrl} id={id} />
         </View>
       </ScrollView>
@@ -192,6 +190,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingRight: 10,
   },
   userTextItem: {
     flex: 1,
@@ -238,7 +237,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
   },
 })

@@ -4,15 +4,15 @@ import { SafeAreaView, StatusBar, StyleSheet, Text, View, Switch } from 'react-n
 import { useToggle } from '../../hooks/useToggle'
 
 const DisplayScreen = () => {
-  const { colors } = useTheme()
-  const { handleDarkTheme, darkTheme } = useToggle()
+  const { colors, dark } = useTheme()
+  const { handleDarkTheme } = useToggle()
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
       <StatusBar
         animated={true}
         showHideTransition={'slide'}
-        barStyle={darkTheme ? 'light-content' : 'dark-content'}
+        barStyle={dark ? 'light-content' : 'dark-content'}
         backgroundColor={colors.colorPrimary}
       />
       <View style={styles.item}>
@@ -25,10 +25,10 @@ const DisplayScreen = () => {
         </View>
         <Switch
           trackColor={{ false: '#767577', true: colors.colorThirdBlue }}
-          thumbColor={darkTheme ? colors.colorThirdYellow : '#f4f3f4'}
+          thumbColor={dark ? colors.colorThirdYellow : '#f4f3f4'}
           ios_backgroundColor='#3e3e3e'
           onValueChange={handleDarkTheme}
-          value={darkTheme}
+          value={dark}
         />
       </View>
     </SafeAreaView>

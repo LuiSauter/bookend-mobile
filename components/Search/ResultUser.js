@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Image, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native'
+import { Image, StyleSheet, Text, Pressable, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import BtnFollow from '../Button/BtnFollow'
 import { useNavigation, useTheme } from '@react-navigation/native'
@@ -17,7 +17,7 @@ const ResultUser = ({ name, username, user, email, photo, verified }) => {
   const { data: userDominantColor } = useQuery(GET_DOMINANT_COLOR, { variables: { image: photo } })
 
   return (
-    <TouchableHighlight
+    <Pressable
       onPress={() =>
         navigation.navigate('UserScreen', {
           name: data?.findUser ? data?.findUser.me.name : '',
@@ -34,7 +34,8 @@ const ResultUser = ({ name, username, user, email, photo, verified }) => {
           website: data?.findUser ? data?.findUser.website : '',
         })
       }
-      underlayColor={colors.colorUnderlay}
+      android_ripple={{ color: colors.colorUnderlay }}
+      style={({ pressed }) => [{ backgroundColor: pressed ? 'transparent' : 'transparent' }]}
     >
       <View style={[styles.item, { borderColor: colors.border }]}>
         <View style={styles.textItem}>
@@ -60,7 +61,7 @@ const ResultUser = ({ name, username, user, email, photo, verified }) => {
           </Text>
         )}
       </View>
-    </TouchableHighlight>
+    </Pressable>
   )
 }
 
