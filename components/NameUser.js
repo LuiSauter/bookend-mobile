@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { Text, StyleSheet } from 'react-native'
 import React from 'react'
 import IconOcticons from 'react-native-vector-icons/Octicons'

@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, Pressable } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'

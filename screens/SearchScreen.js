@@ -1,5 +1,4 @@
 /* eslint-disable indent */
-/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react'
 import { useTheme } from '@react-navigation/native'
 import {
@@ -140,10 +139,10 @@ const SearchScreen = () => {
       {book
         ? data?.searchBooks.length === 0 && <TextNotFound color={colors.textGray} />
         : author
-        ? data?.searchBooksAuthor.length === 0 && <TextNotFound color={colors.textGray} />
-        : user
-        ? data?.searchUsers.length === 0 && <TextNotFound color={colors.textGray} />
-        : null}
+          ? data?.searchBooksAuthor.length === 0 && <TextNotFound color={colors.textGray} />
+          : user
+            ? data?.searchUsers.length === 0 && <TextNotFound color={colors.textGray} />
+            : null}
       {word.length !== 0 ? (
         <FlatList
           ListHeaderComponent={() =>
@@ -159,10 +158,10 @@ const SearchScreen = () => {
             book
               ? data?.searchBooks.length > 0 && data?.searchBooks
               : author
-              ? data?.searchBooksAuthor.length > 0 && data?.searchBooksAuthor
-              : user
-              ? data?.searchUsers.length > 0 && data?.searchUsers
-              : []
+                ? data?.searchBooksAuthor.length > 0 && data?.searchBooksAuthor
+                : user
+                  ? data?.searchUsers.length > 0 && data?.searchUsers
+                  : []
           }
           renderItem={filter.user ? renderItemUser : renderItem}
           keyExtractor={filter.user ? keyExtractorUser : keyExtractor}

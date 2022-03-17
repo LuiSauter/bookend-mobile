@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, memo } from 'react'
 import { View, Text, Image, TouchableOpacity, StyleSheet, StatusBar, Pressable } from 'react-native'
 import { useLazyQuery, useQuery } from '@apollo/client'
 import { useNavigation, useTheme } from '@react-navigation/native'
@@ -201,7 +201,7 @@ const AllPostItem = ({
     </>
   )
 }
-export default AllPostItem
+export default memo(AllPostItem)
 
 const styles = StyleSheet.create({
   postContainer: {

@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react'
 import { StyleSheet, Text, View, Pressable } from 'react-native'
 import BtnLike from './Button/BtnLike'

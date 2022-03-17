@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { createContext, useState, useEffect } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { storageTheme } from '../config/constants'

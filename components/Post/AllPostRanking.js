@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { RefreshControl, StyleSheet, ActivityIndicator } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { ALL_POSTS_COUNT, ALL_POST_RANKING } from '../../post/graphql-queries'

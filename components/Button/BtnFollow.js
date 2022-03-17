@@ -1,8 +1,7 @@
-/* eslint-disable react/prop-types */
 import { useLazyQuery, useMutation } from '@apollo/client'
 import { useTheme } from '@react-navigation/native'
 import React, { useEffect } from 'react'
-import { Text, TouchableHighlight } from 'react-native'
+import { Text, TouchableOpacity } from 'react-native'
 import { useAuth } from '../../hooks/useAuth'
 import { useToggle } from '../../hooks/useToggle'
 import { FOLLOW_USER, UNFOLLOW_USER } from '../../user/graphql-mutation'
@@ -45,9 +44,9 @@ const BtnFollow = ({ user }) => {
     status === 'authenticated' && dataUser?.findUser.following.some((userId) => userId === user)
 
   return isMath ? (
-    <TouchableHighlight
+    <TouchableOpacity
       style={{ marginLeft: 16 }}
-      underlayColor={colors.colorUnderlay}
+      activeOpacity={0.6}
       onPress={() => handleClickButtonUnFollow(user)}
     >
       <Text
@@ -64,11 +63,11 @@ const BtnFollow = ({ user }) => {
       >
         Dejar de seguir
       </Text>
-    </TouchableHighlight>
+    </TouchableOpacity>
   ) : (
-    <TouchableHighlight
+    <TouchableOpacity
       style={{ marginLeft: 16 }}
-      underlayColor={colors.colorUnderlay}
+      activeOpacity={0.6}
       onPress={() => handleClickButtonFollow(user)}
     >
       <Text
@@ -84,7 +83,7 @@ const BtnFollow = ({ user }) => {
       >
         Seguir
       </Text>
-    </TouchableHighlight>
+    </TouchableOpacity>
   )
 }
 export default BtnFollow

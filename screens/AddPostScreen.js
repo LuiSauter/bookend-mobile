@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { SafeAreaView, StatusBar, StyleSheet } from 'react-native'
 import React from 'react'
 import NewPost from '../components/Post/NewPost'

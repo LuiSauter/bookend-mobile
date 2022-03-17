@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react'
 import { StyleSheet, SafeAreaView, StatusBar } from 'react-native'
 import { useTheme } from '@react-navigation/native'

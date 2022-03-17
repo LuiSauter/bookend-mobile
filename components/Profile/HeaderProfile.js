@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { Fragment } from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import { useNavigation, useTheme } from '@react-navigation/native'

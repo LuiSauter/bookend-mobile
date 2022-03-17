@@ -1,10 +1,9 @@
-/* eslint-disable react/prop-types */
 import React, { useState, useEffect, useCallback } from 'react'
 import { FlatList, ActivityIndicator, RefreshControl } from 'react-native'
 import { useLazyQuery, useQuery } from '@apollo/client'
 import { ALL_POSTS, ALL_POSTS_COUNT } from '../../post/graphql-queries'
-import AllPostItem from './AllPostItem'
 import { useTheme } from '@react-navigation/native'
+import AllPostItem from './AllPostItem'
 
 const INITIAL_PAGE = 20
 const ITEM_HEIGHT = 700

@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react'
 import CustomDrawerContent from '../components/CustomDrawerContent'
 import { createDrawerNavigator } from '@react-navigation/drawer'

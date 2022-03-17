@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { Fragment, useEffect } from 'react'
 import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer'

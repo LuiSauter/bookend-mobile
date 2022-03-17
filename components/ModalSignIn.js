@@ -1,9 +1,8 @@
-/* eslint-disable react/prop-types */
-import React from 'react'
+import React, { memo } from 'react'
 import { View, Modal } from 'react-native'
 import { useToggle } from '../hooks/useToggle'
 
-export default function ModalSignIn({ children }) {
+export const ModalSignIn = ({ children }) => {
   const { handleModalVisible, modalVisible } = useToggle()
   return (
     <View>
@@ -22,3 +21,4 @@ export default function ModalSignIn({ children }) {
     </View>
   )
 }
+export default memo(ModalSignIn)

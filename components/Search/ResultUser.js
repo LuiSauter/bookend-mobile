@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { Image, StyleSheet, Text, Pressable, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import BtnFollow from '../Button/BtnFollow'
