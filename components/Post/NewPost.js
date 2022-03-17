@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { Fragment, useEffect, useState } from 'react'
 import { Image, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import { useTheme } from '@react-navigation/native'
@@ -63,6 +62,14 @@ const NewPost = ({ name, username, verified, photo, email, handleDisabled, addPo
             style={[styles.title, { color: colors.colorThirdBlue }]}
           />
           <TextInput
+            placeholder='Autor'
+            placeholderTextColor={`${colors.colorThirdBlue}aa`}
+            multiline={true}
+            onChangeText={(author) => setPostState((prevState) => ({ ...prevState, author }))}
+            value={author}
+            style={[styles.text, { color: colors.colorThirdBlue }]}
+          />
+          <TextInput
             placeholder='Descripción'
             placeholderTextColor={colors.textGray}
             multiline={true}
@@ -72,19 +79,11 @@ const NewPost = ({ name, username, verified, photo, email, handleDisabled, addPo
             style={[styles.text, { color: colors.text }]}
           />
           <TextInput
-            placeholder='Autor'
-            placeholderTextColor={colors.textGray}
-            multiline={true}
-            onChangeText={(author) => setPostState((prevState) => ({ ...prevState, author }))}
-            value={author}
-            style={[styles.text, { color: colors.text, fontWeight: 'bold' }]}
-          />
-          <TextInput
             placeholder='Url del libro (google.drive)'
             placeholderTextColor={colors.textGray}
             onChangeText={(bookUrl) => setPostState((prevState) => ({ ...prevState, bookUrl }))}
             value={bookUrl}
-            style={[styles.text, { color: colors.colorThirPuple }]}
+            style={[styles.text, { color: colors.colorThirdPurple }]}
           />
           <TextInput
             placeholder='Url de la imagen previa'
@@ -169,11 +168,11 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   text: {
-    fontSize: 16,
+    fontSize: 17,
     marginBottom: 10,
   },
   title: {
-    fontSize: 18,
+    fontSize: 17,
     marginBottom: 10,
   },
   btnChangeImage: {
