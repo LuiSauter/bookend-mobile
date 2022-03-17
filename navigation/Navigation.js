@@ -1,197 +1,56 @@
-/* eslint-disable react/prop-types */
-import React, { useState } from 'react'
-import { StyleSheet, Text, TouchableHighlight } from 'react-native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { useNavigation, useTheme } from '@react-navigation/native'
+import React from 'react'
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native'
+import { colors, colorsLight } from '../config/colors'
+import { useToggle } from '../hooks/useToggle'
+import StackNavigator from './StackNavigator'
 
-import UserScreen from '../screens/UserScreen'
-import DetailScreen from '../screens/DetailScreen'
-import SettingScreen from '../screens/SettingScreen'
-import AccountScreen from '../screens/Setting/AccountScreen'
-import ActivityScreen from '../screens/Setting/ActivityScreen'
-import ContactSceen from '../screens/Setting/ContactSceen'
-import DisplayScreen from '../screens/Setting/DisplayScreen'
-import AddPostScreen from '../screens/AddPostScreen'
+const light = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: colorsLight.colorPrimary,
+    primary: colorsLight.colorPrimary,
+    secondary: colorsLight.colorSecondary,
+    textGray: colorsLight.TextGray,
+    colorThirdBlue: colorsLight.colorThirdBlue,
+    colorThirdPurple: colorsLight.colorThirdPurple,
+    colorThirdYellow: colorsLight.colorThirdYellow,
+    colorUnderlay: colorsLight.colorUnderlay,
+    colorFourthRed: colorsLight.colorFourthRed,
+    colorLikeRed: colorsLight.colorLikeRed,
+    white: '#fff',
+    text: colorsLight.text,
+    border: colors.border,
+  },
+}
 
-import NameUser from '../components/NameUser'
-import DrawerNavigator from './DrawerNavigator'
-import { usePost } from '../hooks/usePost'
-import { auth } from '../lib/auth'
-import UpdateScreen from '../screens/UpdateScreen'
-import PdfScreen from '../screens/PdfScreen'
-
-const Stack = createNativeStackNavigator()
+const dark = {
+  ...DarkTheme,
+  colors: {
+    ...DarkTheme.colors,
+    background: colors.colorPrimary,
+    primary: colors.colorPrimary,
+    secondary: colors.colorSecondary,
+    textGray: colors.TextGray,
+    colorThirdBlue: colors.colorThirdBlue,
+    colorThirdPurple: colors.colorThirdPurple,
+    colorThirdYellow: colors.colorThirdYellow,
+    colorFourthRed: colors.colorFourthRed,
+    colorUnderlay: colors.colorUnderlay,
+    colorLikeRed: colors.colorLikeRed,
+    white: '#fff',
+    text: colors.textWhite,
+    border: colors.border,
+  },
+}
 
 const Navigation = () => {
-  const { colors } = useTheme()
-  const { isDisabled, handleDisabled, addNewPost } = usePost()
-  const [currentData, setCurrentData] = useState(null)
-  const { message } = auth()
-  const navigation = useNavigation()
-
-  const addPost = (data) => {
-    setCurrentData(data)
-  }
-
-  if (message === 'signup') navigation.navigate('UpdateScreen')
-
+  const { darkTheme } = useToggle()
   return (
-    <Stack.Navigator>
-      <Stack.Group>
-        <Stack.Screen
-          name='TabNavigation'
-          component={DrawerNavigator}
-          options={{ headerShown: false, title: 'Inicio' }}
-        />
-        <Stack.Screen
-          name='UpdateScreen'
-          component={UpdateScreen}
-          options={{
-            title: 'Update profile',
-            headerStyle: { backgroundColor: colors.primary },
-            headerTitleStyle: { color: colors.text },
-            headerTintColor: colors.text,
-          }}
-        />
-        <Stack.Screen
-          name='UserScreen'
-          component={UserScreen}
-          options={({ route }) => ({
-            title: '',
-            headerStyle: { backgroundColor: `rgb(${route.params.dominantColor})` },
-            headerTintColor: 'white',
-            headerTitle: (props) => (
-              <NameUser
-                {...props}
-                name={route.params.name}
-                verified={false}
-                fontSize={17}
-                color='white'
-              />
-            ),
-          })}
-        />
-        <Stack.Screen
-          name='DetailScreen'
-          component={DetailScreen}
-          options={() => ({
-            title: 'Book',
-            headerStyle: {
-              backgroundColor: colors.primary,
-            },
-            headerTitleStyle: { color: colors.text },
-            headerTintColor: colors.text,
-          })}
-        />
-        <Stack.Screen
-          name='SettingScreen'
-          component={SettingScreen}
-          options={() => ({
-            title: 'Ajustes',
-            headerStyle: { backgroundColor: colors.primary },
-            headerTitleStyle: { color: colors.text },
-            headerTintColor: colors.text,
-          })}
-        />
-        <Stack.Screen
-          name='AccountScreen'
-          component={AccountScreen}
-          options={() => ({
-            title: 'Tu cuenta',
-            headerStyle: { backgroundColor: colors.primary },
-            headerTitleStyle: { color: colors.text },
-            headerTintColor: colors.text,
-          })}
-        />
-        <Stack.Screen
-          name='ActivityScreen'
-          component={ActivityScreen}
-          options={() => ({
-            title: 'Tu actividad',
-            headerStyle: { backgroundColor: colors.primary },
-            headerTitleStyle: { color: colors.text },
-            headerTintColor: colors.text,
-          })}
-        />
-        <Stack.Screen
-          name='ContactSceen'
-          component={ContactSceen}
-          options={() => ({
-            title: 'Contacto del desarrollador',
-            headerStyle: { backgroundColor: colors.primary },
-            headerTitleStyle: { color: colors.text },
-            headerTintColor: colors.text,
-          })}
-        />
-        <Stack.Screen
-          name='DisplayScreen'
-          component={DisplayScreen}
-          options={() => ({
-            title: 'Pantalla y idiomas',
-            headerStyle: { backgroundColor: colors.primary },
-            headerTitleStyle: { color: colors.text },
-            headerTintColor: colors.text,
-          })}
-        />
-        <Stack.Screen
-          name='AddPostScreen'
-          options={({ navigation }) => ({
-            title: '',
-            headerStyle: { backgroundColor: colors.primary },
-            headerTitleStyle: { color: colors.text },
-            headerTintColor: colors.text,
-            headerRight: () => (
-              <TouchableHighlight
-                onPress={() => {
-                  currentData !== null && addNewPost(currentData)
-                  navigation.navigate('HomeScreen')
-                }}
-                underlayColor={colors.colorUnderlay}
-                disabled={isDisabled}
-              >
-                <Text
-                  style={[
-                    styles.btnPost,
-                    {
-                      backgroundColor: isDisabled ? '#09fa' : colors.colorThirdBlue,
-                      color: colors.white,
-                    },
-                  ]}
-                >
-                  Post
-                </Text>
-              </TouchableHighlight>
-            ),
-          })}
-        >
-          {(props) => (
-            <AddPostScreen {...props} handleDisabled={handleDisabled} addPost={addPost} />
-          )}
-        </Stack.Screen>
-        <Stack.Screen
-          name='PdfScreen'
-          component={PdfScreen}
-          options={() => ({
-            title: '',
-            headerTitleStyle: { color: colors.text },
-            headerTintColor: colors.textGray,
-            headerShown: true,
-            headerTransparent: true,
-          })}
-        />
-      </Stack.Group>
-    </Stack.Navigator>
+    <NavigationContainer theme={darkTheme ? dark : light}>
+      <StackNavigator />
+    </NavigationContainer>
   )
 }
 
 export default Navigation
-
-const styles = StyleSheet.create({
-  btnPost: {
-    borderRadius: 10,
-    paddingHorizontal: 16,
-    paddingTop: 4,
-    paddingBottom: 6,
-    fontSize: 16,
-  },
-})
