@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react'
 import { SafeAreaView, StatusBar, StyleSheet, Text, View, Pressable } from 'react-native'
 import { useTheme } from '@react-navigation/native'
@@ -8,14 +7,14 @@ import AllPost from '../components/Post/AllPost'
 import ModalSignIn from '../components/ModalSignIn'
 import { auth } from '../lib/auth'
 import { useToggle } from '../hooks/useToggle'
-import { useAuth } from '../hooks/useAuth'
 import NameUser from '../components/NameUser'
+import { useAuth } from '../hooks/useAuth'
 
 const HomeScreen = () => {
   const { googleAuth } = useAuth()
   const { status, name } = googleAuth
   const { colors, dark } = useTheme()
-  const { handleModalVisible } = useToggle()
+  const { handleModalVisible, modalVisible } = useToggle()
   const { promptAsync, request, signOut } = auth()
 
   return (
@@ -30,7 +29,7 @@ const HomeScreen = () => {
         backgroundColor={colors.primary}
       />
       <AllPost />
-      <ModalSignIn>
+      {modalVisible && <ModalSignIn>
         <View style={styles.centeredView}>
           <View
             style={[
@@ -114,7 +113,7 @@ const HomeScreen = () => {
             </Pressable>
           </View>
         </View>
-      </ModalSignIn>
+      </ModalSignIn>}
     </SafeAreaView>
   )
 }
