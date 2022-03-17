@@ -3,7 +3,8 @@
     "name": "Bookend",
     "slug": "bookend",
     "version": "1.0.0",
-    "orientation": "default",
+    "orientation": "portrait",
+    "jsEngine": "hermes",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/img/bookend.png",

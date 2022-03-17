@@ -3,10 +3,20 @@
     "version": ">= 0.47.0"
   },
   "build": {
+    "production": {
+      "node": "16.13.0"
+    },
+    "development": {
+      "extends": "production",
+      "developmentClient": "true",
+      "distribution": "internal"
+    },
     "preview": {
       "android": {
         "buildType": "apk"
-      }
+      },
+      "extends": "production",
+      "distribution": "internal"
     },
     "preview2": {
       "android": {
@@ -15,8 +25,7 @@
     },
     "preview3": {
       "developmentClient": true
-    },
-    "production": {}
+    }
   },
   "submit": {
     "production": {}
