@@ -2,7 +2,6 @@ import React from 'react'
 import { SafeAreaView, StatusBar, StyleSheet, Text, View, Pressable } from 'react-native'
 import { useTheme } from '@react-navigation/native'
 import GoogleIcon from 'react-native-vector-icons/AntDesign'
-
 import AllPost from '../components/Post/AllPost'
 import ModalSignIn from '../components/ModalSignIn'
 import { auth } from '../lib/auth'
@@ -148,7 +147,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 30,
     backgroundColor: '#0002',
   },
   modalView: {
