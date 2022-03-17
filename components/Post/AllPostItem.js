@@ -4,6 +4,7 @@ import { useLazyQuery, useQuery } from '@apollo/client'
 import { useNavigation, useTheme } from '@react-navigation/native'
 import ImageView from 'react-native-image-viewing'
 import PropTypes from 'prop-types'
+import * as NavigationBar from 'expo-navigation-bar'
 
 import { FIND_USER_BY_USER } from '../../user/graphql-queries'
 import { GET_DOMINANT_COLOR } from '../../post/graphql-queries'
@@ -46,32 +47,36 @@ const AllPostItem = ({
     }
   }, [data?.findUserById])
 
+  const activeModal = () => {
+    isVisible ? (
+      NavigationBar.setVisibilityAsync('visible')
+    ) : (
+      NavigationBar.setVisibilityAsync('hidden'),
+      NavigationBar.setBehaviorAsync('overlay-swipe')
+    )
+    setIsVisible(!isVisible)
+  }
+
   return (
     <>
-      {isVisible && (
-        <StatusBar
-          barStyle={'light-content'}
-          animated={true}
-          showHideTransition={'fade'}
-          backgroundColor={
-            dataDominantColor?.getColors ? `rgb(${dataDominantColor?.getColors})` : colors.primary
-          }
-        />
-      )}
+      {isVisible && <StatusBar
+        barStyle={'light-content'}
+        animated={false}
+        showHideTransition={'none'}
+        backgroundColor={dataDominantColor?.getColors ? `rgb(${dataDominantColor?.getColors})` : colors.primary}
+        translucent={true}
+      />}
       <ImageView
         images={[{ uri: image }]}
         imageIndex={0}
         visible={isVisible}
-        onRequestClose={() => setIsVisible(false)}
+        onRequestClose={activeModal}
         animationType='fade'
-        backgroundColor={
-          dataDominantColor?.getColors ? `rgb(${dataDominantColor?.getColors})` : colors.primary
-        }
-        swipeToCloseEnabled={false}
-        doubleTapToZoomEnabled={true}
+        backgroundColor={dataDominantColor?.getColors ? `rgb(${dataDominantColor?.getColors})` : colors.primary}
+      // swipeToCloseEnabled={false}
+      // doubleTapToZoomEnabled={true}
       />
       <Pressable
-        // underlayColor={colors.colorUnderlay}
         onPress={() =>
           navigation.navigate('DetailScreen', {
             id: id,
@@ -173,9 +178,7 @@ const AllPostItem = ({
               </Text>
             </View>
             <TouchableOpacity
-              onPress={() => {
-                setIsVisible(true)
-              }}
+              onPress={activeModal}
               activeOpacity={0.6}
               style={[styles.postImgContainer, { borderColor: colors.border }]}
             >

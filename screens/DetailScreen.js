@@ -12,6 +12,7 @@ import {
 import { FINDONE_POST, GET_DOMINANT_COLOR } from '../post/graphql-queries'
 import { useQuery } from '@apollo/client'
 import ImageView from 'react-native-image-viewing'
+import * as NavigationBar from 'expo-navigation-bar'
 
 import NameUser from '../components/NameUser'
 import MultipleButtons from '../components/MultipleButtons'
@@ -49,6 +50,16 @@ const DetailScreen = ({ route, navigation }) => {
     variables: { id: id },
   })
 
+  const activeModal = () => {
+    isVisible ? (
+      NavigationBar.setVisibilityAsync('visible')
+    ) : (
+      NavigationBar.setVisibilityAsync('hidden'),
+      NavigationBar.setBehaviorAsync('overlay-swipe')
+    )
+    setIsVisible(!isVisible)
+  }
+
   return (
     <SafeAreaView
       style={[styles.safeArea, { backgroundColor: colors.primary }]}
@@ -75,9 +86,7 @@ const DetailScreen = ({ route, navigation }) => {
         images={[{ uri: image }]}
         imageIndex={0}
         visible={isVisible}
-        onRequestClose={() => {
-          setIsVisible(false)
-        }}
+        onRequestClose={activeModal}
         animationType='fade'
         backgroundColor={
           dataDominantColor?.getColors
@@ -125,7 +134,7 @@ const DetailScreen = ({ route, navigation }) => {
           <Text style={[styles.text, { color: colors.text }]}>{description.join('\n')}</Text>
         </View>
         <TouchableOpacity
-          onPress={() => setIsVisible(true)}
+          onPress={activeModal}
           activeOpacity={0.6}
           style={[styles.postImgContainer, { borderColor: colors.border }]}
         >
