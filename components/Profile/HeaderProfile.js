@@ -21,12 +21,13 @@ const HeaderProfile = ({
 }) => {
   const { colors } = useTheme()
   const navigation = useNavigation()
+  console.log(`rgb(${dominantColor})`)
   return (
     <Fragment>
       <View style={styles.profilePresentation}>
         <Image
           blurRadius={100}
-          style={[styles.imageBackground, { tintColor: dominantColor }]}
+          style={[styles.imageBackground, { tintColor: `rgb(${dominantColor})` }]}
           source={{ uri: photo }}
         />
         <Image

@@ -106,7 +106,7 @@ const DetailScreen = ({ route, navigation }) => {
                   username: username,
                   verified: verified,
                   photo: photo,
-                  dominantColor: userDominantColor?.getColors,
+                  dominantColor: userDominantColor?.getColors ? userDominantColor?.getColors : '21,32,43',
                   description: descriptionUser,
                   user: user,
                   location: location,

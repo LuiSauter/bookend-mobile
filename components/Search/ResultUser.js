@@ -24,7 +24,7 @@ const ResultUser = ({ name, username, user, email, photo, verified }) => {
           verified: data?.findUser ? data?.findUser.me.verified : '',
           user: user,
           email: email,
-          dominantColor: userDominantColor?.getColors,
+          dominantColor: userDominantColor?.getColors ? userDominantColor?.getColors : '21,32,43',
           photo: data?.findUser ? data?.findUser.me.photo : '',
           description: data?.findUser ? data?.findUser.description : '',
           location: data?.findUser ? data?.findUser.location : '',

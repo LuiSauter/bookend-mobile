@@ -21,14 +21,6 @@
       "bundleIdentifier": "com.sauter.bookend",
       "buildNumber": "3"
     },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#192734"
-      },
-      "package": "com.sauter.bookend",
-      "versionCode": 1
-    },
     "androidStatusBar": {
       "translucent": true,
       "barStyle": "light-content",

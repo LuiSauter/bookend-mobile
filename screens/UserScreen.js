@@ -140,7 +140,7 @@ const UserScreen = ({ route }) => {
             userEmail={userEmail}
             following={following}
             location={location}
-            dominantColor={`rgb(${dominantColor})`}
+            dominantColor={dominantColor}
           />
         )}
         data={dataAllPosts?.allPostsByUsername}

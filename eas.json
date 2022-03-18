@@ -3,28 +3,15 @@
     "version": ">= 0.47.0"
   },
   "build": {
-    "production": {
-      "node": "16.13.0"
-    },
+    "production": {},
     "development": {
       "extends": "production",
       "developmentClient": "true",
       "distribution": "internal"
     },
     "preview": {
-      "android": {
-        "buildType": "apk"
-      },
-      "extends": "production",
-      "distribution": "internal"
-    },
-    "preview2": {
-      "android": {
-        "gradleCommand": ":app:assembleRelease"
-      }
-    },
-    "preview3": {
-      "developmentClient": true
+      "distribution": "internal",
+      "extends": "production"
     }
   },
   "submit": {
